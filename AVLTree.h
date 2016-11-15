@@ -24,8 +24,10 @@ class AVLTree {
         bool contains(ElemType);
         void remove(ElemType);
         bool empty();
+        int size();
         void print();
         void printTree();
+        ElemType getRoot();
         std::stack<ElemType> getElements();
     private:
         struct Node {
@@ -44,6 +46,7 @@ class AVLTree {
         void print(Node *);
         void printTree(Node *);
         void getElements(Node *, std::stack<ElemType> &);
+        int size(Node *, int);
         
         int getBalance(Node *);
         int height(Node *);
@@ -52,7 +55,7 @@ class AVLTree {
         Node *rotateRight(Node *);
         Node *rotateLeft(Node *);
         Node *removeNode(Node *);
-        Node *replaceParentWithChild(Node *, Node *);
+        Node *updateHeight(Node *);
         
         
 };
@@ -66,6 +69,7 @@ AVLTree<ElemType>::AVLTree()
 {
     root = nullptr;
 }
+
 
 template<typename ElemType>
 AVLTree<ElemType>::~AVLTree()
@@ -169,75 +173,87 @@ void AVLTree<ElemType>::remove(ElemType val)
 
 template<typename ElemType>
 typename AVLTree<ElemType>::Node *AVLTree<ElemType>::remove(Node* node, ElemType val)
-{
-    if (node != nullptr) {
-        // If node == val, remove node
-        if (val == node->value) {
-            node = removeNode(node);
-        }
-        // Search left subtree if node > s
-        else if (val < node->value) {
-            node->left = remove(node->left, val);
+{   
+    // Standard BST removal 
+    if (node == nullptr) 
+        return node;
+   
+   // If node == val, remove node    
+    if (val == node->value) 
+        node = removeNode(node); 
 
-        // Search right subtree if node < s
-        } else {
-            node->right = remove(node->right, val);
-        }
-        if (node == nullptr) 
-            return node;
-        // Update height
-        node->height = max(height(node->left), height(node->right)) + 1;
-        int balance = getBalance(node);
+    // Search left subtree if node > s  
+    else if (val < node->value)
+        node->left = remove(node->left, val);
         
-        if (balance > 1) {
-            // Right right unbalance 
-            if (getBalance(root->right) >= 0) {     
-                return rotateLeft(node);
-            // Right left unbalance
-            } else { // getBalance(root->right) < 0              
-                node->right = rotateRight(node->right);
-                return rotateLeft(node);
-            }
-        } else if (balance < -1) {
-            // Left left unbalance
-            if (getBalance(root->left) <= 0) {
-                return rotateRight(node);
-            // Right left unbalance
-            } else { // getBalance(rood->left) > 0
-                node->left = rotateLeft(node->left);
-                return rotateRight(node);
-            }
+
+    // Search right subtree if node < s
+    else 
+        node->right = remove(node->right, val);  
+
+    if (node == nullptr) 
+        return node;
+    
+    // Update height
+    node = updateHeight(node);
+
+    return node;
+}
+
+template<typename ElemType>
+typename AVLTree<ElemType>::Node *AVLTree<ElemType>::updateHeight(Node *node)
+{
+    node->height = max(height(node->left), height(node->right)) + 1;
+    int balance = getBalance(node);
+        
+    if (balance > 1) {
+        // Right right unbalance   
+        if (getBalance(root->right) >= 0) {   
+            return rotateLeft(node);
+
+        // Right left unbalance 
+        } else {            
+            node->right = rotateRight(node->right);
+            return rotateLeft(node);
+        }
+    } else if (balance < -1) {
+        // Left left unbalance
+        if (getBalance(root->left) <= 0) { 
+            return rotateRight(node);
+
+        // Right left unbalance
+        } else { 
+            node->left = rotateLeft(node->left);
+            return rotateRight(node);
         }
     }
     return node;
-
 }
 template<typename ElemType>
 typename AVLTree<ElemType>::Node *AVLTree<ElemType>::removeNode(Node *node)
 {
-        // If node has two children, find its in-order successor and replace node 
+    // If node has two children, find its in-order successor and replace node 
     // with it. Then delete an instance of its in-order successor through 
     // recursion
     if (node->left != nullptr and node->right != nullptr) {
         Node *successor = getMinNode(node->right);
         node->value  = successor->value;
-        node->height = successor->height;
-        node->right  = removeNode(successor);
+        node->right  = remove(node->right, successor->value);
     
-    // If node has only left child, replace node with its left child
-    } else if (node->left != nullptr) {
-        node = replaceParentWithChild(node, node->left);
-
-    // If node has only right child, replace node with its right child
-    } else if (node->right != nullptr) {
-        node = replaceParentWithChild(node, node->right);
-    
-    // If node has no children, delete it
+    // Else if node has only one or no child.
     } else {
-        Node *temp = node;
+        Node *temp = node->left ? node->left : node->right;
+
+        // If node has no child
+        if (temp == nullptr) {
+            temp = node;
+            node = nullptr;
+        } else {
+            *node = *temp;
+        }
         delete temp;
-        node = nullptr;
     }
+
     return node;
 }
 template<typename ElemType>
@@ -248,18 +264,6 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::getMinNode(Node *node)
         return getMinNode(node->left);
     }
     return node;
-}
-
-template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::replaceParentWithChild
-                                  (Node *parent,  Node *child)
-{
-    parent->height = child->height;
-    parent->value  = child->value;
-    parent->left   = child->left;
-    parent->right  = child->right;
-    delete child;
-    return parent;
 }
 
 
@@ -389,5 +393,27 @@ void AVLTree<ElemType>::printTree(Node *node)
     }
     std::cout << "]";
     
+}
+template<typename ElemType>
+int AVLTree<ElemType>::size()
+{
+    return size(root, 0);
+}
+template<typename ElemType>
+int AVLTree<ElemType>::size(Node *node, int sum)
+{
+    if (node != nullptr) {
+        sum++;
+        // Traverse left subtree 
+        sum = size(node->left, sum);
+        // Traverse right subtree
+        sum = size(node->right, sum);
+    }
+    return sum;
+}
+template<typename ElemType>
+ElemType AVLTree<ElemType>::getRoot()
+{
+    return root->value;
 }
 #endif
