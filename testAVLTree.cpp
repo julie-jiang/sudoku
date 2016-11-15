@@ -1,5 +1,6 @@
 #include <iostream>
-#include <cassert>
+#include <cstdlib>
+#include <stack>
 #include "AVLTree.h"
 
 
@@ -85,6 +86,7 @@ void testContains()
     std::cout << "Actual output:    " << avl->contains(70) << std::endl;
     delete avl;
 }
+
 void testRemoveLeftLeft()
 {
     AVLTree<int> *avl = new AVLTree<int>;
@@ -104,6 +106,24 @@ void testRemove()
     testRemoveLeftLeft();
 }
 
+void testGetElements()
+{
+    std::cout << "\n<------ Testing function getElements ------> \n";
+    AVLTree<int> *avl = new AVLTree<int>;
+    std::cout << "Output should be\n";
+    avl->add(9);  avl->add(5); avl->add(10);
+    avl->add(0);  avl->add(6); avl->add(11);
+    avl->add(-1); avl->add(1); avl->add(2);
+
+    std::stack<int> intStack = avl->getElements();
+    while (not intStack.empty()) {
+        std::cout << intStack.top() << " ";
+        intStack.pop();
+    }
+    std::cout << std::endl;
+
+}
+
 
 int main() 
 {
@@ -111,6 +131,6 @@ int main()
     testAdd();
     testContains();
     testRemove();
-    testIterator();
+    testGetElements();
     std::cout << "============== Tests for AVLTree completed! ==============\n";
 }

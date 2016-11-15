@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <map>
 #include <algorithm>
+#include <stack>
 #include "Soduku.h"
 #include "AVLTree.h"
 
@@ -23,28 +24,26 @@ Soduku::Soduku(std::string filename, int size)
     for (int j = 0; j < gridSize; j++) {
         for (int i = 0; i < gridSize; i++) {
             Coord c = std::make_pair(i, j);
-            grid.insert(std::pair<Coord, std::vector<int>>(c, 
-                        AVLTree<int>());
+            grid.insert(std::pair<Coord, AVLTree<int>>(c, 
+                        AVLTree<int>()));
             inFile >> s;
             int ints = string2int(s);
             if (ints != 0) 
-                grid[c].push_back(ints);
+                grid[c].add(ints);
             else {
-                grid[c].push_back(1);
-                grid[c].push_back(2);
-                grid[c].push_back(3);
-                grid[c].push_back(4);
-                grid[c].push_back(5);
-                grid[c].push_back(6);
-                grid[c].push_back(7);
-                grid[c].push_back(8);
-                grid[c].push_back(9);
+                grid[c].add(1);
+                grid[c].add(2);
+                grid[c].add(3);
+                grid[c].add(4);
+                grid[c].add(5);
+                grid[c].add(6);
+                grid[c].add(7);
+                grid[c].add(8);
+                grid[c].add(9);
                 Queue.push(c);
             }
         }
     }
-    printGrid();
-    std::cout << "---------------------------\n";
     arcConsistency();
     printGrid();
 
@@ -83,17 +82,28 @@ void Soduku::arcConsistency()
 {
     while (not Queue.empty()) {
         Coord c = Queue.front();
+        int x, y;
+        std::tie(x, y) = c;
+        std::cout << "checking coordinates " << x << " " << y << "..."; 
         Queue.pop();
         validateDomain(c);
+        std::cout << std::endl;
     }
 }
 bool Soduku::validateDomain(Coord c)
 {
     bool removed = false;
-    for (int i = 0; i < (int) grid[c].size(); i++) {
-        if (valueIsInconsistent(domain[i], c)) {
+    std::stack<int> domain = grid[c].getElements();
+    while (not domain.empty()) {
+        int item = domain.top();
+        std::cout << item << " ";
+        domain.pop();
+        if (valueIsInconsistent(item, c)) {
             removed = true;
-            ;
+            int x, y;
+            std::tie(x, y) = c;
+            std::cout << "removing x = " << item << " from the domain of coordinates " << x << " " << y << std::endl;
+            grid[c].remove(item);
         }
     }
     return removed;
@@ -103,10 +113,9 @@ bool Soduku::valueIsInconsistent(int item, Coord c)
     int x, y;
     std::tie(x, y) = c;
     for (int i = 0; i < gridSize; i++) {
-        if (i != y and grid[std::make_pair(x, i)].contains(item))
-            return false;
-        if (i != x and gric[std::make_pair(i, y)].contains(item))
-            return false;
+        if ((i != y and grid[std::make_pair(x, i)].contains(item)) or 
+            (i != x and grid[std::make_pair(i, y)].contains(item)))
+            return true;
     }
-    return true;
+    return false;
 }

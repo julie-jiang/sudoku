@@ -10,47 +10,51 @@
 
 #ifndef AVLTree_H
 #define AVLTree_H
+#include <cstdlib>
+#include <stack>
 
 template<typename ElemType>
 
 
 class AVLTree {
-public:
-    AVLTree();
-    ~AVLTree();
-    void add(ElemType);
-    bool contains(ElemType);
-    void remove(ElemType);
-    bool empty();
-    void print();
-    void printTree();
+    public:
+        AVLTree();
+        ~AVLTree();
+        void add(ElemType);
+        bool contains(ElemType);
+        void remove(ElemType);
+        bool empty();
+        void print();
+        void printTree();
+        std::stack<ElemType> getElements();
+    private:
+        struct Node {
+            int height;
+            ElemType value;
+            Node *left;
+            Node *right;
+            Node *parent;
+        }
+        *root;
 
-private:
-    struct Node {
-        int height;
-        ElemType value;
-        Node *left;
-        Node *right;
-    }
-    *root;
-
-    Node *add(Node *, ElemType);
-    Node *makeNewNode(ElemType);
-    bool contains(Node *, ElemType);
-    Node *remove(Node *, ElemType);
-    void print(Node *);
-    void printTree(Node *);
-    
-    int getBalance(Node *);
-    int height(Node *);
-    int max(int, int);
-    Node *getMinNode(Node *);
-    Node *rotateRight(Node *);
-    Node *rotateLeft(Node *);
-    Node *removeNode(Node *);
-    Node *replaceParentWithChild(Node *, Node *);
-    
-    
+        Node *add(Node *, ElemType);
+        Node *makeNewNode(ElemType);
+        bool contains(Node *, ElemType);
+        Node *remove(Node *, ElemType);
+        void print(Node *);
+        void printTree(Node *);
+        void getElements(Node *, std::stack<ElemType> &);
+        
+        int getBalance(Node *);
+        int height(Node *);
+        int max(int, int);
+        Node *getMinNode(Node *);
+        Node *rotateRight(Node *);
+        Node *rotateLeft(Node *);
+        Node *removeNode(Node *);
+        Node *replaceParentWithChild(Node *, Node *);
+        
+        
 };
 
 /*****************************************************************************/
@@ -111,6 +115,8 @@ void AVLTree<ElemType>::add(ElemType val)
     root = add(root, val);
         
 }
+
+
 template<typename ElemType>
 typename AVLTree<ElemType>::Node *AVLTree<ElemType>::add(Node *node, ElemType val)
 {
@@ -118,7 +124,7 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::add(Node *node, ElemType va
     if (node == nullptr) {
         node = makeNewNode(val);
 
-    // Insert left if node is greater than s
+    // Insert left if currnode is greater than newnode
     } else if (node->value > val) {
         node->left = add(node->left, val);
 
@@ -309,11 +315,12 @@ int AVLTree<ElemType>::max(int a, int b)
 template<typename ElemType>
 typename AVLTree<ElemType>::Node *AVLTree<ElemType>::makeNewNode(ElemType val)
 {
-    Node *newNode    = new Node;
-    newNode->height  = 1;
-    newNode->value   = val;
-    newNode->left    = nullptr;
-    newNode->right   = nullptr;
+    Node *newNode   = new Node;
+    newNode->height = 1;
+    newNode->value  = val;
+    newNode->left   = nullptr;
+    newNode->right  = nullptr;
+    newNode->parent = nullptr;
     return newNode;
 }
 template<typename ElemType>
@@ -326,7 +333,7 @@ void AVLTree<ElemType>::print()
     std::cout << "]";
 }
 template<typename ElemType>
-void AVLTree<ElemType>::print()
+void AVLTree<ElemType>::print(Node *node)
 {
     if (node->left != nullptr) 
         print(node->left);
@@ -338,6 +345,24 @@ void AVLTree<ElemType>::print()
 
 }
 
+template<typename ElemType>
+std::stack<ElemType> AVLTree<ElemType>::getElements()
+{
+    std::stack<ElemType> elemStack;
+    getElements(root, elemStack);
+    return elemStack;    
+}
+
+template<typename ElemType>
+void AVLTree<ElemType>::getElements(Node *node, std::stack<ElemType> &elemStack)
+{
+    if (node != nullptr) {
+        elemStack.push(node->value);
+        getElements(node->left, elemStack);
+        getElements(node->right, elemStack);
+    }
+    
+}
 template<typename ElemType>
 void AVLTree<ElemType>::printTree()
 {

@@ -21,7 +21,7 @@ private:
 	int string2int(std::string);
 	void printGrid();
 	void arcConsistency();
-	bool removeFromDomain(Coord);
+	bool validateDomain(Coord);
 	bool valueIsInconsistent(int, Coord);
 };
 
