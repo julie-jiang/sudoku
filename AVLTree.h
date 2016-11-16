@@ -35,7 +35,6 @@ class AVLTree {
             ElemType value;
             Node *left;
             Node *right;
-            Node *parent;
         }
         *root;
 
@@ -324,7 +323,6 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::makeNewNode(ElemType val)
     newNode->value  = val;
     newNode->left   = nullptr;
     newNode->right  = nullptr;
-    newNode->parent = nullptr;
     return newNode;
 }
 template<typename ElemType>

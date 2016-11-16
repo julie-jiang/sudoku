@@ -14,7 +14,7 @@ Soduku::Soduku(std::string filename, int size)
     n = (int) sqrt(size);
     std::map<Coord, int> assignment;
     initGrid(filename, assignment);
-    //bool result = backtrackingSearch(assignment);
+    bool result = backtrackingSearch(assignment);
 }
 Soduku::~Soduku()
 {
@@ -72,6 +72,7 @@ bool Soduku::backtrackingSearch(std::map<Coord, int> &assignment)
                 std::cout << "Assigned (" << x << ", " << y << ") to " << d << std::endl;
                 if (backtrackingSearch(assignment))
                     return true;
+                std::cout << "(" << x << ", " << y << ") = " << d << "didn't workout, backtracking\n";
                 assignment.erase(c);
             }
         }
