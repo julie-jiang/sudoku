@@ -15,20 +15,24 @@ private:
 	int gridSize, n;
 	typedef std::pair<int, int> Coord;
 	std::map<Coord, AVLTree<int>> grid;
+	std::map<Coord, int> givenAssignment;
+	std::map<Coord, int> assignment;
 
 	std::queue<Coord> PQueue;
 	std::queue<Coord> Queue;
 
-	void initGrid(std::string, std::map<Coord, int> &);
-	bool backtrackingSearch(std::map<Coord, int> &);
+	void initGrid(std::string);
+	bool backtrackingSearch();
 	Coord selectUnassignedVaraible();
 	void addToQueue(Coord);
-	void print(std::map<Coord, int> &);
+	void print();
 	void printGridDomains();
-	void enforceArcConsistency(std::map<Coord, int> &);
-	bool removeInconsistentValues(Coord, std::map<Coord, int> &);
-	bool valueIsConsistent(int, Coord, std::map<Coord, int> &);
+	void enforceArcConsistency();
+	bool removeInconsistentValues(Coord);
+	bool valueIsConsistent(int, Coord);
 	int string2int(std::string);
+	std::string int2string(int);
+
 };
 
 #endif

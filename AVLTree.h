@@ -8,8 +8,8 @@
 /*                                  Header                                   */
 /*****************************************************************************/
 
-#ifndef AVLTree_H
-#define AVLTree_H
+#ifndef AVLTREE_H
+#define AVLTREE_H
 #include <cstdlib>
 #include <stack>
 

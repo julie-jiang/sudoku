@@ -12,9 +12,9 @@ Soduku::Soduku(std::string filename, int size)
 {
 	gridSize = size;
     n = (int) sqrt(size);
-    std::map<Coord, int> assignment;
-    initGrid(filename, assignment);
-    bool result = backtrackingSearch(assignment);
+    
+    initGrid(filename);
+    bool result = backtrackingSearch();
 }
 Soduku::~Soduku()
 {
@@ -22,7 +22,7 @@ Soduku::~Soduku()
 }
 
 
-void Soduku::initGrid(std::string filename, std::map<Coord, int> &assignment)
+void Soduku::initGrid(std::string filename)
 {
     // Open file 
 	std::ifstream inFile;
@@ -41,45 +41,51 @@ void Soduku::initGrid(std::string filename, std::map<Coord, int> &assignment)
             int num = string2int(s);
             if (num != 0) {
                 grid[c].add(num);
-                assignment[c] = num;
+                givenAssignment[c] = num;
             } else {
                 for (int i = 1; i < 10; i++) {
                     grid[c].add(i);
                 } 
                 Queue.push(c);
                 PQueue.push(c);
-
             }
         }
     }
-    enforceArcConsistency(assignment);
+    enforceArcConsistency();
     printGridDomains();
 }
 
-bool Soduku::backtrackingSearch(std::map<Coord, int> &assignment)
+bool Soduku::backtrackingSearch()
 {   
     if (not PQueue.empty()) {
         Coord c = selectUnassignedVaraible();
         std::stack<int> domain(grid[c].getElements());
+        int x, y;
+        std::tie(x, y) = c;
         while (not domain.empty()) {
             int d = domain.top();
             domain.pop();
-            if (valueIsConsistent(d, c, assignment)) {
+            if (valueIsConsistent(d, c)) {
                 assignment[c] = d;
-                int x, y;
-                std::tie(x, y) = c;
-                print(assignment);
+                char a;
+                std::cin >> a;
+                std::cout << ("\033[H\033[2J");
                 std::cout << "Assigned (" << x << ", " << y << ") to " << d << std::endl;
-                if (backtrackingSearch(assignment))
+                print();
+                if (backtrackingSearch()) {
+                    std::cout << "(" << x << ", " << y << ") = " << d << " worked!!!\n";
                     return true;
-                std::cout << "(" << x << ", " << y << ") = " << d << "didn't workout, backtracking\n";
+                } 
+                std::cout << "(" << x << ", " << y << ") = " << d << " didn't workout, backtracking\n";
                 assignment.erase(c);
             }
         }
+        PQueue.push(c);
     }
     return false;
     
 }
+
 Soduku::Coord Soduku::selectUnassignedVaraible()
 {
     Coord c = PQueue.front();
@@ -105,14 +111,14 @@ void Soduku::addToQueue(Coord c)
         }
     }
 }
-void Soduku::enforceArcConsistency(std::map<Coord, int> &assignment)
+void Soduku::enforceArcConsistency()
 {
     while (not Queue.empty()) {
         Coord c = Queue.front();
         Queue.pop();
         int x,y;
         std::tie(x,y) = c;
-        removeInconsistentValues(c, assignment);
+        removeInconsistentValues(c);
     }
     for (std::map<Coord, AVLTree<int>>::iterator i = grid.begin(); i != grid.end(); i++){
         if (i->second.size() == 1) {
@@ -122,52 +128,70 @@ void Soduku::enforceArcConsistency(std::map<Coord, int> &assignment)
         }
     }
 }
-bool Soduku::removeInconsistentValues(Coord c, std::map<Coord, int> &assignment)
+bool Soduku::removeInconsistentValues(Coord c)
 {
     bool removed = false;
     std::stack<int> domain = grid[c].getElements();
     while (not domain.empty()) {
         int d = domain.top();
         domain.pop();
-        if (not valueIsConsistent(d, c, assignment)) {
+        if (not valueIsConsistent(d, c)) {
             removed = true;
             grid[c].remove(d);
         }
     }
     return removed;
 }
-bool Soduku::valueIsConsistent(int d, Coord c, std::map<Coord, int> &assignment)
+bool Soduku::valueIsConsistent(int d, Coord c)
 {
     int x, y;
     std::tie(x, y) = c;
     // Check row and column
     for (int i = 0; i < gridSize; i++) {
-        if ((i != y and assignment[std::make_pair(x, i)] == d) or 
-            (i != x and assignment[std::make_pair(i, y)] == d)) 
+        if ((i != y and givenAssignment.find(std::make_pair(x, i)) != givenAssignment.end() and givenAssignment[std::make_pair(x, i)] == d) or 
+            (i != x and givenAssignment.find(std::make_pair(i, y)) != givenAssignment.end() and givenAssignment[std::make_pair(i, y)] == d)) 
             return false;
     }
     // Check subgrid
     for (int i = x - x % n; i < n + x - x % n; i++) {
         for (int j = y - y % n; j < n + y - y % n; j++) {
-            if (i != x and j != y and assignment[std::make_pair(i, j)] == d)
+            if (i != x and j != y and givenAssignment.find(std::make_pair(i, j)) != givenAssignment.end() and givenAssignment[std::make_pair(i, j)] == d)
                 return false;
         }
     }
     return true;
 }
 
-void Soduku::print(std::map<Coord, int> &assignment)
+void Soduku::print()
 {
-    std::cout << ("\033[H\033[2J");
-    for (int i = 0; i < gridSize; i++) {
-        for (int j = 0; j < gridSize; j++) {
-            if (assignment.find(std::make_pair(i, j)) != assignment.end())
-                std::cout << assignment[std::make_pair(i, j)] << " ";
-            else
-                std::cout << "0 ";
+    for (int j = 0; j < gridSize; j++) {
+        for (int i = 0; i < gridSize; i++) {
+            std::map<Coord, int>::iterator it = givenAssignment.find(std::make_pair(i, j));
+            if (it != givenAssignment.end()) {
+                std::string s = int2string(it->second);
+                std::cout << "\033[1m\033[31m" << s << "\033[0m ";
+            } else {
+                std::map<Coord, int>::iterator itt = assignment.find(std::make_pair(i, j));
+                if (itt != assignment.end()){
+                    std::string s = int2string(itt->second);
+                    std::cout << "\033[1m\033[33m" << s << "\033[0m ";
+                } else {
+                    std::cout << "\033[37m0 \033[0m";
+                }
+                
+            }
         }
         std::cout << std::endl;
     }
+}
+
+std::string Soduku::int2string(int n)
+{
+    std::string result;
+    std::ostringstream oss;
+    oss << n;
+    result = oss.str();
+    return result;
 }
 
 void Soduku::printGridDomains()
