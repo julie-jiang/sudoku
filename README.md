@@ -18,10 +18,9 @@ The variables in `Soduku`, which are the individual grid cells, are implemented 
 
 ## Usage
 Compile with:
-
-    ```
-    make
-    ```
+```
+make
+```
 And run:
 
     ```
@@ -41,7 +40,7 @@ I'm currently implementing the hash table, which will be used to replace the `ma
 After that, I will implement the priority queue. Right now I'm using a normal queue in place of priority queue for simplicity.
 
 ## Testing
-To test my soduku solver, I will write a `SodukuGenerator` which will be able to generate soduku puzzles of arbitrary size. 
+To test my soduku solver, I will write a `SodukuGenerator.cpp` which will be able to generate soduku puzzles of arbitrary size. 
 
 ## Read more
 Please see the doc Julie Jiang Comp 15 Final Project Specs.pdf for formal definitions and algorithms rendered in beautiful LaTeX.
