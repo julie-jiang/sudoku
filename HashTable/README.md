@@ -30,12 +30,10 @@ HashTable<std::string, int> ht(size);
 
 ## Testing
 Compile with:
-
-    ```
-    make
-    ```
+```
+make
+```
 And run:
-
-    ```
-    ./testHashTable
-    ```
+```
+./testHashTable
+```

@@ -29,8 +29,10 @@ Coord c(1, 2);
     std::cout << "y = " << y << std::endl; // x = 2
     ```
 3. Cout as string
+    ```
     Coord c(1, 2);
     std::cout << c << std::endl; // (1, 2)
+    ```
 
 ## Testing
 Compile with:
