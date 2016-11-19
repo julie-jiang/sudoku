@@ -27,6 +27,7 @@ An [AVL tree](https://en.wikipedia.org/wiki/AVL_tree) is a self-balancing binary
     ```
 
 The things it can do:
+
 1. Add an element
 
     ```c++
