@@ -1,0 +1,7 @@
+CXX = clang++
+CXXFLAGS = -std=c++11 -Wall -Wextra 
+
+AVLTree: testAVLTree.o 
+	${CXX} ${CXXFLAGS} testAVLTree.cpp -o testAVLTree
+	
+testAVLTree.o: testAVLTree.cpp AVLTree.h

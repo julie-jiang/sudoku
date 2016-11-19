@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Coord.h"
-#include "AVLTree.h"
+#include "../AVLTree/AVLTree.h"
 #include <cstdlib>
 #include <map>
 

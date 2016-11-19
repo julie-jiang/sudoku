@@ -18,7 +18,8 @@ template<typename Key, typename Value>
 class HashTable {
 
     public:
-        HashTable(size_t size = 100);
+        HashTable();
+        HashTable(size_t);
         ~HashTable();
         void set(Key, Value);
         Value get(Key);
@@ -40,6 +41,17 @@ class HashTable {
 /*****************************************************************************/
 #include <functional>
 #include <sstream>
+
+template<typename Key, typename Value>
+HashTable<Key, Value>::HashTable()
+{
+    bucketSize = 100;
+    buckets = new Node *[bucketSize];
+    for (size_t i = 0; i < bucketSize; i++) {
+        buckets[i] = nullptr;
+    }
+    hashFunction = std::hash<std::string>{};
+}
 
 template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable(size_t size)

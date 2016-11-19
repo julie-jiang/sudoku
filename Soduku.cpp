@@ -6,7 +6,7 @@
 #include <stack>
 #include <math.h>
 #include "Soduku.h"
-#include "AVLTree.h"
+#include "AVLTree/AVLTree.h"
 
 Soduku::Soduku(std::string filename, int size)
 {
@@ -52,7 +52,7 @@ void Soduku::initGrid(std::string filename)
         }
     }
     enforceArcConsistency();
-    printGridDomains();
+    //printGridDomains();
 }
 
 bool Soduku::backtrackingSearch()
@@ -67,11 +67,12 @@ bool Soduku::backtrackingSearch()
             domain.pop();
             if (valueIsConsistent(d, c)) {
                 assignment[c] = d;
-                char a;
-                std::cin >> a;
                 std::cout << ("\033[H\033[2J");
                 std::cout << "Assigned (" << x << ", " << y << ") to " << d << std::endl;
                 print();
+                // Wait for user input before continuing
+                char a;
+                std::cin >> a;
                 if (backtrackingSearch()) {
                     std::cout << "(" << x << ", " << y << ") = " << d << " worked!!!\n";
                     return true;
@@ -183,6 +184,7 @@ void Soduku::print()
         }
         std::cout << std::endl;
     }
+    std::cout << "Press anything to continue \n";
 }
 
 std::string Soduku::int2string(int n)

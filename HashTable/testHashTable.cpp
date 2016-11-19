@@ -1,10 +1,9 @@
 #include <iostream>
 #include "HashTable.h"
-#include "Coord.h"
+#include "../Coord/Coord.h"
 
 int main ()
 {
-
     HashTable<std::string, int> ht1;
     ht1.set("a", 1);
     ht1.set("b", 2);
