@@ -41,4 +41,4 @@ After that, I will implement the priority queue. Right now I'm using a normal qu
 To test my soduku solver, I will write a `SodukuGenerator.cpp` which will be able to generate soduku puzzles of arbitrary size. 
 
 ## Read more
-Please see [my spec](soduku-solver/Julie Jiang Comp 15 Final Project Specs.pdf)for formal definitions and algorithms rendered in beautiful LaTeX.
+Please see [my spec](Julie Jiang Comp 15 Final Project Specs.pdf) for formal definitions and algorithms rendered in beautiful LaTeX.
