@@ -39,6 +39,17 @@ After that, I will implement the priority queue. Right now I'm using a normal qu
 ## Data Structures
 
 1. [AVL Tree](AVLTree/)
+	
+	A self-balancing binary search tree designed to hold the domains, or possible values, of each coordinate object `Coord`.
+
+2. [Hash Table[(HashTable/)]
+	
+	A hash table designed to map coordinate objects `Coord` to their assigned values. 
+
+3. Priority Queue
+	
+	A PQ that holds coordinate objects `Coord`, prioritized by the number of values in their domains.
+
 
 ## Testing
 To test my soduku solver, I will write a `SodukuGenerator.cpp` which will be able to generate soduku puzzles of arbitrary size. 
