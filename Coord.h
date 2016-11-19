@@ -4,16 +4,16 @@
 
 class Coord {
 
-	public:
-		Coord(int, int);
-		friend bool operator==(const Coord &, const Coord &);
-		friend bool operator!=(const Coord &, const Coord &);
-		friend std::ostream &operator<<(std::ostream &, const Coord &);
-		int &operator[](const int);
+    public:
+        Coord(int, int);
+        friend bool operator==(const Coord &, const Coord &);
+        friend bool operator!=(const Coord &, const Coord &);
+        friend std::ostream &operator<<(std::ostream &, const Coord &);
+        int &operator[](const int);
 
-	private:
-		int x;
-		int y;
+    private:
+        int x;
+        int y;
 };
 
 #endif
