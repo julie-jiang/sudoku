@@ -95,15 +95,7 @@ Value HashTable<Key, Value>::get(Key k)
 
 	
 }
-template<typename Key, typename Value>
-size_t HashTable<Key, Value>::getIndex(Key k)
-{
-	std::string stringK = toString(k);
-	int hashedK = hashFunction(stringK);
-	return hashedK % bucketSize;
-}
 
-/*
 template<typename Key, typename Value>
 size_t HashTable<Key, Value>::getIndex(Key k)
 {
@@ -113,11 +105,11 @@ size_t HashTable<Key, Value>::getIndex(Key k)
 template<typename Key, typename Value>
 int HashTable<Key, Value>::hash(Key k)
 {
-	stringK = toString(k);
+	std::string stringK = toString(k);
 	return hashFunction(stringK);
 
 
-}*/
+}
 template<typename Key, typename Value>
 std::string HashTable<Key, Value>::toString(Key k)
 {

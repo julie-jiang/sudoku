@@ -4,6 +4,7 @@
 #include <queue>
 #include <map>
 #include "AVLTree.h"
+#include "Coord.h"
 
 class Soduku {
 
@@ -13,7 +14,6 @@ public:
 
 private:
 	int gridSize, n;
-	typedef std::pair<int, int> Coord;
 	std::map<Coord, AVLTree<int>> grid;
 	std::map<Coord, int> givenAssignment;
 	std::map<Coord, int> assignment;

@@ -1,22 +1,32 @@
 #include <iostream>
 #include "HashTable.h"
+#include "Coord.h"
 
 int main ()
 {
-	HashTable<std::string, int> *ht = new HashTable<std::string, int>;
-	ht->set("a", 1);
-	ht->set("b", 2);
-	int aval = ht->get("a");
-	int bval = ht->get("b");
+
+	HashTable<std::string, int> ht1;
+	ht1.set("a", 1);
+	ht1.set("b", 2);
+	int aval = ht1.get("a");
+	int bval = ht1.get("b");
 	std::cout << "aval = " << aval << " bval = " << bval << std::endl;
-	typedef std::pair<int, int> Coord;
-	/*HashTable<Coord, int> *ht1 = new HashTable<Coord, int>;
-	Coord c1 = std::make_pair(0, 0);
-	Coord c2 = std::make_pair(4, 7);
-	ht1->set(c1, 10);
-	ht1->set(c2, 20);*/
-	//int aaval = ht->get(c1);
-	//int bbval = ht->get(c2);
+	HashTable<Coord, int> ht2;
+	Coord c1(0, 0);
+	Coord c2(4, 7);
+	ht2.set(c1, 10);
+	ht2.set(c2, 20);
+	int aaval = ht2.get(c1);
+	int bbval = ht2.get(c2);
+	std::cout << "aaval = " << aaval << " bbval = " << bbval << std::endl;
+	
 
 	return 0;
 }
+
+
+
+
+
+
+

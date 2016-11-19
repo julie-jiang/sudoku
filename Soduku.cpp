@@ -10,7 +10,7 @@
 
 Soduku::Soduku(std::string filename, int size)
 {
-	gridSize = size;
+    gridSize = size;
     n = (int) sqrt(size);
     
     initGrid(filename);
@@ -25,7 +25,7 @@ Soduku::~Soduku()
 void Soduku::initGrid(std::string filename)
 {
     // Open file 
-	std::ifstream inFile;
+    std::ifstream inFile;
     inFile.open(filename);
     if (inFile.fail()) {
         throw std::logic_error("File does not exist");
@@ -219,9 +219,3 @@ int Soduku::string2int(std::string s)
 
     return result;
 }
-
-
-
-
-
-
