@@ -3,11 +3,11 @@ The variables in `Soduku`, which are the individual grid cells, are implemented 
 
 ## Initilization
 
-    ```c++
-    #include "Coord.h"
-    // ...
-    Coord c(1, 2);
-    ```
+```c++
+#include "Coord.h"
+// ...
+Coord c(1, 2);
+```
 
 ## The things it can do
 
@@ -35,11 +35,12 @@ The variables in `Soduku`, which are the individual grid cells, are implemented 
 ## Testing
 Compile with:
 
-    ```
-    make
-    ```
+```
+make
+```
+
 And run:
 
-    ```
-    ./testCoord
-    ```
+```
+./testCoord
+```

@@ -4,11 +4,11 @@ An [AVL tree](https://en.wikipedia.org/wiki/AVL_tree) is a self-balancing binary
 ## Initialization 
 To initialize an `AVLTree` object:
 
-    ```c++
-    #include "AVLTree.h"
-    // ...
-    AVLTree<ElemType> avl;
-    ```
+```c++
+#include "AVLTree.h"
+// ...
+AVLTree<ElemType> avl;
+```
 
 ## The things it can do
 
@@ -76,12 +76,13 @@ To initialize an `AVLTree` object:
 ## Testing
 Compile with:
 
-    ```
-    make
-    ```
+```
+make
+```
+
 And run:
 
-    ```
-    ./testAVLTree
-    ```
+```
+./testAVLTree
+```
 

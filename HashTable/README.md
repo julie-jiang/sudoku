@@ -8,20 +8,20 @@ This data structure is currently still under development.
 ## Intialization
 To create a new hashtable of default bucket size of 100:
 
-	```c++
-	#include "Hashtable.h"
-	// ...
-	HashTable<std::string, int> ht;
-	```
+```c++
+#include "Hashtable.h"
+// ...
+HashTable<std::string, int> ht;
+```
 
 To create a new hashtable of with user defined bucket size:
 
-	```c++
-	#include "Hashtable.h"
-	// ...
-	int size = 200;
-	HashTable<std::string, int> ht(size);
-	```
+```c++
+#include "Hashtable.h"
+// ...
+int size = 200;
+HashTable<std::string, int> ht(size);
+```
 ## The things it can do
 
 1. Look up the value of a given key. It will return some sort of none if the key is not present. 
