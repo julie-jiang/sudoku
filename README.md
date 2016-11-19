@@ -42,7 +42,7 @@ After that, I will implement the priority queue. Right now I'm using a normal qu
 	
 	A self-balancing binary search tree designed to hold the domains, or possible values, of each coordinate object `Coord`.
 
-2. [Hash Table[(HashTable/)]
+2. [Hash Table](HashTable/)]
 	
 	A hash table designed to map coordinate objects `Coord` to their assigned values. 
 
