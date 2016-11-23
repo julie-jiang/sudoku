@@ -22,8 +22,11 @@ int main()
     } else {
         std::cout << "c1 != c3\n";
     }
+    std::cout << "c1 = " << c1 << std::endl;
+    Coord c4 = c1;
 
-    std::cout << c1 << std::endl;
+    std::cout << "c4 = " << c4 << std::endl;
+
 
     /*std::map<Coord, AVLTree<int>> mymap;
     mymap.insert(std::pair<Coord, AVLTree<int>>(c1, AVLTree<int>()));*/

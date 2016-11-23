@@ -6,6 +6,7 @@ class Coord {
 
     public:
         Coord(int, int);
+        Coord(const Coord &);
         friend bool operator==(const Coord &, const Coord &);
         friend bool operator!=(const Coord &, const Coord &);
         friend std::ostream &operator<<(std::ostream &, const Coord &);

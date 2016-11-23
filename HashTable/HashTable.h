@@ -12,7 +12,7 @@
 
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
-
+#include "../LinkedList/LinkedList.h"
 template<typename Key, typename Value>
 
 class HashTable {
@@ -21,16 +21,15 @@ class HashTable {
         HashTable();
         HashTable(size_t);
         ~HashTable();
+        Value &operator[](const Key);
         void set(Key, Value);
         Value get(Key);
     private:
-        struct Node {
-            Value val;
-            Node *next;
-        };
-        Node **buckets;
+        LinkedList<Key, Value> **buckets;
         size_t bucketSize;
         std::hash<std::string> hashFunction;
+
+        void init();
         size_t getIndex(Key);
         int hash(Key);
         std::string toString(Key);
@@ -46,24 +45,25 @@ template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable()
 {
     bucketSize = 100;
-    buckets = new Node *[bucketSize];
-    for (size_t i = 0; i < bucketSize; i++) {
-        buckets[i] = nullptr;
-    }
-    hashFunction = std::hash<std::string>{};
+    init();
 }
 
 template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable(size_t size)
 {
     bucketSize = size;
-    buckets = new Node *[bucketSize];
+    init();
+
+}
+template<typename Key, typename Value>
+void HashTable<Key, Value>::init()
+{
+    buckets = new LinkedList<Key, Value> *[bucketSize];
     for (size_t i = 0; i < bucketSize; i++) {
         buckets[i] = nullptr;
     }
     hashFunction = std::hash<std::string>{};
 }
-
 template<typename Key, typename Value>
 HashTable<Key, Value>::~HashTable()
 {
@@ -74,17 +74,15 @@ HashTable<Key, Value>::~HashTable()
 template<typename Key, typename Value>
 void HashTable<Key, Value>::set(Key k, Value val)
 {
-    Node *newNode = new Node;
-    newNode->val = val;
-    newNode->next = nullptr;
     //std::cout << "Trying to set value for key " << k << std::endl;
     size_t index = getIndex(k);
     std::cout << "Hashed index " << index << std::endl;
     if (buckets[index] == nullptr) {
-        buckets[index] = newNode;
+        buckets[index] = new LinkedList<Key, Value>();
+        buckets[index]->insert(k, val);
         std::cout << "Set successfully\n";
     } else {
-        buckets[index] = newNode;
+        buckets[index]->insert(k, val);
         std::cout << "Collision!\n";
     }
 
@@ -97,7 +95,7 @@ Value HashTable<Key, Value>::get(Key k)
     size_t index = getIndex(k);
     std::cout << "Hashed index " << index << std::endl;
     if (buckets[index] != nullptr) {
-        Value val = buckets[index]->val;
+        Value val = buckets[index]->get(k);
         std::cout << "Returning value " << val << std::endl;
         return val;
     } else {

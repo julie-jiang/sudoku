@@ -12,7 +12,7 @@ Coord c(1, 2);
 ## The things it can do
 
 1. Equality operators 
-    ```
+    ```c++
     Coord c1(1, 1);
     Coord c2(1, 1);
     Coord c3(1, 2);
@@ -21,7 +21,7 @@ Coord c(1, 2);
     ```
 
 2. Subscript operator
-    ```
+    ```c++
     Coord c(1, 2);
     int x = c[0];
     int y = c[1];
@@ -29,7 +29,8 @@ Coord c(1, 2);
     std::cout << "y = " << y << std::endl; // x = 2
     ```
 3. Cout as string
-    ```
+
+    ```c++
     Coord c(1, 2);
     std::cout << c << std::endl; // (1, 2)
     ```

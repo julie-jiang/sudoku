@@ -6,6 +6,12 @@ Coord::Coord(int i, int j)
     x = i;
     y = j;
 }
+Coord::Coord(const Coord &source)
+{
+    x = source.x;
+    y = source.y;
+
+}
 bool operator==(const Coord &source1, const Coord &source2) 
 {
     return (source1.x == source2.x and source1.y == source2.y);
