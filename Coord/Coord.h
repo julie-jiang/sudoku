@@ -6,6 +6,7 @@ class Coord {
 
     public:
         Coord(int, int);
+        ~Coord();
         Coord(const Coord &);
         friend bool operator==(const Coord &, const Coord &);
         friend bool operator!=(const Coord &, const Coord &);

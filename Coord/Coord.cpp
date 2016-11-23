@@ -6,11 +6,14 @@ Coord::Coord(int i, int j)
     x = i;
     y = j;
 }
+Coord::~Coord()
+{
+
+}
 Coord::Coord(const Coord &source)
 {
     x = source.x;
     y = source.y;
-
 }
 bool operator==(const Coord &source1, const Coord &source2) 
 {
@@ -22,19 +25,23 @@ bool operator!=(const Coord &source1, const Coord &source2)
 }
 bool operator<=(const Coord &source1, const Coord &source2)
 {
+    return (source1 < source2 or source1 == source2);
 
 }
 bool operator<(const Coord &source1, const Coord &source2)
 {
+    return (source1.x < source2.x or 
+           (source1.x == source2.x and source1.y < source2.y));
 
 }
 bool operator>=(const Coord &source1, const Coord &source2)
 {
+    return (source1 > source2 or source1 == source2);
 
 }
 bool operator>(const Coord &source1, const Coord &source2)
 {
-
+    return not (source1 <= source2);
 }
 int &Coord::operator[](const int index)
 {
