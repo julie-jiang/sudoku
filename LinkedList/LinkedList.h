@@ -6,9 +6,11 @@
 /*                                  Header                                   */
 /*****************************************************************************/
 #include "Node.h"
-#include <iterator>
+#include "Iterator.h"
 template<typename Key, typename Value>
 class LinkedList {
+    public:
+        typedef Iterator<Key, Value> iterator;
     public:
         LinkedList(); 
         ~LinkedList(); /* Destructor */
@@ -18,34 +20,14 @@ class LinkedList {
         Value &operator[](const Key);
         void insert(Key, Value);
         void remove(Key);
-    public:
-        class iterator {
-            friend class List;
-
-            private:
-            iterator(Node<Key, Value>* node) : m_node(node) {}
-
-            public:
-            iterator() : m_node(0) {}
-
-            iterator& operator ++() {
-                m_node = m_node->next;
-                return *this;
-            }
-
-            int& operator * () {
-                // Note: Dereferncing the end (sentinal node) is undefined behavior.
-                
-            }
-
-            // More iterator functions.
-
-            private:
-            Node<Key, Value> * m_node;
-        };
+        iterator begin() {
+            return Iterator<Key, Value>(front);
+        }
+        iterator end() {
+            return Iterator<Key, Value>(nullptr);
+        }
     private:
         Node<Key, Value> *front;
-        Node<Key, Value> *makeNewNode(const Key &, const Value &);
         Node<Key, Value> *lastNode();
 };
 /*****************************************************************************/
@@ -89,13 +71,6 @@ int LinkedList<Key, Value>::size()
     return num_nodes;
 }
 
-template<typename Key, typename Value>
-Node<Key, Value> *LinkedList<Key, Value>::makeNewNode(const Key &k, const Value &v)
-{
-    Node<Key, Value> *newNode = new Node<Key, Value>(k, v);
-
-    return newNode;
-}
  // assumes non empty!!!!!
 template<typename Key, typename Value>
 Node<Key, Value> *LinkedList<Key, Value>::lastNode()
@@ -141,8 +116,7 @@ Value &LinkedList<Key, Value>::operator[](const Key k)
 template<typename Key, typename Value>
 void LinkedList<Key, Value>::insert(Key k, Value v)
 {
-    //Node<Key, Value> *newNode = new Node<Key, Value>(k, v);
-    Node<Key, Value> *newNode = makeNewNode(k, v);
+    Node<Key, Value> *newNode = new Node<Key, Value>(k, v);
     if (empty()) {
         front = newNode;
     } else {

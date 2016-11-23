@@ -20,6 +20,22 @@ bool operator!=(const Coord &source1, const Coord &source2)
 {
     return not (source1 == source2);
 }
+bool operator<=(const Coord &source1, const Coord &source2)
+{
+
+}
+bool operator<(const Coord &source1, const Coord &source2)
+{
+
+}
+bool operator>=(const Coord &source1, const Coord &source2)
+{
+
+}
+bool operator>(const Coord &source1, const Coord &source2)
+{
+
+}
 int &Coord::operator[](const int index)
 {
     if (index == 0) {

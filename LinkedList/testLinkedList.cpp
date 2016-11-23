@@ -21,7 +21,14 @@ int main()
     
     int val22 = list2[c2];
     std::cout << "val11 = " << val11 << " val22 = " << val22 << std::endl;
-    
+
+    for (LinkedList<Coord, int>::iterator it = list2.begin(); it != list2.end(); ++it) {
+    	Coord c = it.key();
+    	int value = it.value();
+    	std::cout << "c = " << c << " value = " << value << std::endl;
+    }
+
+   
 
 	
 
