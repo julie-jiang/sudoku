@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <stack>
 #include "AVLTree.h"
+#include "../Coord/Coord.h"
 
 
 void testAddLeftLeft()
@@ -47,6 +48,18 @@ void testAddRightLeft()
     avl->printTree();
     delete avl;
 }
+void testAddDuplicates()
+{
+    AVLTree<int> *avl = new AVLTree<int>;
+    std::cout << "Output should be: [[[[] 10 []] 20 []] 30 [[[] 40 []] 50 [[] 60 []]]] \n"; 
+    avl->add(10); avl->add(50); avl->add(20);
+    avl->add(30); avl->add(60); avl->add(40);
+    avl->add(30); avl->add(50); avl->add(10);
+    std::cout << "Actual output:    ";
+    avl->printTree();
+    delete avl;
+
+}
 void testAdd()
 {
     std::cout << "\n<------ Testing add function ------> \n";
@@ -54,6 +67,7 @@ void testAdd()
     testAddLeftRight();
     testAddRightRight();
     testAddRightLeft();
+    testAddDuplicates();
 }
 /*
  * Tests contains when
@@ -187,7 +201,18 @@ void testSize()
 
 
 }
-
+void testCoord()
+{
+    std::cout << "\n<------ Testing using AVLTree with custom defined object------> \n";
+    AVLTree<Coord> *avl = new AVLTree<Coord>;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            Coord c(i, j);
+            avl->add(c);
+        }
+    }
+    delete avl;
+}
 
 int main() 
 {
@@ -197,5 +222,6 @@ int main()
     testRemove();
     testGetElements();
     testSize();
+    testCoord();
     std::cout << "============== Tests for AVLTree completed! ==============\n";
 }

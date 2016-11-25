@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Soduku.h"
+#include "Sodukupp.h"
 
 const int size = 9;
 int main(int argc, char *argv[])

@@ -1,5 +1,8 @@
 # AVLTree.h
-An [AVL tree](https://en.wikipedia.org/wiki/AVL_tree) is a self-balancing binary search tree. This tree is designed to hold the domain, or possible values, each variable in the grid can hold. In practice, it can hold elements of any type.
+This is a set implemented as an [AVL tree](https://en.wikipedia.org/wiki/AVL_tree), a type of self-balancing binary search tree. This tree is designed to hold the domain, or possible values, each variable in the grid can hold. In practice, it can hold elements of any type.
+
+As a set, it will not hold duplicate copies of the same item. If you attempt to add an element that is already in the set, then nothing will change.
+
 
 ## Initialization 
 To initialize an `AVLTree` object:

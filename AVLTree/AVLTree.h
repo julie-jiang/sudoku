@@ -12,6 +12,7 @@
 #define AVLTREE_H
 #include <cstdlib>
 #include <stack>
+#include "TreeNode.h"
 
 template<typename ElemType>
 
@@ -22,6 +23,7 @@ class AVLTree {
         ~AVLTree();
         void add(ElemType);
         bool contains(ElemType);
+        ElemType pop();
         void remove(ElemType);
         bool empty();
         int size();
@@ -30,31 +32,24 @@ class AVLTree {
         ElemType getRoot();
         std::stack<ElemType> getElements();
     private:
-        struct Node {
-            int height;
-            ElemType value;
-            Node *left;
-            Node *right;
-        }
-        *root;
+        TreeNode<ElemType> *root;
 
-        Node *add(Node *, ElemType);
-        Node *makeNewNode(ElemType);
-        bool contains(Node *, ElemType);
-        Node *remove(Node *, ElemType);
-        void print(Node *);
-        void printTree(Node *);
-        void getElements(Node *, std::stack<ElemType> &);
-        int size(Node *, int);
+        TreeNode<ElemType> *add(TreeNode<ElemType> *, ElemType);
+        bool contains(TreeNode<ElemType> *, ElemType);
+        TreeNode<ElemType> *remove(TreeNode<ElemType> *, ElemType);
+        void print(TreeNode<ElemType> *);
+        void printTree(TreeNode<ElemType> *);
+        void getElements(TreeNode<ElemType> *, std::stack<ElemType> &);
+        int size(TreeNode<ElemType> *, int);
         
-        int getBalance(Node *);
-        int height(Node *);
+        int getBalance(TreeNode<ElemType> *);
+        int height(TreeNode<ElemType> *);
         int max(int, int);
-        Node *getMinNode(Node *);
-        Node *rotateRight(Node *);
-        Node *rotateLeft(Node *);
-        Node *removeNode(Node *);
-        Node *updateHeight(Node *);
+        TreeNode<ElemType> *getMinTreeNode(TreeNode<ElemType> *);
+        TreeNode<ElemType> *rotateRight(TreeNode<ElemType> *);
+        TreeNode<ElemType> *rotateLeft(TreeNode<ElemType> *);
+        TreeNode<ElemType> *removeTreeNode(TreeNode<ElemType> *);
+        TreeNode<ElemType> *updateHeight(TreeNode<ElemType> *);
         
         
 };
@@ -84,19 +79,19 @@ bool AVLTree<ElemType>::contains(ElemType val)
 
 }
 template<typename ElemType>
-bool AVLTree<ElemType>::contains(Node *node, ElemType val)
+bool AVLTree<ElemType>::contains(TreeNode<ElemType> *node, ElemType val)
 {
-    // If node == s, return true
+    // If TreeNode == s, return true
     if (node->value == val) {
         return true;
     } 
 
-    // Search left subtree if node > s
+    // Search left subtree if TreeNode > s
     if (node->value > val and node->left != nullptr) {
         return contains(node->left, val);
     }
 
-    // Search right subtree if node < s
+    // Search right subtree if TreeNode < s
     else if (node->right != nullptr) {
         return contains(node->right, val);
     } 
@@ -121,18 +116,18 @@ void AVLTree<ElemType>::add(ElemType val)
 
 
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::add(Node *node, ElemType val)
+TreeNode<ElemType> *AVLTree<ElemType>::add(TreeNode<ElemType> *node, ElemType val)
 {
-    // Make new node 
+    // Make new TreeNode 
     if (node == nullptr) {
-        node = makeNewNode(val);
+        node = new TreeNode<ElemType>(val);
 
-    // Insert left if currnode is greater than newnode
+    // Insert left if currTreeNode is greater than newTreeNode
     } else if (node->value > val) {
         node->left = add(node->left, val);
 
-    // Insert right if node is smaller than s
-    } else {
+    // Insert right if TreeNode is smaller than s
+    } else  if (node->value < val) {
         node->right = add(node->right, val);
     }
     
@@ -145,7 +140,7 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::add(Node *node, ElemType va
         if (val > node->right->value) {    
             return rotateLeft(node);
         // Right left unbalance
-        } else { // val < node->right->value              
+        } else { // val < TreeNode->right->value              
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }
@@ -154,13 +149,20 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::add(Node *node, ElemType va
         if (val < node->left->value) {
             return rotateRight(node);
         // Left right unbalance
-        } else { // val > node->left->value
+        } else { // val > TreeNode->left->value
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
     }
 
     return node;
+}
+template<typename ElemType>
+ElemType AVLTree<ElemType>::pop()
+{
+    ElemType value = root->value;
+    remove(value);
+    return value;
 }
 
 template<typename ElemType>
@@ -171,22 +173,22 @@ void AVLTree<ElemType>::remove(ElemType val)
 
 
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::remove(Node* node, ElemType val)
+TreeNode<ElemType> *AVLTree<ElemType>::remove(TreeNode<ElemType> *node, ElemType val)
 {   
     // Standard BST removal 
     if (node == nullptr) 
         return node;
    
-   // If node == val, remove node    
+   // If TreeNode == val, remove TreeNode    
     if (val == node->value) 
-        node = removeNode(node); 
+        node = removeTreeNode(node); 
 
-    // Search left subtree if node > s  
+    // Search left subtree if TreeNode > s  
     else if (val < node->value)
         node->left = remove(node->left, val);
         
 
-    // Search right subtree if node < s
+    // Search right subtree if TreeNode < s
     else 
         node->right = remove(node->right, val);  
 
@@ -200,7 +202,7 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::remove(Node* node, ElemType
 }
 
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::updateHeight(Node *node)
+TreeNode<ElemType> *AVLTree<ElemType>::updateHeight(TreeNode<ElemType> *node)
 {
     node->height = max(height(node->left), height(node->right)) + 1;
     int balance = getBalance(node);
@@ -229,21 +231,21 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::updateHeight(Node *node)
     return node;
 }
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::removeNode(Node *node)
+TreeNode<ElemType> *AVLTree<ElemType>::removeTreeNode(TreeNode<ElemType> *node)
 {
-    // If node has two children, find its in-order successor and replace node 
+    // If TreeNode has two children, find its in-order successor and replace TreeNode 
     // with it. Then delete an instance of its in-order successor through 
     // recursion
     if (node->left != nullptr and node->right != nullptr) {
-        Node *successor = getMinNode(node->right);
+        TreeNode<ElemType> *successor = getMinTreeNode(node->right);
         node->value  = successor->value;
         node->right  = remove(node->right, successor->value);
     
-    // Else if node has only one or no child.
+    // Else if TreeNode has only one or no child.
     } else {
-        Node *temp = node->left ? node->left : node->right;
+        TreeNode<ElemType> *temp = node->left ? node->left : node->right;
 
-        // If node has no child
+        // If TreeNode has no child
         if (temp == nullptr) {
             temp = node;
             node = nullptr;
@@ -256,21 +258,21 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::removeNode(Node *node)
     return node;
 }
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::getMinNode(Node *node)
+TreeNode<ElemType> *AVLTree<ElemType>::getMinTreeNode(TreeNode<ElemType> *node)
 {
     // Keep traversing left until end of AVL tree is reached
     if (node->left != nullptr) {
-        return getMinNode(node->left);
+        return getMinTreeNode(node->left);
     }
     return node;
 }
 
 
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::rotateLeft(Node *node)
+TreeNode<ElemType> *AVLTree<ElemType>::rotateLeft(TreeNode<ElemType> *node)
 {
-    Node *rightChild     = node->right;
-    Node *rightLeftChild = rightChild->left;
+    TreeNode<ElemType> *rightChild     = node->right;
+    TreeNode<ElemType> *rightLeftChild = rightChild->left;
 
     rightChild->left = node;
     node->right      = rightLeftChild;
@@ -281,10 +283,10 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::rotateLeft(Node *node)
     return rightChild;
 }
 template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::rotateRight(Node *node)
+TreeNode<ElemType> *AVLTree<ElemType>::rotateRight(TreeNode<ElemType> *node)
 {
-    Node *leftChild     = node->left;
-    Node *leftRightChild = leftChild->right;
+    TreeNode<ElemType> *leftChild      = node->left;
+    TreeNode<ElemType> *leftRightChild = leftChild->right;
 
     leftChild->right = node;
     node->left       = leftRightChild;
@@ -296,13 +298,13 @@ typename AVLTree<ElemType>::Node *AVLTree<ElemType>::rotateRight(Node *node)
 }
 
 template<typename ElemType>
-int AVLTree<ElemType>::getBalance(Node *node)
+int AVLTree<ElemType>::getBalance(TreeNode<ElemType> *node)
 {
     return (height(node->right) - height(node->left));
 }
 
 template<typename ElemType>
-int AVLTree<ElemType>::height(Node *node)
+int AVLTree<ElemType>::height(TreeNode<ElemType> *node)
 {
     if (node != nullptr)
         return node->height;
@@ -315,16 +317,7 @@ int AVLTree<ElemType>::max(int a, int b)
     return (a > b) ? a : b;
 }
 
-template<typename ElemType>
-typename AVLTree<ElemType>::Node *AVLTree<ElemType>::makeNewNode(ElemType val)
-{
-    Node *newNode   = new Node;
-    newNode->height = 1;
-    newNode->value  = val;
-    newNode->left   = nullptr;
-    newNode->right  = nullptr;
-    return newNode;
-}
+
 template<typename ElemType>
 void AVLTree<ElemType>::print()
 {
@@ -335,7 +328,7 @@ void AVLTree<ElemType>::print()
     std::cout << "]";
 }
 template<typename ElemType>
-void AVLTree<ElemType>::print(Node *node)
+void AVLTree<ElemType>::print(TreeNode<ElemType> *node)
 {
     if (node->left != nullptr) 
         print(node->left);
@@ -356,7 +349,7 @@ std::stack<ElemType> AVLTree<ElemType>::getElements()
 }
 
 template<typename ElemType>
-void AVLTree<ElemType>::getElements(Node *node, std::stack<ElemType> &elemStack)
+void AVLTree<ElemType>::getElements(TreeNode<ElemType> *node, std::stack<ElemType> &elemStack)
 {
     if (node != nullptr) {
         elemStack.push(node->value);
@@ -375,14 +368,14 @@ void AVLTree<ElemType>::printTree()
     std::cout << "]" << std::endl;
 }
 template<typename ElemType>
-void AVLTree<ElemType>::printTree(Node *node)
+void AVLTree<ElemType>::printTree(TreeNode<ElemType> *node)
 {
     // Traverse left subtree 
     std::cout << "[";
     if (node->left != nullptr) {    
         printTree(node->left);  
     } 
-    // Print current node
+    // Print current TreeNode
     std::cout << "] " << node->value << " [";
     
     // Traverse right subtree
@@ -398,7 +391,7 @@ int AVLTree<ElemType>::size()
     return size(root, 0);
 }
 template<typename ElemType>
-int AVLTree<ElemType>::size(Node *node, int sum)
+int AVLTree<ElemType>::size(TreeNode<ElemType> *node, int sum)
 {
     if (node != nullptr) {
         sum++;
