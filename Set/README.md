@@ -68,7 +68,8 @@ Set<T> *copy_set_pointer = new Set<T>(set);
     for (Set<T>::iterator it = set.begin(); it != set.end(); ++it) {
         std::cout << *it << std::endl;
     }
-
+    ```
+    
 7. Print the elements in the set via in order traversal
 
     ```c++
