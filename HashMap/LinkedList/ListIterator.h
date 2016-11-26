@@ -7,7 +7,7 @@ class ListIterator
         friend class LinkedList<Key, Value>;
         ListIterator() : iter_node(0) {}
 
-        ListIterator &operator ++() {
+        ListIterator &operator++() {
             iter_node = iter_node->next;
             return *this;
         }

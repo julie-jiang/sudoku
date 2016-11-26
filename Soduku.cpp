@@ -65,23 +65,11 @@ bool Soduku::assign(Coord c, int d)
             return false;
         }
     }
-    /*
-    for (Set<int>::iterator it = values[c].begin(); it != values[c].end(); ++it) {
-        int d2 = *it;
-        if (d2 != d and not eliminate(c, d2)) {
-            std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
-            return false;
-        }
-
-    }*/
     delete other_values;
     return true;
 }
 bool Soduku::eliminate(Coord c, int d)
 {
-    //std::cout << "eliminating " << d << " from " << c << std::endl;
-    //values[c].print();
-    //std::cout << std::endl;
     if (not values[c].contains(d)) {
         return true;
     }
@@ -118,8 +106,6 @@ bool Soduku::eliminate(Coord c, int d)
             }
         }
     }
-    //std::cout << "eliminating " << d << " from " << c << "successful!\n";
-    
     return true;
 
 

@@ -41,7 +41,7 @@ void testType()
     assert(val1 = 10);
     assert(val2 = 20);
 }
-void testGetterSetter()
+void testGetterSetter1()
 {
     std::cout << "\n<------ Testing getter and setter ------> \n";
     LinkedList<std::string, int> list;
@@ -65,6 +65,18 @@ void testGetterSetter()
     assert(caught_exception);
 
 }
+void testGetterSetter2()
+{
+    LinkedList<std::string, int> list;
+    bool caught_exception = false;
+    try {
+        int val = list["key"];
+        (void) val;
+    } catch (std::logic_error) {
+        caught_exception = true;
+    }
+    assert(caught_exception);
+}
 
 void testRemove1()
 {
@@ -74,9 +86,9 @@ void testRemove1()
     list.insert("key1", 1);
     list.insert("key2", 1);
     list.insert("key3", 2);
-    list.remove("key2");
-    list.remove("key4");
-    list.remove("key1");
+    assert(list.remove("key2"));
+    assert(not list.remove("key4"));
+    assert(list.remove("key1"));
     assert(list.size() == 1);
     LinkedList<std::string, int>::iterator it = list.begin();
     assert(it.key() == "key3");
@@ -89,11 +101,11 @@ void testRemove2()
     list.insert("key2", 2);
     list.insert("key3", 3);
     list.insert("key4", 4);
-    list.remove("key1");
+    assert(list.remove("key1"));
     assert(list.size() == 3);
-    list.remove("key2");
+    assert(list.remove("key2"));
     assert(list.size() == 2);
-    list.remove("key3");
+    assert(list.remove("key3"));
     assert(list.size() == 1);
     LinkedList<std::string, int>::iterator it = list.begin();
     assert(it.key() == "key4");
@@ -124,17 +136,30 @@ void testSize()
     assert(list["key1"] == 2);
 
 }
+void testPointer()
+{
+    LinkedList<int, int> *list = new LinkedList<int, int>;
+    list->insert(1, 10);
+    list->insert(2, 20);
+    int val1 = (*list)[1];
+    int val2 = (*list)[2];
+    assert(val1 == 10);
+    assert(val2 == 20);
+    delete list;
+}
 int main()
 {
     std::cout << "============== Running tests for LinkedList ==============\n";
     
     testSize();
     testEmpty();
-    testGetterSetter();
+    testGetterSetter1();
+    testGetterSetter2();
     testType();
     testIterator();
     testRemove1();
     testRemove2();
+    testPointer();
     std::cout << "============== Tests for LinkedList completed! ==============\n";
 	
 

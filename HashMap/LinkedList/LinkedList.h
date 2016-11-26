@@ -13,9 +13,9 @@ class LinkedList {
         ~LinkedList(); 
         bool empty();
         size_t size(); 
-        const Value &operator[](Key) const;
+        Value &operator[](const Key &);
         void insert(Key, Value);
-        void remove(Key);
+        bool remove(Key);
         iterator begin(); 
         iterator end();
     private:
@@ -74,7 +74,7 @@ size_t LinkedList<Key, Value>::size()
 
 
 template<typename Key, typename Value>
-const Value &LinkedList<Key, Value>::operator[](Key k) const
+Value &LinkedList<Key, Value>::operator[](const Key &k)
 {
     ListNode<Key, Value> *current = front;
     while (current != nullptr) {
@@ -111,7 +111,7 @@ void LinkedList<Key, Value>::insert(Key k, Value v)
 }
 
 template<typename Key, typename Value>
-void LinkedList<Key, Value>::remove(Key k)
+bool LinkedList<Key, Value>::remove(Key k)
 {
     ListNode<Key, Value> *current = front;
     ListNode<Key, Value> *previous = nullptr;
@@ -122,11 +122,12 @@ void LinkedList<Key, Value>::remove(Key k)
             else 
                 front = current->next;
             delete current;
-            return;
+            return true;
         }
         previous = current;
         current = current->next;
     }
+    return false;
 
 }
 
