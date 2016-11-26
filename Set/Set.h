@@ -1,26 +1,19 @@
-
-/*****************************************************************************/
-/*                                  Header                                   */
-/*****************************************************************************/
-
 #ifndef SET_H
 #define SET_H
 #include <cstdlib>
 #include <stack>
 #include "SetNode.h"
 #include "SetIterator.h"
-
+/*****************************************************************************/
+/*                                  Header                                   */
+/*****************************************************************************/
 template<typename T>
-
-
 class Set {
-    private:
-        SetNode<T> *root;
     public:
         typedef SetIterator<T> iterator;
         Set();
         ~Set();
-        //Set(const Set &)
+        Set(const Set &);
         void add(T);
         bool contains(T);
         T pop();
@@ -31,13 +24,10 @@ class Set {
         void printTree();
         T getRoot();
         std::stack<T> getElements();
-        iterator begin() {
-            return SetIterator<T>(root);
-        }
-        iterator end() { 
-            return SetIterator<T>(nullptr);
-        }
+        iterator begin() const;
+        iterator end() const;
     private:
+        SetNode<T> *root;
         SetNode<T> *add(SetNode<T> *, T);
         bool contains(SetNode<T> *, T);
         SetNode<T> *remove(SetNode<T> *, T);
@@ -74,7 +64,25 @@ Set<T>::~Set()
 {
 
 }
+template<typename T>
+Set<T>::Set(const Set &source)
+{
+    root = nullptr;
+    for (Set<T>::iterator i = source.begin(); i != source.end(); ++i) {
+        add(*i);
+    }
 
+}
+template<typename T>
+SetIterator<T> Set<T>::begin() const
+{
+    return SetIterator<T>(root);
+}
+template<typename T>
+SetIterator<T> Set<T>::end() const
+{
+    return SetIterator<T>(nullptr);
+}
 template<typename T>
 bool Set<T>::contains(T val)
 {

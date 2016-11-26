@@ -217,22 +217,31 @@ void testType()
 void testIterator()
 {
     std::cout << "\n<------ Testing iterator------> \n";
-    Set<int> set;
+    Set<int> *set = new Set<int>;
     std::cout << "Output should be: 11 10 9 6 5 2 1 0 -1\n";
     std::cout << "Actual output:    ";
-    set.add(9);  set.add(5); set.add(10);
-    set.add(0);  set.add(6); set.add(11);
-    set.add(-1); set.add(1); set.add(2);
-    int j = 0;
-    for (Set<int>::iterator i = set.begin(); i != set.end(); ++i)
+    set->add(9);  set->add(5); set->add(10);
+    set->add(0);  set->add(6); set->add(11);
+    set->add(-1); set->add(1); set->add(2);
+    for (Set<int>::iterator i = set->begin(); i != set->end(); ++i)
     {
-        int num = *i;
-        std::cout << num << " ";
-        j++;
-        if (j == 13) {
-            break;
-        }
+        std::cout << *i << " ";
     }
+    std::cout << std::endl;
+    delete set;
+    
+}
+void testCopyConstructor()
+{
+    std::cout << "\n<------ Testing copy constructor------> \n";
+    Set<int> *set = new Set<int>;
+    std::cout << "Output should be: [-1 0 1 2 5 6 9 10 11 ]\n";
+    std::cout << "Actual output:    ";
+    set->add(9);  set->add(5); set->add(10);
+    set->add(0);  set->add(6); set->add(11);
+    set->add(-1); set->add(1); set->add(2);
+    Set<int> *set2 = new Set<int>(*set);
+    set2->print();
     std::cout << std::endl;
     
 }
@@ -247,5 +256,6 @@ int main()
     testSize();
     testType();
     testIterator();
+    testCopyConstructor();
     std::cout << "============== Tests for Set completed! ==============\n";
 }
