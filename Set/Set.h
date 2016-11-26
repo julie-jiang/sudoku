@@ -17,7 +17,7 @@ class Set {
     private:
         SetNode<T> *root;
     public:
-        typedef SetIterator<SetNode<T>> iterator;
+        typedef SetIterator<T> iterator;
         Set();
         ~Set();
         //Set(const Set &)
@@ -32,10 +32,10 @@ class Set {
         T getRoot();
         std::stack<T> getElements();
         iterator begin() {
-            return SetIterator<SetNode<T>>(root);
+            return SetIterator<T>(root);
         }
         iterator end() { 
-            return SetIterator<SetNode<T>>(nullptr);
+            return SetIterator<T>(nullptr);
         }
     private:
         SetNode<T> *add(SetNode<T> *, T);
@@ -74,6 +74,7 @@ Set<T>::~Set()
 {
 
 }
+
 template<typename T>
 bool Set<T>::contains(T val)
 {

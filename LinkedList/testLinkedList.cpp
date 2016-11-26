@@ -28,9 +28,4 @@ int main()
     	std::cout << "c = " << c << " value = " << value << std::endl;
     }
 
-   
-
-	
-
-
 }
