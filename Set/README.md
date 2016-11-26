@@ -59,7 +59,7 @@ Set<T> *copy_set_pointer = new Set<T>(set);
 7. Get the size of the set
 
     ```c++
-    int size = set.size()
+    size_t size = set.size()
     ```
 
 8. Iterate through the set

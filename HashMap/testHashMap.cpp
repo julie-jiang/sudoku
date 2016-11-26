@@ -1,16 +1,16 @@
 #include <iostream>
-#include "HashTable.h"
+#include "HashMap.h"
 #include "../Coord/Coord.h"
 
 int main ()
 {
-    HashTable<std::string, int> ht1;
+    HashMap<std::string, int> ht1;
     ht1.set("a", 1);
     ht1.set("b", 2);
     int aval = ht1.get("a");
     int bval = ht1.get("b");
     std::cout << "aval = " << aval << " bval = " << bval << std::endl;
-    /*HashTable<Coord, int> ht2;
+    /*HashMap<Coord, int> ht2;
     Coord c1(0, 0);
     Coord c2(4, 7);
     ht2.set(c1, 10);

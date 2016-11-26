@@ -1,5 +1,5 @@
-# HashTable
-This hash table is designed to hold Key-Value pairs, in which the keys would be `Coord` objects and the values would be the integer that is assigned to the `Coord`. In practice, it can hold keys and values of any type. 
+# Hash Map
+This hash map is designed to hold Key-Value pairs, in which the keys would be `Coord` objects and the values would be the integer that is assigned to the `Coord`. In practice, it can hold keys and values of any type. 
 
 Hash collisions will be resolved by chaining. This hash table will not be able to resize or rehash, so if the number of values get too out of hand there will be a lot of hash collisions. It is therefore important to have a relative maximum bound in mind when initializing this object.
 

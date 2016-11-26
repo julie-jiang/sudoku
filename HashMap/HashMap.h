@@ -10,17 +10,17 @@
 /*                                  Header                                   */
 /*****************************************************************************/
 
-#ifndef HASHTABLE_H
-#define HASHTABLE_H
-#include "../LinkedList/LinkedList.h"
+#ifndef HASHMAP_H
+#define HASHMAP_H
+#include "LinkedList/LinkedList.h"
 template<typename Key, typename Value>
 
-class HashTable {
+class HashMap {
 
     public:
-        HashTable();
-        HashTable(size_t);
-        ~HashTable();
+        HashMap();
+        HashMap(size_t);
+        ~HashMap();
         Value &operator[](const Key);
         void set(Key, Value);
         Value get(Key);
@@ -42,21 +42,21 @@ class HashTable {
 #include <sstream>
 
 template<typename Key, typename Value>
-HashTable<Key, Value>::HashTable()
+HashMap<Key, Value>::HashMap()
 {
     bucketSize = 100;
     init();
 }
 
 template<typename Key, typename Value>
-HashTable<Key, Value>::HashTable(size_t size)
+HashMap<Key, Value>::HashMap(size_t size)
 {
     bucketSize = size;
     init();
 
 }
 template<typename Key, typename Value>
-void HashTable<Key, Value>::init()
+void HashMap<Key, Value>::init()
 {
     buckets = new LinkedList<Key, Value> *[bucketSize];
     for (size_t i = 0; i < bucketSize; i++) {
@@ -65,14 +65,14 @@ void HashTable<Key, Value>::init()
     hashFunction = std::hash<std::string>{};
 }
 template<typename Key, typename Value>
-HashTable<Key, Value>::~HashTable()
+HashMap<Key, Value>::~HashMap()
 {
 
 }
 
 
 template<typename Key, typename Value>
-void HashTable<Key, Value>::set(Key k, Value val)
+void HashMap<Key, Value>::set(Key k, Value val)
 {
     //std::cout << "Trying to set value for key " << k << std::endl;
     size_t index = getIndex(k);
@@ -89,7 +89,7 @@ void HashTable<Key, Value>::set(Key k, Value val)
 
 }
 template<typename Key, typename Value>
-Value HashTable<Key, Value>::get(Key k)
+Value HashMap<Key, Value>::get(Key k)
 {
     //std::cout << "Trying to get value for key " << k << std::endl;
     size_t index = getIndex(k);
@@ -107,13 +107,13 @@ Value HashTable<Key, Value>::get(Key k)
 }
 
 template<typename Key, typename Value>
-size_t HashTable<Key, Value>::getIndex(Key k)
+size_t HashMap<Key, Value>::getIndex(Key k)
 {
     return hash(k) % bucketSize;
 }
 
 template<typename Key, typename Value>
-int HashTable<Key, Value>::hash(Key k)
+int HashMap<Key, Value>::hash(Key k)
 {
     std::string stringK = toString(k);
     return hashFunction(stringK);
@@ -121,7 +121,7 @@ int HashTable<Key, Value>::hash(Key k)
 
 }
 template<typename Key, typename Value>
-std::string HashTable<Key, Value>::toString(Key k)
+std::string HashMap<Key, Value>::toString(Key k)
 {
     std::string result;
     std::ostringstream oss;

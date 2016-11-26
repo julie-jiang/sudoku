@@ -17,7 +17,7 @@ class Set {
         T pop();
         void remove(T);
         bool empty();
-        int size();
+        size_t size();
         void print();
         void printTree();
         T top();
@@ -30,7 +30,7 @@ class Set {
         SetNode<T> *remove(SetNode<T> *, T);
         void print(SetNode<T> *);
         void printTree(SetNode<T> *);
-        int size(SetNode<T> *, int);
+        size_t size(SetNode<T> *, int);
         
         int getBalance(SetNode<T> *);
         int height(SetNode<T> *);
@@ -377,12 +377,12 @@ void Set<T>::printTree(SetNode<T> *node)
     
 }
 template<typename T>
-int Set<T>::size()
+size_t Set<T>::size()
 {
     return size(root, 0);
 }
 template<typename T>
-int Set<T>::size(SetNode<T> *node, int sum)
+size_t Set<T>::size(SetNode<T> *node, int sum)
 {
     if (node != nullptr) {
         sum++;

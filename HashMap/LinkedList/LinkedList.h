@@ -12,16 +12,14 @@ class LinkedList {
         LinkedList(); 
         ~LinkedList(); 
         bool empty();
-        int size(); 
-        Value get(Key);
-        Value &operator[](const Key);
+        size_t size(); 
+        const Value &operator[](Key) const;
         void insert(Key, Value);
         void remove(Key);
         iterator begin(); 
         iterator end();
     private:
         ListNode<Key, Value> *front;
-        ListNode<Key, Value> *lastNode();
 };
 /*****************************************************************************/
 /*                              Implementations                              */
@@ -61,9 +59,9 @@ bool LinkedList<Key, Value>::empty()
     return (front == nullptr);
 }
 template<typename Key, typename Value>
-int LinkedList<Key, Value>::size() 
+size_t LinkedList<Key, Value>::size() 
 {
-    int num_nodes = 0;
+    size_t num_nodes = 0;
     ListNode<Key, Value> *current = front;
     
     while (current != nullptr) { 
@@ -74,19 +72,9 @@ int LinkedList<Key, Value>::size()
     return num_nodes;
 }
 
- // assumes non empty!!!!!
-template<typename Key, typename Value>
-ListNode<Key, Value> *LinkedList<Key, Value>::lastNode()
-{
-    ListNode<Key, Value> *current = front;
-    while (current->next != nullptr) {
-        current = current->next;
-    }
-    return current;
 
-}
 template<typename Key, typename Value>
-Value LinkedList<Key, Value>::get(Key k)
+const Value &LinkedList<Key, Value>::operator[](Key k) const
 {
     ListNode<Key, Value> *current = front;
     while (current != nullptr) {
@@ -95,18 +83,10 @@ Value LinkedList<Key, Value>::get(Key k)
         }
         current = current->next;
     }
-    return 0;
-}
-template<typename Key, typename Value>
-Value &LinkedList<Key, Value>::operator[](const Key k)
-{
-    ListNode<Key, Value> *current = front;
-    while (current->key != k) {
-        current = current->next;
-    }
-    return current->val;
+    throw std::logic_error("Value does not exist");
 
 }
+
 
 template<typename Key, typename Value>
 void LinkedList<Key, Value>::insert(Key k, Value v)
@@ -115,25 +95,41 @@ void LinkedList<Key, Value>::insert(Key k, Value v)
     if (empty()) {
         front = newNode;
     } else {
-        ListNode<Key, Value> *current = lastNode();
-        current->next = newNode;
+        ListNode<Key, Value> *current = front;
+        ListNode<Key, Value> *previous;
+        while (current != nullptr) {
+            if (current->key == k) {
+                current->val = v;
+                delete newNode;
+                return;
+            }
+            previous = current;
+            current = current->next;
+        }
+        previous->next = newNode;
     }
 }
+
 template<typename Key, typename Value>
 void LinkedList<Key, Value>::remove(Key k)
 {
     ListNode<Key, Value> *current = front;
-    if (not empty()) {  
-        while (current->next != nullptr) {
-            if (current->next->key == k) {
-                ListNode<Key, Value> *temp= current->next;
-                current->next = current->next->next;
-                delete temp;
-
-            }
+    ListNode<Key, Value> *previous = nullptr;
+    while (current != nullptr) {
+        if (current->key == k) {
+            if (previous != nullptr)
+                previous->next = current->next;
+            else 
+                front = current->next;
+            delete current;
+            return;
         }
+        previous = current;
+        current = current->next;
     }
+
 }
+
 
 
 

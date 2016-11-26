@@ -36,11 +36,11 @@ I'm currently implementing the hash table, which will be used to replace the `ma
 
 ## Data Structures
 
-1. [AVL Tree](Set/)
+1. [Set](Set/)
 	
-	A self-balancing binary search tree designed to hold the domains, or possible values, of each coordinate object `Coord`.
+	A self-balancing AVL binary search tree designed to hold the domains, or possible values, of each coordinate object `Coord`.
 
-2. [Hash Table](HashTable/)
+2. [Hash Map](HashMap/)
 	
 	A hash table designed to map coordinate objects `Coord` to their assigned values. 
 
