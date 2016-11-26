@@ -57,7 +57,7 @@ void Soduku::initGrid(std::string filename)
             throw std::logic_error("");
         } 
         if (i->second.size() == 1) {
-            assignment[i->first] = i->second.getRoot(); 
+            assignment[i->first] = i->second.top(); 
         } else {
             PQueue.push(i->first);
         }
@@ -137,8 +137,8 @@ std::map<Coord, Set<int>> *Soduku::forwardCheck(Coord c, int d)
                 eliminatedDomains->insert(std::pair<Coord, Set<int>>(c1, Set<int>()));
             (*eliminatedDomains)[c1].add(d);
             if (grid[c1].size == 1) {
-                std::cout << "Assigned " << c1 << " to " << grid[c1].getRoot() << std::endl;
-                assignment[c1] = grid[c1].getRoot();
+                std::cout << "Assigned " << c1 << " to " << grid[c1].top() << std::endl;
+                assignment[c1] = grid[c1].top();
             }
         } 
         if (i != x and grid[c2].contains(d)) {
@@ -148,8 +148,8 @@ std::map<Coord, Set<int>> *Soduku::forwardCheck(Coord c, int d)
                 eliminatedDomains->insert(std::pair<Coord, Set<int>>(c2, Set<int>()));
             (*eliminatedDomains)[c2].add(d);
             if (grid[c2].size == 1) {
-                std::cout << "Assigned " << c2 << " to " << grid[c2].getRoot() << std::endl;
-                assignment[c2] = grid[c2].getRoot();
+                std::cout << "Assigned " << c2 << " to " << grid[c2].top() << std::endl;
+                assignment[c2] = grid[c2].top();
             }
         }
     }
@@ -163,8 +163,8 @@ std::map<Coord, Set<int>> *Soduku::forwardCheck(Coord c, int d)
                     eliminatedDomains->insert(std::pair<Coord, Set<int>>(c3, Set<int>()));
                 (*eliminatedDomains)[c3].add(d);
                 if (grid[c3].size == 1) {
-                    std::cout << "Assigned " << c3 << " to " << grid[c3].getRoot() << std::endl;
-                    assignment[c3] = grid[c3].getRoot();
+                    std::cout << "Assigned " << c3 << " to " << grid[c3].top() << std::endl;
+                    assignment[c3] = grid[c3].top();
             }
             }
         }

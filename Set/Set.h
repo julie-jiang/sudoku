@@ -1,7 +1,5 @@
 #ifndef SET_H
 #define SET_H
-#include <cstdlib>
-#include <stack>
 #include "SetNode.h"
 #include "SetIterator.h"
 /*****************************************************************************/
@@ -22,8 +20,7 @@ class Set {
         int size();
         void print();
         void printTree();
-        T getRoot();
-        std::stack<T> getElements();
+        T top();
         iterator begin() const;
         iterator end() const;
     private:
@@ -33,7 +30,6 @@ class Set {
         SetNode<T> *remove(SetNode<T> *, T);
         void print(SetNode<T> *);
         void printTree(SetNode<T> *);
-        void getElements(SetNode<T> *, std::stack<T> &);
         int size(SetNode<T> *, int);
         
         int getBalance(SetNode<T> *);
@@ -354,24 +350,6 @@ void Set<T>::print(SetNode<T> *node)
 }
 
 template<typename T>
-std::stack<T> Set<T>::getElements()
-{
-    std::stack<T> elemStack;
-    getElements(root, elemStack);
-    return elemStack;    
-}
-
-template<typename T>
-void Set<T>::getElements(SetNode<T> *node, std::stack<T> &elemStack)
-{
-    if (node != nullptr) {
-        elemStack.push(node->value);
-        getElements(node->left, elemStack);
-        getElements(node->right, elemStack);
-    }
-    
-}
-template<typename T>
 void Set<T>::printTree()
 {
     std::cout << "[";
@@ -416,7 +394,7 @@ int Set<T>::size(SetNode<T> *node, int sum)
     return sum;
 }
 template<typename T>
-T Set<T>::getRoot()
+T Set<T>::top()
 {
     return root->value;
 }

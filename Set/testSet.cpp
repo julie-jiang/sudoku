@@ -155,28 +155,9 @@ void testRemove3()
 void testRemove()
 {
     std::cout << "\n<------ Testing function remove ------> \n";
-    //testRemove1();
-    //testRemove2();
+    testRemove1();
+    testRemove2();
     testRemove3();
-
-}
-
-
-void testGetElements()
-{
-    std::cout << "\n<------ Testing function getElements ------> \n";
-    Set<int> *set = new Set<int>;
-    std::cout << "Output should be \n";
-    set->add(9);  set->add(5); set->add(10);
-    set->add(0);  set->add(6); set->add(11);
-    set->add(-1); set->add(1); set->add(2);
-
-    std::stack<int> intStack = set->getElements();
-    while (not intStack.empty()) {
-        std::cout << intStack.top() << " ";
-        intStack.pop();
-    }
-    std::cout << std::endl;
 
 }
 void testSize()
@@ -200,18 +181,6 @@ void testSize()
     delete set3;
 
 
-}
-void testType()
-{
-    std::cout << "\n<------ Testing using Set with custom defined object------> \n";
-    Set<Coord> *set = new Set<Coord>;
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            Coord c(i, j);
-            set->add(c);
-        }
-    }
-    delete set;
 }
 
 void testIterator()
@@ -245,6 +214,21 @@ void testCopyConstructor()
     std::cout << std::endl;
     
 }
+void testType()
+{
+    std::cout << "\n<------ Testing using Set with custom defined object------> \n";
+    Set<Coord> *set = new Set<Coord>;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            Coord c(i, j);
+            set->add(c);
+        }
+    }
+    Set<Coord> *set2 = new Set<Coord>(*set);
+    delete set;
+    delete set2;
+}
+
 
 int main() 
 {
@@ -252,10 +236,9 @@ int main()
     testAdd();
     testContains();
     testRemove();
-    testGetElements();
     testSize();
-    testType();
     testIterator();
     testCopyConstructor();
+    testType();
     std::cout << "============== Tests for Set completed! ==============\n";
 }

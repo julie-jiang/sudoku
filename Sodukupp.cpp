@@ -32,7 +32,7 @@ void Soduku::print()
         for (int i = 0; i < gridSize; i++) {
             Coord c(i, j);
             if (values[c].size() == 1) {
-                 std::cout << "\033[1m\033[31m" << values[c].getRoot() << "\033[0m ";
+                 std::cout << "\033[1m\033[31m" << values[c].top() << "\033[0m ";
             } else {
                 std::cout << "\033[37m0 \033[0m";
             }
@@ -57,35 +57,24 @@ bool Soduku::solve()
 }
 bool Soduku::assign(Coord c, int d)
 {
-    //std::cout << "trying to assign " << c << " to " << d << std::endl;
-	Set<int> *other_values = new Set<int>;
-	std::stack<int> domain = values[c].getElements();
-	while (not domain.empty()) {
-		int v = domain.top();
-		domain.pop();
-		if (v != d)
-			other_values->add(v);
-	}
-	
+    Set<int> *other_values = new Set<int>(values[c]);
 	while (not other_values->empty()) {
 		int d2 = other_values->pop();
-		if (not eliminate(c, d2)) {
+		if (d2 != d and not eliminate(c, d2)) {
             std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
-            
 			return false;
 		}
 	}
     /*
-    while (not values[c].empty()) {
-        int d2 = values[c].pop();
+    for (Set<int>::iterator it = values[c].begin(); it != values[c].end(); ++it) {
+        int d2 = *it;
         if (d2 != d and not eliminate(c, d2)) {
             std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
             return false;
         }
+
     }*/
-    //std::cout << ("\033[H\033[2J");
-    //std::cout << "assigned " << c << " = " << d << std::endl;
-    //print();
+    delete other_values;
 	return true;
 }
 bool Soduku::eliminate(Coord c, int d)
@@ -101,17 +90,13 @@ bool Soduku::eliminate(Coord c, int d)
         std::cout << "eliminate(): retruning false because values[c].empty() for c = "<< c << "\n";
 		return false; // sanity check
 	} else if (values[c].size() == 1) {
-		int d2 = values[c].getRoot();
-		std::stack<Coord> peeers = peers[c].getElements();
-		while (not peeers.empty()) {
-			Coord c2 = peeers.top();
-			peeers.pop();
-			if (not eliminate(c2, d2)) {
-                std::cout << "eliminate(): returning false because eliminating " << d2 << " from " << c2 << " failed\n";
-            
-				return false;
-			}
-		}
+		int d2 = values[c].top();
+        for (Set<Coord>::iterator it = peers[c].begin(); it != peers[c].end(); ++it) {
+            Coord c2 = *it;
+            if (not eliminate(c2, d2)) {
+                return false;
+            }
+        }
 	}
 	for (int i = 0; i < (int) units[c].size(); i++) {
 		std::vector<Coord> dplaces;

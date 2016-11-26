@@ -1,17 +1,20 @@
-# Set.h
-This is a set implemented as an [set tree](https://en.wikipedia.org/wiki/set_tree), a type of self-balancing binary search tree. This tree is designed to hold the domain, or possible values, each variable in the grid can hold. In practice, it can hold elements of any type.
-
-As a set, it will not hold duplicate copies of the same item. If you attempt to add an element that is already in the set, then nothing will change.
+# Set
+This is implemented as an [AVL tree](https://en.wikipedia.org/wiki/avl_tree), a type of self-balancing binary search tree. As a set, it will not hold duplicate copies of the same item. If you attempt to add an element that is already in the set, then nothing will change.
 
 
 ## Initialization 
-To initialize an `Set` object:
+To initialize a `Set` object:
 
 ```c++
 #include "Set.h"
 // ...
 Set<T> set;
+Set<T> *set_pointer = new Set<T>;
+
+Set<T> copy_set(set);
+Set<T> *copy_set_pointer = new Set<T>(set);
 ```
+
 
 ## The things it can do
 
@@ -26,8 +29,18 @@ Set<T> set;
     ```c++
     set.remove(item);
     ```
+3. Get the root of the set (without removing)
 
-3. Check if it contains an element in O(n) time (returns a bool)
+    ```c++
+    T item = set.top();
+    ```
+4. Get and remove the root of the set
+    
+    ```c++
+    T item = set.pop();
+    ```
+
+5. Check if it contains an element in O(n) time (returns a bool)
 
     ```c++
     if (set.contains(item)) {
@@ -35,7 +48,7 @@ Set<T> set;
     }
     ```
     
-3. Check if its empty (returns a bool)
+6. Check if its empty (returns a bool)
 
     ```c++
     if (set.empty()) {
@@ -43,34 +56,26 @@ Set<T> set;
     }
     ```
 
-4. Get the size of the tree
+7. Get the size of the set
 
     ```c++
     int size = set.size()
     ```
 
-5. Get the root of the tree (without removing)
-
+8. Iterate through the set
+    
     ```c++
-    T item = set.getRoot()
-    ```
+    for (Set<T>::iterator it = set.begin(); it != set.end(); ++it) {
+        std::cout << *it << std::endl;
+    }
 
-7. Get all the elements in the tree as a stack (This is mostly for convenience at the moment, might be eliminated in the final version)
-
-    ```c++
-    #include <cstdlib>
-    #include <stack>
-    // ...
-    stack<T> elements = set.getElements()
-    ```
-
-6. Print the elements in the tree via in order traversal
+7. Print the elements in the set via in order traversal
 
     ```c++
     set.print()
     ```
 
-7. Print the tree with a bunch of brackets indicating parent-child relationship. This is mostly for debugging at the moment and will probably be removed later.
+8. Print the set tree with a bunch of brackets indicating parent-child relationship. This is mostly for debugging at the moment and will probably be removed later.
 
     ```c++
     set.printTree()
