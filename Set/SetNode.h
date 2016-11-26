@@ -5,11 +5,11 @@ template<typename T> class SetIterator;
 template<typename T>
 class SetNode 
 {
-	friend class Set<T>;
-	friend class SetIterator<T>;
+    friend class Set<T>;
+    friend class SetIterator<T>;
 
-	private:
-		int height;
+    private:
+        int height;
         T value;
         SetNode<T> *left;
         SetNode<T> *right;

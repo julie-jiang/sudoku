@@ -43,28 +43,28 @@ void Soduku::print()
 
 bool Soduku::solve()
 {
-	for(std::map<Coord, int>::iterator i = puzzle.begin();
-		i != puzzle.end(); i++) {
-		Coord c = i->first;
-		int   d = i->second;
+    for(std::map<Coord, int>::iterator i = puzzle.begin();
+        i != puzzle.end(); i++) {
+        Coord c = i->first;
+        int   d = i->second;
         //std::cout << "solve(): at " << c << " d = " << d << std::endl;
-		if (d != 0 and not assign(c, d)) {
+        if (d != 0 and not assign(c, d)) {
             std::cout << "solve(): returning false because assignment " << c << " = " << d << " failed\n";
-			return false;
+            return false;
         }
-	}
-	return true;
+    }
+    return true;
 }
 bool Soduku::assign(Coord c, int d)
 {
     Set<int> *other_values = new Set<int>(values[c]);
-	while (not other_values->empty()) {
-		int d2 = other_values->pop();
-		if (d2 != d and not eliminate(c, d2)) {
+    while (not other_values->empty()) {
+        int d2 = other_values->pop();
+        if (d2 != d and not eliminate(c, d2)) {
             std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
-			return false;
-		}
-	}
+            return false;
+        }
+    }
     /*
     for (Set<int>::iterator it = values[c].begin(); it != values[c].end(); ++it) {
         int d2 = *it;
@@ -75,64 +75,64 @@ bool Soduku::assign(Coord c, int d)
 
     }*/
     delete other_values;
-	return true;
+    return true;
 }
 bool Soduku::eliminate(Coord c, int d)
 {
     //std::cout << "eliminating " << d << " from " << c << std::endl;
     //values[c].print();
     //std::cout << std::endl;
-	if (not values[c].contains(d)) {
-		return true;
-	}
-	values[c].remove(d);
-	if (values[c].empty()) {
+    if (not values[c].contains(d)) {
+        return true;
+    }
+    values[c].remove(d);
+    if (values[c].empty()) {
         std::cout << "eliminate(): retruning false because values[c].empty() for c = "<< c << "\n";
-		return false; // sanity check
-	} else if (values[c].size() == 1) {
-		int d2 = values[c].top();
+        return false; // sanity check
+    } else if (values[c].size() == 1) {
+        int d2 = values[c].top();
         for (Set<Coord>::iterator it = peers[c].begin(); it != peers[c].end(); ++it) {
             Coord c2 = *it;
             if (not eliminate(c2, d2)) {
                 return false;
             }
         }
-	}
-	for (int i = 0; i < (int) units[c].size(); i++) {
-		std::vector<Coord> dplaces;
-		for (int j = 0; j < (int) units[c][i].size(); j++) {
-			Coord c3 = units[c][i][j];
-			if (values[c3].contains(d)) {
-				dplaces.push_back(c3);
-			} 
-		}
-		if (dplaces.size() == 0) {
+    }
+    for (int i = 0; i < (int) units[c].size(); i++) {
+        std::vector<Coord> dplaces;
+        for (int j = 0; j < (int) units[c][i].size(); j++) {
+            Coord c3 = units[c][i][j];
+            if (values[c3].contains(d)) {
+                dplaces.push_back(c3);
+            } 
+        }
+        if (dplaces.size() == 0) {
             std::cout << "eliminate(): returning false because dplaces.size() == 0 \n";
             
-			return false;
-		} else if (dplaces.size() == 1) {
-			if (not assign(dplaces[0], d)) {
+            return false;
+        } else if (dplaces.size() == 1) {
+            if (not assign(dplaces[0], d)) {
                 std::cout << "eliminate(): returning false because assignment " << dplaces[0] << " = " << d << " failed\n";
             
-				return false;
-			}
-		}
-	}
+                return false;
+            }
+        }
+    }
     //std::cout << "eliminating " << d << " from " << c << "successful!\n";
     
-	return true;
+    return true;
 
 
 }
 void Soduku::init(std::string filename)
 {
-	init_data_structures();
-	init_grid(filename);
+    init_data_structures();
+    init_grid(filename);
 
 }
 void Soduku::init_grid(std::string filename)
 {
-	    // Open file 
+        // Open file 
     std::ifstream inFile;
     inFile.open(filename);
     if (inFile.fail()) {
@@ -149,15 +149,15 @@ void Soduku::init_grid(std::string filename)
             puzzle[c] = num;
             values.insert(std::pair<Coord, Set<int>>(c, Set<int>()));
             for (int i = 1; i < gridSize + 1; i++) {
-            	values[c].add(i);
+                values[c].add(i);
             }
         }
     }
     assert(puzzle.size() == 81);
     assert(values.size() == 81);
     for (std::map<Coord, Set<int>>::iterator i = values.begin();
-    	 i != values.end(); i++) {
-    	assert(i->second.size() == 9);
+         i != values.end(); i++) {
+        assert(i->second.size() == 9);
     }
         
 
@@ -165,8 +165,8 @@ void Soduku::init_grid(std::string filename)
 }
 void Soduku::init_data_structures()
 {
-	for (int j = 0; j < gridSize; j++) {
-		allunits.push_back(std::vector<Coord>());
+    for (int j = 0; j < gridSize; j++) {
+        allunits.push_back(std::vector<Coord>());
         allunits.push_back(std::vector<Coord>());
         for (int i = 0; i < gridSize; i++) {
             Coord c1(i, j);
@@ -178,28 +178,28 @@ void Soduku::init_data_structures()
         }
     }
     for (int i = 0; i < gridSize; i += n) {
-    	for (int j = 0; j < gridSize; j += n) {
-    		allunits.push_back(std::vector<Coord>());
-    		int size = allunits.size();
-    		for (int k = i; k < n + i; k++) {
-    			for (int l = j; l < n + j; l++) {
-    				Coord c(l, k);
-    				allunits[size - 1].push_back(c);
-    			}
-    		}
-    	}
+        for (int j = 0; j < gridSize; j += n) {
+            allunits.push_back(std::vector<Coord>());
+            int size = allunits.size();
+            for (int k = i; k < n + i; k++) {
+                for (int l = j; l < n + j; l++) {
+                    Coord c(l, k);
+                    allunits[size - 1].push_back(c);
+                }
+            }
+        }
     }
     for (int i = 0; i < (int) allunits.size(); i++) {
-    	for (int j = 0; j < (int) allunits[i].size(); j++) {
-    		Coord c = allunits[i][j];
-    		units[c].push_back(std::vector<Coord>(allunits[i]));
-    		for (int k = 0; k < (int) allunits[i].size(); k++) {
-    			if (k != j) {
-    				Coord c2 = allunits[i][k];
-    				peers[c].add(c2);
-    			}
-    		}
-    	}
+        for (int j = 0; j < (int) allunits[i].size(); j++) {
+            Coord c = allunits[i][j];
+            units[c].push_back(std::vector<Coord>(allunits[i]));
+            for (int k = 0; k < (int) allunits[i].size(); k++) {
+                if (k != j) {
+                    Coord c2 = allunits[i][k];
+                    peers[c].add(c2);
+                }
+            }
+        }
     }
  
 }
