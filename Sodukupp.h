@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <map>
 #include <vector>
-#include "AVLTree/AVLTree.h"
+#include "Set/Set.h"
 #include "Coord/Coord.h"
 
 class Soduku {
@@ -11,11 +11,10 @@ class Soduku {
 		Soduku(std::string, int);
 		~Soduku();
 	private:
-		std::vector<Coord> grid;
 		std::vector<std::vector<Coord>> allunits;
 		std::map<Coord, std::vector<std::vector<Coord>>> units;
-		std::map<Coord, AVLTree<Coord>> peers;
-		std::map<Coord, AVLTree<int>> values;
+		std::map<Coord, Set<Coord>> peers;
+		std::map<Coord, Set<int>> values;
 		std::map<Coord, int> puzzle;
 		int gridSize;
 		int n;

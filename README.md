@@ -38,7 +38,7 @@ When the algorithm actually works, I will implement the priority queue. Right no
 
 ## Data Structures
 
-1. [AVL Tree](AVLTree/)
+1. [AVL Tree](Set/)
 	
 	A self-balancing binary search tree designed to hold the domains, or possible values, of each coordinate object `Coord`.
 

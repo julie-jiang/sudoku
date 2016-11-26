@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <queue>
 #include <map>
-#include "AVLTree/AVLTree.h"
+#include "Set/Set.h"
 #include "Coord/Coord.h"
 
 class Soduku {
@@ -15,7 +15,7 @@ public:
 private:
     int gridSize, n;
     //typedef std::pair<int, int> Coord;
-    std::map<Coord, AVLTree<int>> grid;
+    std::map<Coord, Set<int>> grid;
     std::map<Coord, int> permAssignment;
     std::map<Coord, int> assignment;
 
@@ -24,8 +24,8 @@ private:
 
     void initGrid(std::string);
     bool backtrackingSearch();
-    void addToDomain(std::map<Coord, AVLTree<int>> *);
-    std::map<Coord, AVLTree<int>> *forwardCheck(Coord, int);
+    void addToDomain(std::map<Coord, Set<int>> *);
+    std::map<Coord, Set<int>> *forwardCheck(Coord, int);
     Coord selectUnassignedVariable();
     void addToQueue(Coord);
     void print();

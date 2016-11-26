@@ -1,55 +1,59 @@
-/*
- * Easy to add element 
- * Easy to remove element
- * Easy to find element
- */
 
 /*****************************************************************************/
 /*                                  Header                                   */
 /*****************************************************************************/
 
-#ifndef AVLTREE_H
-#define AVLTREE_H
+#ifndef SET_H
+#define SET_H
 #include <cstdlib>
 #include <stack>
-#include "TreeNode.h"
+#include "SetNode.h"
+#include "SetIterator.h"
 
-template<typename ElemType>
+template<typename T>
 
 
-class AVLTree {
+class Set {
+    private:
+        SetNode<T> *root;
     public:
-        AVLTree();
-        ~AVLTree();
-        void add(ElemType);
-        bool contains(ElemType);
-        ElemType pop();
-        void remove(ElemType);
+        typedef SetIterator<SetNode<T>> iterator;
+        Set();
+        ~Set();
+        //Set(const Set &)
+        void add(T);
+        bool contains(T);
+        T pop();
+        void remove(T);
         bool empty();
         int size();
         void print();
         void printTree();
-        ElemType getRoot();
-        std::stack<ElemType> getElements();
+        T getRoot();
+        std::stack<T> getElements();
+        iterator begin() {
+            return SetIterator<SetNode<T>>(root);
+        }
+        iterator end() { 
+            return SetIterator<SetNode<T>>(nullptr);
+        }
     private:
-        TreeNode<ElemType> *root;
-
-        TreeNode<ElemType> *add(TreeNode<ElemType> *, ElemType);
-        bool contains(TreeNode<ElemType> *, ElemType);
-        TreeNode<ElemType> *remove(TreeNode<ElemType> *, ElemType);
-        void print(TreeNode<ElemType> *);
-        void printTree(TreeNode<ElemType> *);
-        void getElements(TreeNode<ElemType> *, std::stack<ElemType> &);
-        int size(TreeNode<ElemType> *, int);
+        SetNode<T> *add(SetNode<T> *, T);
+        bool contains(SetNode<T> *, T);
+        SetNode<T> *remove(SetNode<T> *, T);
+        void print(SetNode<T> *);
+        void printTree(SetNode<T> *);
+        void getElements(SetNode<T> *, std::stack<T> &);
+        int size(SetNode<T> *, int);
         
-        int getBalance(TreeNode<ElemType> *);
-        int height(TreeNode<ElemType> *);
+        int getBalance(SetNode<T> *);
+        int height(SetNode<T> *);
         int max(int, int);
-        TreeNode<ElemType> *getMinTreeNode(TreeNode<ElemType> *);
-        TreeNode<ElemType> *rotateRight(TreeNode<ElemType> *);
-        TreeNode<ElemType> *rotateLeft(TreeNode<ElemType> *);
-        TreeNode<ElemType> *removeTreeNode(TreeNode<ElemType> *);
-        TreeNode<ElemType> *updateHeight(TreeNode<ElemType> *);
+        SetNode<T> *getMinSetNode(SetNode<T> *);
+        SetNode<T> *rotateRight(SetNode<T> *);
+        SetNode<T> *rotateLeft(SetNode<T> *);
+        SetNode<T> *removeSetNode(SetNode<T> *);
+        SetNode<T> *updateHeight(SetNode<T> *);
         
         
 };
@@ -58,40 +62,40 @@ class AVLTree {
 /*                              Implementations                              */
 /*****************************************************************************/
 
-template<typename ElemType>
-AVLTree<ElemType>::AVLTree()
+template<typename T>
+Set<T>::Set()
 {
     root = nullptr;
 }
 
 
-template<typename ElemType>
-AVLTree<ElemType>::~AVLTree()
+template<typename T>
+Set<T>::~Set()
 {
 
 }
-template<typename ElemType>
-bool AVLTree<ElemType>::contains(ElemType val)
+template<typename T>
+bool Set<T>::contains(T val)
 {
     if (not empty())
         return contains(root, val);
     return false;
 
 }
-template<typename ElemType>
-bool AVLTree<ElemType>::contains(TreeNode<ElemType> *node, ElemType val)
+template<typename T>
+bool Set<T>::contains(SetNode<T> *node, T val)
 {
-    // If TreeNode == s, return true
+    // If SetNode == s, return true
     if (node->value == val) {
         return true;
     } 
 
-    // Search left subtree if TreeNode > s
+    // Search left subtree if SetNode > s
     if (node->value > val and node->left != nullptr) {
         return contains(node->left, val);
     }
 
-    // Search right subtree if TreeNode < s
+    // Search right subtree if SetNode < s
     else if (node->right != nullptr) {
         return contains(node->right, val);
     } 
@@ -102,31 +106,31 @@ bool AVLTree<ElemType>::contains(TreeNode<ElemType> *node, ElemType val)
     }
 }
 
-template<typename ElemType>
-bool AVLTree<ElemType>::empty()
+template<typename T>
+bool Set<T>::empty()
 {
     return (root == nullptr);
 }
-template<typename ElemType>
-void AVLTree<ElemType>::add(ElemType val)
+template<typename T>
+void Set<T>::add(T val)
 {
     root = add(root, val);
         
 }
 
 
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::add(TreeNode<ElemType> *node, ElemType val)
+template<typename T>
+SetNode<T> *Set<T>::add(SetNode<T> *node, T val)
 {
-    // Make new TreeNode 
+    // Make new SetNode 
     if (node == nullptr) {
-        node = new TreeNode<ElemType>(val);
+        node = new SetNode<T>(val);
 
-    // Insert left if currTreeNode is greater than newTreeNode
+    // Insert left if currSetNode is greater than newSetNode
     } else if (node->value > val) {
         node->left = add(node->left, val);
 
-    // Insert right if TreeNode is smaller than s
+    // Insert right if SetNode is smaller than s
     } else  if (node->value < val) {
         node->right = add(node->right, val);
     }
@@ -140,7 +144,7 @@ TreeNode<ElemType> *AVLTree<ElemType>::add(TreeNode<ElemType> *node, ElemType va
         if (val > node->right->value) {    
             return rotateLeft(node);
         // Right left unbalance
-        } else { // val < TreeNode->right->value              
+        } else { // val < SetNode->right->value              
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }
@@ -149,7 +153,7 @@ TreeNode<ElemType> *AVLTree<ElemType>::add(TreeNode<ElemType> *node, ElemType va
         if (val < node->left->value) {
             return rotateRight(node);
         // Left right unbalance
-        } else { // val > TreeNode->left->value
+        } else { // val > SetNode->left->value
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
@@ -157,38 +161,38 @@ TreeNode<ElemType> *AVLTree<ElemType>::add(TreeNode<ElemType> *node, ElemType va
 
     return node;
 }
-template<typename ElemType>
-ElemType AVLTree<ElemType>::pop()
+template<typename T>
+T Set<T>::pop()
 {
-    ElemType value = root->value;
+    T value = root->value;
     remove(value);
     return value;
 }
 
-template<typename ElemType>
-void AVLTree<ElemType>::remove(ElemType val)
+template<typename T>
+void Set<T>::remove(T val)
 {
     root = remove(root, val);
 }
 
 
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::remove(TreeNode<ElemType> *node, ElemType val)
+template<typename T>
+SetNode<T> *Set<T>::remove(SetNode<T> *node, T val)
 {   
     // Standard BST removal 
     if (node == nullptr) 
         return node;
    
-   // If TreeNode == val, remove TreeNode    
+   // If SetNode == val, remove SetNode    
     if (val == node->value) 
-        node = removeTreeNode(node); 
+        node = removeSetNode(node); 
 
-    // Search left subtree if TreeNode > s  
+    // Search left subtree if SetNode > s  
     else if (val < node->value)
         node->left = remove(node->left, val);
         
 
-    // Search right subtree if TreeNode < s
+    // Search right subtree if SetNode < s
     else 
         node->right = remove(node->right, val);  
 
@@ -201,8 +205,8 @@ TreeNode<ElemType> *AVLTree<ElemType>::remove(TreeNode<ElemType> *node, ElemType
     return node;
 }
 
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::updateHeight(TreeNode<ElemType> *node)
+template<typename T>
+SetNode<T> *Set<T>::updateHeight(SetNode<T> *node)
 {
     node->height = max(height(node->left), height(node->right)) + 1;
     int balance = getBalance(node);
@@ -230,22 +234,22 @@ TreeNode<ElemType> *AVLTree<ElemType>::updateHeight(TreeNode<ElemType> *node)
     }
     return node;
 }
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::removeTreeNode(TreeNode<ElemType> *node)
+template<typename T>
+SetNode<T> *Set<T>::removeSetNode(SetNode<T> *node)
 {
-    // If TreeNode has two children, find its in-order successor and replace TreeNode 
+    // If SetNode has two children, find its in-order successor and replace SetNode 
     // with it. Then delete an instance of its in-order successor through 
     // recursion
     if (node->left != nullptr and node->right != nullptr) {
-        TreeNode<ElemType> *successor = getMinTreeNode(node->right);
+        SetNode<T> *successor = getMinSetNode(node->right);
         node->value  = successor->value;
         node->right  = remove(node->right, successor->value);
     
-    // Else if TreeNode has only one or no child.
+    // Else if SetNode has only one or no child.
     } else {
-        TreeNode<ElemType> *temp = node->left ? node->left : node->right;
+        SetNode<T> *temp = node->left ? node->left : node->right;
 
-        // If TreeNode has no child
+        // If SetNode has no child
         if (temp == nullptr) {
             temp = node;
             node = nullptr;
@@ -257,22 +261,22 @@ TreeNode<ElemType> *AVLTree<ElemType>::removeTreeNode(TreeNode<ElemType> *node)
 
     return node;
 }
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::getMinTreeNode(TreeNode<ElemType> *node)
+template<typename T>
+SetNode<T> *Set<T>::getMinSetNode(SetNode<T> *node)
 {
     // Keep traversing left until end of AVL tree is reached
     if (node->left != nullptr) {
-        return getMinTreeNode(node->left);
+        return getMinSetNode(node->left);
     }
     return node;
 }
 
 
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::rotateLeft(TreeNode<ElemType> *node)
+template<typename T>
+SetNode<T> *Set<T>::rotateLeft(SetNode<T> *node)
 {
-    TreeNode<ElemType> *rightChild     = node->right;
-    TreeNode<ElemType> *rightLeftChild = rightChild->left;
+    SetNode<T> *rightChild     = node->right;
+    SetNode<T> *rightLeftChild = rightChild->left;
 
     rightChild->left = node;
     node->right      = rightLeftChild;
@@ -282,11 +286,11 @@ TreeNode<ElemType> *AVLTree<ElemType>::rotateLeft(TreeNode<ElemType> *node)
     
     return rightChild;
 }
-template<typename ElemType>
-TreeNode<ElemType> *AVLTree<ElemType>::rotateRight(TreeNode<ElemType> *node)
+template<typename T>
+SetNode<T> *Set<T>::rotateRight(SetNode<T> *node)
 {
-    TreeNode<ElemType> *leftChild      = node->left;
-    TreeNode<ElemType> *leftRightChild = leftChild->right;
+    SetNode<T> *leftChild      = node->left;
+    SetNode<T> *leftRightChild = leftChild->right;
 
     leftChild->right = node;
     node->left       = leftRightChild;
@@ -297,29 +301,29 @@ TreeNode<ElemType> *AVLTree<ElemType>::rotateRight(TreeNode<ElemType> *node)
 
 }
 
-template<typename ElemType>
-int AVLTree<ElemType>::getBalance(TreeNode<ElemType> *node)
+template<typename T>
+int Set<T>::getBalance(SetNode<T> *node)
 {
     return (height(node->right) - height(node->left));
 }
 
-template<typename ElemType>
-int AVLTree<ElemType>::height(TreeNode<ElemType> *node)
+template<typename T>
+int Set<T>::height(SetNode<T> *node)
 {
     if (node != nullptr)
         return node->height;
     return 0;
 }
 
-template<typename ElemType>
-int AVLTree<ElemType>::max(int a, int b)
+template<typename T>
+int Set<T>::max(int a, int b)
 {
     return (a > b) ? a : b;
 }
 
 
-template<typename ElemType>
-void AVLTree<ElemType>::print()
+template<typename T>
+void Set<T>::print()
 {
     std::cout << "[";
     if (not empty()) {
@@ -327,8 +331,8 @@ void AVLTree<ElemType>::print()
     }
     std::cout << "]";
 }
-template<typename ElemType>
-void AVLTree<ElemType>::print(TreeNode<ElemType> *node)
+template<typename T>
+void Set<T>::print(SetNode<T> *node)
 {
     if (node->left != nullptr) 
         print(node->left);
@@ -340,16 +344,16 @@ void AVLTree<ElemType>::print(TreeNode<ElemType> *node)
 
 }
 
-template<typename ElemType>
-std::stack<ElemType> AVLTree<ElemType>::getElements()
+template<typename T>
+std::stack<T> Set<T>::getElements()
 {
-    std::stack<ElemType> elemStack;
+    std::stack<T> elemStack;
     getElements(root, elemStack);
     return elemStack;    
 }
 
-template<typename ElemType>
-void AVLTree<ElemType>::getElements(TreeNode<ElemType> *node, std::stack<ElemType> &elemStack)
+template<typename T>
+void Set<T>::getElements(SetNode<T> *node, std::stack<T> &elemStack)
 {
     if (node != nullptr) {
         elemStack.push(node->value);
@@ -358,8 +362,8 @@ void AVLTree<ElemType>::getElements(TreeNode<ElemType> *node, std::stack<ElemTyp
     }
     
 }
-template<typename ElemType>
-void AVLTree<ElemType>::printTree()
+template<typename T>
+void Set<T>::printTree()
 {
     std::cout << "[";
     if (not empty()) {
@@ -367,15 +371,15 @@ void AVLTree<ElemType>::printTree()
     }
     std::cout << "]" << std::endl;
 }
-template<typename ElemType>
-void AVLTree<ElemType>::printTree(TreeNode<ElemType> *node)
+template<typename T>
+void Set<T>::printTree(SetNode<T> *node)
 {
     // Traverse left subtree 
     std::cout << "[";
     if (node->left != nullptr) {    
         printTree(node->left);  
     } 
-    // Print current TreeNode
+    // Print current SetNode
     std::cout << "] " << node->value << " [";
     
     // Traverse right subtree
@@ -385,13 +389,13 @@ void AVLTree<ElemType>::printTree(TreeNode<ElemType> *node)
     std::cout << "]";
     
 }
-template<typename ElemType>
-int AVLTree<ElemType>::size()
+template<typename T>
+int Set<T>::size()
 {
     return size(root, 0);
 }
-template<typename ElemType>
-int AVLTree<ElemType>::size(TreeNode<ElemType> *node, int sum)
+template<typename T>
+int Set<T>::size(SetNode<T> *node, int sum)
 {
     if (node != nullptr) {
         sum++;
@@ -402,8 +406,8 @@ int AVLTree<ElemType>::size(TreeNode<ElemType> *node, int sum)
     }
     return sum;
 }
-template<typename ElemType>
-ElemType AVLTree<ElemType>::getRoot()
+template<typename T>
+T Set<T>::getRoot()
 {
     return root->value;
 }

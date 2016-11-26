@@ -6,7 +6,7 @@
 #include <stack>
 #include <math.h>
 #include <cassert>
-#include "AVLTree/AVLTree.h"
+#include "Set/Set.h"
 #include "Coord/Coord.h"
 #include "Sodukupp.h"
 
@@ -45,10 +45,9 @@ bool Soduku::solve()
 {
 	for(std::map<Coord, int>::iterator i = puzzle.begin();
 		i != puzzle.end(); i++) {
-
 		Coord c = i->first;
 		int   d = i->second;
-        std::cout << "solve(): at " << c << " d = " << d << std::endl;
+        //std::cout << "solve(): at " << c << " d = " << d << std::endl;
 		if (d != 0 and not assign(c, d)) {
             std::cout << "solve(): returning false because assignment " << c << " = " << d << " failed\n";
 			return false;
@@ -59,7 +58,7 @@ bool Soduku::solve()
 bool Soduku::assign(Coord c, int d)
 {
     //std::cout << "trying to assign " << c << " to " << d << std::endl;
-	AVLTree<int> *other_values = new AVLTree<int>;
+	Set<int> *other_values = new Set<int>;
 	std::stack<int> domain = values[c].getElements();
 	while (not domain.empty()) {
 		int v = domain.top();
@@ -76,9 +75,17 @@ bool Soduku::assign(Coord c, int d)
 			return false;
 		}
 	}
-    std::cout << ("\033[H\033[2J");
+    /*
+    while (not values[c].empty()) {
+        int d2 = values[c].pop();
+        if (d2 != d and not eliminate(c, d2)) {
+            std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
+            return false;
+        }
+    }*/
+    //std::cout << ("\033[H\033[2J");
     //std::cout << "assigned " << c << " = " << d << std::endl;
-    print();
+    //print();
 	return true;
 }
 bool Soduku::eliminate(Coord c, int d)
@@ -155,7 +162,7 @@ void Soduku::init_grid(std::string filename)
             inFile >> s;
             int num = string2int(s);
             puzzle[c] = num;
-            values.insert(std::pair<Coord, AVLTree<int>>(c, AVLTree<int>()));
+            values.insert(std::pair<Coord, Set<int>>(c, Set<int>()));
             for (int i = 1; i < gridSize + 1; i++) {
             	values[c].add(i);
             }
@@ -163,7 +170,7 @@ void Soduku::init_grid(std::string filename)
     }
     assert(puzzle.size() == 81);
     assert(values.size() == 81);
-    for (std::map<Coord, AVLTree<int>>::iterator i = values.begin();
+    for (std::map<Coord, Set<int>>::iterator i = values.begin();
     	 i != values.end(); i++) {
     	assert(i->second.size() == 9);
     }
@@ -175,25 +182,18 @@ void Soduku::init_data_structures()
 {
 	for (int j = 0; j < gridSize; j++) {
 		allunits.push_back(std::vector<Coord>());
+        allunits.push_back(std::vector<Coord>());
         for (int i = 0; i < gridSize; i++) {
-            Coord c(i, j);
-            grid.push_back(c);
-            allunits[j].push_back(c);
-            units.insert(std::pair<Coord, std::vector<std::vector<Coord>>>(c, std::vector<std::vector<Coord>>()));
-            peers.insert(std::pair<Coord, AVLTree<Coord>>(c, AVLTree<Coord>()));
+            Coord c1(i, j);
+            Coord c2(j, i);
+            allunits[2 * j].push_back(c1);
+            allunits[2 * j + 1].push_back(c2);
+            units.insert(std::pair<Coord, std::vector<std::vector<Coord>>>(c1, std::vector<std::vector<Coord>>()));
+            peers.insert(std::pair<Coord, Set<Coord>>(c1, Set<Coord>()));
         }
-    }
-    for (int i = 0; i < gridSize; i++) {
-    	allunits.push_back(std::vector<Coord>());
-    	for (int j = 0; j < gridSize; j++) {
-    		Coord c(i, j);
-    		allunits[gridSize + i].push_back(c);
-
-    	}
     }
     for (int i = 0; i < gridSize; i += n) {
     	for (int j = 0; j < gridSize; j += n) {
-    		Coord c(i, j);
     		allunits.push_back(std::vector<Coord>());
     		int size = allunits.size();
     		for (int k = i; k < n + i; k++) {
@@ -216,41 +216,7 @@ void Soduku::init_data_structures()
     		}
     	}
     }
-    /* tests */
-    assert(grid.size() == 81);
-    assert(allunits.size() == 27);
-    
-    for (int i = 0; i < (int) allunits.size(); i++) {
-    	assert(allunits[i].size() == 9);
-    	/*std::cout << "unit "<< i + 1 << ": " << std::endl;
-    	for (int j = 0 ; j < (int) allunits[i].size(); j++) {
-    		std::cout << allunits[i][j] << " ";
-    	}
-    	std::cout << std::endl;*/
-    }
-    assert(units.size() == 81);
-    for (std::map<Coord, std::vector<std::vector<Coord>>>::iterator i = units.begin();
-    	i != units.end(); i++) {
-    	assert(i->second.size() == 3);
-    	for (int j = 0; j < 3; j++) {
-    		assert(i->second[j].size() == 9);
-    	}
-    	/*std::cout << "key = " << i->first << std::endl;
-    	for (int j = 0; j < (int) i->second.size();j++ ) {
-    		for (int k = 0; k < (int) i->second[j].size(); k++) {
-    			std::cout << i->second[j][k] << ", ";
-    		}
-    		std::cout << std::endl;
-    	}*/
-    }
-    assert(peers.size() == 81);
-    for(std::map<Coord, AVLTree<Coord>>::iterator i = peers.begin();
-    	i != peers.end(); i++) {
-    	assert(i->second.size() == 20);
-    	/*std::cout << i->first << "'s peers: " << std::endl;
-    	i->second.print();
-    	std::cout << std::endl;*/
-    }
+ 
 }
 int Soduku::string2int(std::string s)
 {

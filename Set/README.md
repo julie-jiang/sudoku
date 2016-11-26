@@ -1,16 +1,16 @@
-# AVLTree.h
-This is a set implemented as an [AVL tree](https://en.wikipedia.org/wiki/AVL_tree), a type of self-balancing binary search tree. This tree is designed to hold the domain, or possible values, each variable in the grid can hold. In practice, it can hold elements of any type.
+# Set.h
+This is a set implemented as an [set tree](https://en.wikipedia.org/wiki/set_tree), a type of self-balancing binary search tree. This tree is designed to hold the domain, or possible values, each variable in the grid can hold. In practice, it can hold elements of any type.
 
 As a set, it will not hold duplicate copies of the same item. If you attempt to add an element that is already in the set, then nothing will change.
 
 
 ## Initialization 
-To initialize an `AVLTree` object:
+To initialize an `Set` object:
 
 ```c++
-#include "AVLTree.h"
+#include "Set.h"
 // ...
-AVLTree<ElemType> avl;
+Set<T> set;
 ```
 
 ## The things it can do
@@ -18,19 +18,19 @@ AVLTree<ElemType> avl;
 1. Add an element
 
     ```c++
-    avl.add(item)
+    set.add(item)
     ```
 
 2. Remove an element (without returning)
 
     ```c++
-    avl.remove(item);
+    set.remove(item);
     ```
 
 3. Check if it contains an element in O(n) time (returns a bool)
 
     ```c++
-    if (avl.contains(item)) {
+    if (set.contains(item)) {
         // ...
     }
     ```
@@ -38,7 +38,7 @@ AVLTree<ElemType> avl;
 3. Check if its empty (returns a bool)
 
     ```c++
-    if (avl.empty()) {
+    if (set.empty()) {
      // ...
     }
     ```
@@ -46,13 +46,13 @@ AVLTree<ElemType> avl;
 4. Get the size of the tree
 
     ```c++
-    int size = avl.size()
+    int size = set.size()
     ```
 
 5. Get the root of the tree (without removing)
 
     ```c++
-    ElemType item = avl.getRoot()
+    T item = set.getRoot()
     ```
 
 7. Get all the elements in the tree as a stack (This is mostly for convenience at the moment, might be eliminated in the final version)
@@ -61,19 +61,19 @@ AVLTree<ElemType> avl;
     #include <cstdlib>
     #include <stack>
     // ...
-    stack<ElemType> elements = avl.getElements()
+    stack<T> elements = set.getElements()
     ```
 
 6. Print the elements in the tree via in order traversal
 
     ```c++
-    avl.print()
+    set.print()
     ```
 
 7. Print the tree with a bunch of brackets indicating parent-child relationship. This is mostly for debugging at the moment and will probably be removed later.
 
     ```c++
-    avl.printTree()
+    set.printTree()
     ```
 
 ## Testing
@@ -86,6 +86,6 @@ make
 And run:
 
 ```
-./testAVLTree
+./testSet
 ```
 

@@ -6,7 +6,7 @@
 #include <stack>
 #include <math.h>
 #include "Soduku.h"
-#include "AVLTree/AVLTree.h"
+#include "Set/Set.h"
 #include "Coord/Coord.h"
 
 Soduku::Soduku(std::string filename, int size)
@@ -36,7 +36,7 @@ void Soduku::initGrid(std::string filename)
     for (int j = 0; j < gridSize; j++) {
         for (int i = 0; i < gridSize; i++) {
             Coord c(i, j);
-            grid.insert(std::pair<Coord, AVLTree<int>>(c, AVLTree<int>()));
+            grid.insert(std::pair<Coord, Set<int>>(c, Set<int>()));
             inFile >> s;
             int num = string2int(s);
             if (num != 0) {
@@ -52,7 +52,7 @@ void Soduku::initGrid(std::string filename)
         }
     }
     enforceArcConsistency();
-    for (std::map<Coord, AVLTree<int>>::iterator i = grid.begin(); i != grid.end(); i++){
+    for (std::map<Coord, Set<int>>::iterator i = grid.begin(); i != grid.end(); i++){
         if (i->second.empty()) {
             throw std::logic_error("");
         } 
@@ -72,14 +72,14 @@ bool Soduku::backtrackingSearch()
             int d = grid[c].pop();
             if (valueIsConsistent(d, c)) {
                 assignment[c] = d;
-                std::map<Coord, AVLTree<int>> *eliminatedDomains = forwardCheck(c, d);
+                std::map<Coord, Set<int>> *eliminatedDomains = forwardCheck(c, d);
 
                 std::cout << ("\033[H\033[2J");
                 std::cout << "Assigned " << c << " to " << d << std::endl;
                 print();
                 // print eliminated domains
                 std::cout << "Eliminated: \n";
-                for (std::map<Coord, AVLTree<int>>::iterator i = eliminatedDomains->begin();
+                for (std::map<Coord, Set<int>>::iterator i = eliminatedDomains->begin();
                      i != eliminatedDomains->end(); i++) {
                     std::cout << i->first << " => ";
                     i->second.print();
@@ -111,9 +111,9 @@ void Soduku::eraseAssignment(Coord c, int d)
     int y = c[1];
 
 }
-void Soduku::addToDomain(std::map<Coord, AVLTree<int>> *eliminatedDomains)
+void Soduku::addToDomain(std::map<Coord, Set<int>> *eliminatedDomains)
 {
-    for (std::map<Coord, AVLTree<int>>::iterator i = eliminatedDomains->begin();
+    for (std::map<Coord, Set<int>>::iterator i = eliminatedDomains->begin();
          i != eliminatedDomains->end(); i++) {
         while (not i->second.empty()) {
             int d = i->second.pop();
@@ -121,9 +121,9 @@ void Soduku::addToDomain(std::map<Coord, AVLTree<int>> *eliminatedDomains)
         }
     }
 }
-std::map<Coord, AVLTree<int>> *Soduku::forwardCheck(Coord c, int d)
+std::map<Coord, Set<int>> *Soduku::forwardCheck(Coord c, int d)
 {
-    std::map<Coord, AVLTree<int>> *eliminatedDomains = new std::map<Coord, AVLTree<int>>;
+    std::map<Coord, Set<int>> *eliminatedDomains = new std::map<Coord, Set<int>>;
     
     int x = c[0];
     int y = c[1];
@@ -134,7 +134,7 @@ std::map<Coord, AVLTree<int>> *Soduku::forwardCheck(Coord c, int d)
             std::cout << c1 << " contains " << d << ", removing it\n";
             grid[c1].remove(d);
             if (eliminatedDomains->find(c1) == eliminatedDomains->end())
-                eliminatedDomains->insert(std::pair<Coord, AVLTree<int>>(c1, AVLTree<int>()));
+                eliminatedDomains->insert(std::pair<Coord, Set<int>>(c1, Set<int>()));
             (*eliminatedDomains)[c1].add(d);
             if (grid[c1].size == 1) {
                 std::cout << "Assigned " << c1 << " to " << grid[c1].getRoot() << std::endl;
@@ -145,7 +145,7 @@ std::map<Coord, AVLTree<int>> *Soduku::forwardCheck(Coord c, int d)
             std::cout << c2 << " contains " << d << ", removing it\n";
             grid[c2].remove(d);
             if (eliminatedDomains->find(c2) == eliminatedDomains->end())
-                eliminatedDomains->insert(std::pair<Coord, AVLTree<int>>(c2, AVLTree<int>()));
+                eliminatedDomains->insert(std::pair<Coord, Set<int>>(c2, Set<int>()));
             (*eliminatedDomains)[c2].add(d);
             if (grid[c2].size == 1) {
                 std::cout << "Assigned " << c2 << " to " << grid[c2].getRoot() << std::endl;
@@ -160,7 +160,7 @@ std::map<Coord, AVLTree<int>> *Soduku::forwardCheck(Coord c, int d)
                 std::cout << c3 << " contains " << d << ", removing it\n";
                 grid[c3].remove(d);
                 if (eliminatedDomains->find(c3) == eliminatedDomains->end())
-                    eliminatedDomains->insert(std::pair<Coord, AVLTree<int>>(c3, AVLTree<int>()));
+                    eliminatedDomains->insert(std::pair<Coord, Set<int>>(c3, Set<int>()));
                 (*eliminatedDomains)[c3].add(d);
                 if (grid[c3].size == 1) {
                     std::cout << "Assigned " << c3 << " to " << grid[c3].getRoot() << std::endl;
@@ -316,7 +316,7 @@ std::string Soduku::int2string(int n)
 
 void Soduku::printGridDomains()
 {
-    for (std::map<Coord, AVLTree<int>>::iterator i = grid.begin();
+    for (std::map<Coord, Set<int>>::iterator i = grid.begin();
         i != grid.end(); i++) {
         std::cout << i->first << " => ";
         i->second.print();
