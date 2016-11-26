@@ -1,43 +1,32 @@
 #ifndef SODUKU_H
 #define SODUKU_H
 #include <cstdlib>
-#include <queue>
 #include <map>
+#include <vector>
 #include "Set/Set.h"
 #include "Coord/Coord.h"
 
 class Soduku {
+    public:
+        Soduku(std::string, int);
+        ~Soduku();
+    private:
+        std::vector<std::vector<Coord>> allunits;
+        std::map<Coord, std::vector<std::vector<Coord>>> units;
+        std::map<Coord, Set<Coord>> peers;
+        std::map<Coord, Set<int>> values;
+        std::map<Coord, int> puzzle;
+        int gridSize;
+        int n;
+        void init(std::string);
+        void init_data_structures();
+        void init_grid(std::string);
+        int string2int(std::string);
+        bool solve();
+        bool assign(Coord, int);
+        bool eliminate(Coord, int);
+        void print();
 
-public:
-    Soduku(std::string, int);
-    ~Soduku();
-
-private:
-    int gridSize, n;
-    //typedef std::pair<int, int> Coord;
-    std::map<Coord, Set<int>> grid;
-    std::map<Coord, int> permAssignment;
-    std::map<Coord, int> assignment;
-
-    std::queue<Coord> PQueue;
-    std::queue<Coord> Queue;
-
-    void initGrid(std::string);
-    bool backtrackingSearch();
-    void addToDomain(std::map<Coord, Set<int>> *);
-    std::map<Coord, Set<int>> *forwardCheck(Coord, int);
-    Coord selectUnassignedVariable();
-    void addToQueue(Coord);
-    void print();
-    void printGridDomains();
-    void printAssignments();
-    void printAssignmentGridDomains();
-    void enforceArcConsistency();
-    bool removeInconsistentValues(Coord);
-    bool valueIsConsistent(int, Coord);
-    int string2int(std::string);
-    std::string int2string(int);
 
 };
-
 #endif

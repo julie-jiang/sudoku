@@ -1,30 +1,138 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
+#include <fstream>
 #include <cstdlib>
 #include <map>
 #include <stack>
 #include <math.h>
-#include "Soduku.h"
+#include <cassert>
 #include "Set/Set.h"
 #include "Coord/Coord.h"
+#include "Soduku.h"
 
 Soduku::Soduku(std::string filename, int size)
 {
     gridSize = size;
     n = (int) sqrt(size);
-    initGrid(filename);
-    bool result = backtrackingSearch();
+    init(filename);
+    if (solve()) {
+        std::cout << "solved!\n";
+    } else {
+        std::cout << "not solved ...uh oh\n";
+    }
+    print();
 }
 Soduku::~Soduku()
 {
 
 }
-
-
-void Soduku::initGrid(std::string filename)
+void Soduku::print()
 {
-    // Open file 
+    for (int j = 0; j < gridSize; j++) {
+        for (int i = 0; i < gridSize; i++) {
+            Coord c(i, j);
+            if (values[c].size() == 1) {
+                 std::cout << "\033[1m\033[31m" << values[c].top() << "\033[0m ";
+            } else {
+                std::cout << "\033[37m0 \033[0m";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+bool Soduku::solve()
+{
+	for(std::map<Coord, int>::iterator i = puzzle.begin();
+		i != puzzle.end(); i++) {
+		Coord c = i->first;
+		int   d = i->second;
+        //std::cout << "solve(): at " << c << " d = " << d << std::endl;
+		if (d != 0 and not assign(c, d)) {
+            std::cout << "solve(): returning false because assignment " << c << " = " << d << " failed\n";
+			return false;
+        }
+	}
+	return true;
+}
+bool Soduku::assign(Coord c, int d)
+{
+    Set<int> *other_values = new Set<int>(values[c]);
+	while (not other_values->empty()) {
+		int d2 = other_values->pop();
+		if (d2 != d and not eliminate(c, d2)) {
+            std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
+			return false;
+		}
+	}
+    /*
+    for (Set<int>::iterator it = values[c].begin(); it != values[c].end(); ++it) {
+        int d2 = *it;
+        if (d2 != d and not eliminate(c, d2)) {
+            std::cout << "assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
+            return false;
+        }
+
+    }*/
+    delete other_values;
+	return true;
+}
+bool Soduku::eliminate(Coord c, int d)
+{
+    //std::cout << "eliminating " << d << " from " << c << std::endl;
+    //values[c].print();
+    //std::cout << std::endl;
+	if (not values[c].contains(d)) {
+		return true;
+	}
+	values[c].remove(d);
+	if (values[c].empty()) {
+        std::cout << "eliminate(): retruning false because values[c].empty() for c = "<< c << "\n";
+		return false; // sanity check
+	} else if (values[c].size() == 1) {
+		int d2 = values[c].top();
+        for (Set<Coord>::iterator it = peers[c].begin(); it != peers[c].end(); ++it) {
+            Coord c2 = *it;
+            if (not eliminate(c2, d2)) {
+                return false;
+            }
+        }
+	}
+	for (int i = 0; i < (int) units[c].size(); i++) {
+		std::vector<Coord> dplaces;
+		for (int j = 0; j < (int) units[c][i].size(); j++) {
+			Coord c3 = units[c][i][j];
+			if (values[c3].contains(d)) {
+				dplaces.push_back(c3);
+			} 
+		}
+		if (dplaces.size() == 0) {
+            std::cout << "eliminate(): returning false because dplaces.size() == 0 \n";
+            
+			return false;
+		} else if (dplaces.size() == 1) {
+			if (not assign(dplaces[0], d)) {
+                std::cout << "eliminate(): returning false because assignment " << dplaces[0] << " = " << d << " failed\n";
+            
+				return false;
+			}
+		}
+	}
+    //std::cout << "eliminating " << d << " from " << c << "successful!\n";
+    
+	return true;
+
+
+}
+void Soduku::init(std::string filename)
+{
+	init_data_structures();
+	init_grid(filename);
+
+}
+void Soduku::init_grid(std::string filename)
+{
+	    // Open file 
     std::ifstream inFile;
     inFile.open(filename);
     if (inFile.fail()) {
@@ -36,305 +144,65 @@ void Soduku::initGrid(std::string filename)
     for (int j = 0; j < gridSize; j++) {
         for (int i = 0; i < gridSize; i++) {
             Coord c(i, j);
-            grid.insert(std::pair<Coord, Set<int>>(c, Set<int>()));
             inFile >> s;
             int num = string2int(s);
-            if (num != 0) {
-                grid[c].add(num);
-                permAssignment[c] = num;
-            } else {
-                for (int i = 1; i < 10; i++) {
-                    grid[c].add(i);
-                } 
-                Queue.push(c);
-                
+            puzzle[c] = num;
+            values.insert(std::pair<Coord, Set<int>>(c, Set<int>()));
+            for (int i = 1; i < gridSize + 1; i++) {
+            	values[c].add(i);
             }
         }
     }
-    enforceArcConsistency();
-    for (std::map<Coord, Set<int>>::iterator i = grid.begin(); i != grid.end(); i++){
-        if (i->second.empty()) {
-            throw std::logic_error("");
-        } 
-        if (i->second.size() == 1) {
-            assignment[i->first] = i->second.top(); 
-        } else {
-            PQueue.push(i->first);
-        }
+    assert(puzzle.size() == 81);
+    assert(values.size() == 81);
+    for (std::map<Coord, Set<int>>::iterator i = values.begin();
+    	 i != values.end(); i++) {
+    	assert(i->second.size() == 9);
     }
-    printGridDomains();
-}
-bool Soduku::backtrackingSearch()
-{   
-    if (not PQueue.empty()) {
-        Coord c = selectUnassignedVariable();
-        while (not grid[c].empty()) {
-            int d = grid[c].pop();
-            if (valueIsConsistent(d, c)) {
-                assignment[c] = d;
-                std::map<Coord, Set<int>> *eliminatedDomains = forwardCheck(c, d);
-
-                std::cout << ("\033[H\033[2J");
-                std::cout << "Assigned " << c << " to " << d << std::endl;
-                print();
-                // print eliminated domains
-                std::cout << "Eliminated: \n";
-                for (std::map<Coord, Set<int>>::iterator i = eliminatedDomains->begin();
-                     i != eliminatedDomains->end(); i++) {
-                    std::cout << i->first << " => ";
-                    i->second.print();
-                    std::cout << std::endl;
-                }
-                //printAssignmentGridDomains();
-                char a; // Wait for user input before continuing
-                std::cin >> a;
-                if (backtrackingSearch()) {
-                    std::cout << c << " = " << d << " worked!!!\n";
-                    return true;
-                } 
-                std::cout << c << " = " << d << " didn't workout, backtracking\n";
-                eraseAssignment(c, d);
-                addToDomain(eliminatedDomains);
-            } else {
-                std::cout << ("\033[H\033[2J");
-                std::cout << c << " = " << d << " is not consistent! Next!\n";
-            }
-        }
-        PQueue.push(c);
-    }
-    return false;
-}
-void Soduku::eraseAssignment(Coord c, int d)
-{
-    assignment.erase(c);
-    int x = c[0];
-    int y = c[1];
-
-}
-void Soduku::addToDomain(std::map<Coord, Set<int>> *eliminatedDomains)
-{
-    for (std::map<Coord, Set<int>>::iterator i = eliminatedDomains->begin();
-         i != eliminatedDomains->end(); i++) {
-        while (not i->second.empty()) {
-            int d = i->second.pop();
-            grid[i->first].add(d);
-        }
-    }
-}
-std::map<Coord, Set<int>> *Soduku::forwardCheck(Coord c, int d)
-{
-    std::map<Coord, Set<int>> *eliminatedDomains = new std::map<Coord, Set<int>>;
-    
-    int x = c[0];
-    int y = c[1];
-    for (int i = 0; i < gridSize; i++) {
-        Coord c1(x, i);
-        Coord c2(i, y);
-        if (i != y and grid[c1].contains(d)) {
-            std::cout << c1 << " contains " << d << ", removing it\n";
-            grid[c1].remove(d);
-            if (eliminatedDomains->find(c1) == eliminatedDomains->end())
-                eliminatedDomains->insert(std::pair<Coord, Set<int>>(c1, Set<int>()));
-            (*eliminatedDomains)[c1].add(d);
-            if (grid[c1].size == 1) {
-                std::cout << "Assigned " << c1 << " to " << grid[c1].top() << std::endl;
-                assignment[c1] = grid[c1].top();
-            }
-        } 
-        if (i != x and grid[c2].contains(d)) {
-            std::cout << c2 << " contains " << d << ", removing it\n";
-            grid[c2].remove(d);
-            if (eliminatedDomains->find(c2) == eliminatedDomains->end())
-                eliminatedDomains->insert(std::pair<Coord, Set<int>>(c2, Set<int>()));
-            (*eliminatedDomains)[c2].add(d);
-            if (grid[c2].size == 1) {
-                std::cout << "Assigned " << c2 << " to " << grid[c2].top() << std::endl;
-                assignment[c2] = grid[c2].top();
-            }
-        }
-    }
-    for (int i = x - x % n; i < n + x - x % n; i++) {
-        for (int j = y - y % n; j < n + y - y % n; j++) {
-            Coord c3(i, j);
-            if (i != x and j != y and grid[c3].contains(d)) {
-                std::cout << c3 << " contains " << d << ", removing it\n";
-                grid[c3].remove(d);
-                if (eliminatedDomains->find(c3) == eliminatedDomains->end())
-                    eliminatedDomains->insert(std::pair<Coord, Set<int>>(c3, Set<int>()));
-                (*eliminatedDomains)[c3].add(d);
-                if (grid[c3].size == 1) {
-                    std::cout << "Assigned " << c3 << " to " << grid[c3].top() << std::endl;
-                    assignment[c3] = grid[c3].top();
-            }
-            }
-        }
-    }
-    return eliminatedDomains;
-
-
-}
-bool Soduku::valueIsConsistent(int d, Coord c)
-{
-    int x = c[0];
-    int y = c[1];
-    // Check row and column
-    for (int i = 0; i < gridSize; i++) {
-        Coord c1(x, i);
-        Coord c2(i, y);
-        if ((i != y and permAssignment.find(c1) != permAssignment.end() 
-             and permAssignment[c1] == d) or 
-            (i != x and permAssignment.find(c2) != permAssignment.end()
-             and permAssignment[c2] == d)) 
-            return false;
-    }
-    // Check subgrid
-    for (int i = x - x % n; i < n + x - x % n; i++) {
-        for (int j = y - y % n; j < n + y - y % n; j++) {
-            Coord c3(i, j);
-            if (i != x and j != y 
-                and permAssignment.find(c3) != permAssignment.end() 
-                and permAssignment[c3] == d)
-                return false;
-        }
-    }
-    // Check row and column
-    for (int i = 0; i < gridSize; i++) {
-        Coord c1(x, i);
-        Coord c2(i, y);
-        if ((i != y and assignment.find(c1) != assignment.end() 
-             and assignment[c1] == d) or 
-            (i != x and assignment.find(c2) != assignment.end()
-             and assignment[c2] == d)) 
-            return false;
-    }
-    // Check subgrid
-    for (int i = x - x % n; i < n + x - x % n; i++) {
-        for (int j = y - y % n; j < n + y - y % n; j++) {
-            Coord c3(i, j);
-            if (i != x and j != y 
-                and assignment.find(c3) != assignment.end() 
-                and assignment[c3] == d)
-                return false;
-        }
-    }
-    return true;
-}
-void Soduku::printAssignments()
-{
-    std::cout << "Current assignments: \n";
-    for (std::map<Coord, int>::iterator i = assignment.begin();
-        i != assignment.end(); i++) {
-        std::cout << i->first << " = " << i->second << std::endl;
-    }
-}
-Coord Soduku::selectUnassignedVariable()
-{
-    Coord c = PQueue.front();
-    PQueue.pop();
-    return c;
-}
-void Soduku::addToQueue(Coord c)
-{
-    int x = c[0];
-    int y = c[1];
-    for (int i = 0; i < gridSize; i++) {
-        Coord c1(x, i); 
-        Coord c2(i, y);
-        if (i != y and grid[c1].size() > 1) 
-            Queue.push(c1);
         
-        if (i != x and grid[c2].size() > 1) 
-            Queue.push(c2);
-    }
-    // Check subgrid
-    for (int i = x - x % n; i < n + x - x % n; i++) {
-        for (int j = y - y % n; j < n + y - y % n; j++) {
-            Coord c3(i, j);
-            if (i != x and j != y and grid[c3].size() > 1)
-                Queue.push(c3);
-        }
-    }
-}
-void Soduku::enforceArcConsistency()
-{
-    while (not Queue.empty()) {
-        Coord c = Queue.front();
-        Queue.pop();
-        removeInconsistentValues(c);
 
-    }
 
 }
-bool Soduku::removeInconsistentValues(Coord c)
+void Soduku::init_data_structures()
 {
-    bool removed = false;
-    std::stack<int> domain = grid[c].getElements();
-    while (not domain.empty()) {
-        int d = domain.top();
-        domain.pop();
-        if (not valueIsConsistent(d, c)) {
-            removed = true;
-            grid[c].remove(d);
-        }
-    }
-    return removed;
-}
-
-
-void Soduku::print()
-{
-    for (int j = 0; j < gridSize; j++) {
+	for (int j = 0; j < gridSize; j++) {
+		allunits.push_back(std::vector<Coord>());
+        allunits.push_back(std::vector<Coord>());
         for (int i = 0; i < gridSize; i++) {
-            Coord c(i, j);
-            std::map<Coord, int>::iterator it = permAssignment.find(c);
-            if (it != permAssignment.end()) {
-                std::string s = int2string(it->second);
-                std::cout << "\033[1m\033[31m" << s << "\033[0m ";
-            } else {
-                std::map<Coord, int>::iterator itt = assignment.find(c);
-                if (itt != assignment.end()){
-                    std::string s = int2string(itt->second);
-                    std::cout << "\033[1m\033[33m" << s << "\033[0m ";
-                } else {
-                    std::cout << "\033[37m0 \033[0m";
-                }
-            }
+            Coord c1(i, j);
+            Coord c2(j, i);
+            allunits[2 * j].push_back(c1);
+            allunits[2 * j + 1].push_back(c2);
+            units.insert(std::pair<Coord, std::vector<std::vector<Coord>>>(c1, std::vector<std::vector<Coord>>()));
+            peers.insert(std::pair<Coord, Set<Coord>>(c1, Set<Coord>()));
         }
-        std::cout << std::endl;
     }
-    std::cout << "Press anything to continue \n";
-}
-
-std::string Soduku::int2string(int n)
-{
-    std::string result;
-    std::ostringstream oss;
-    oss << n;
-    result = oss.str();
-    return result;
-}
-
-void Soduku::printGridDomains()
-{
-    for (std::map<Coord, Set<int>>::iterator i = grid.begin();
-        i != grid.end(); i++) {
-        std::cout << i->first << " => ";
-        i->second.print();
-        std::cout << std::endl;
+    for (int i = 0; i < gridSize; i += n) {
+    	for (int j = 0; j < gridSize; j += n) {
+    		allunits.push_back(std::vector<Coord>());
+    		int size = allunits.size();
+    		for (int k = i; k < n + i; k++) {
+    			for (int l = j; l < n + j; l++) {
+    				Coord c(l, k);
+    				allunits[size - 1].push_back(c);
+    			}
+    		}
+    	}
     }
-}
-void Soduku::printAssignmentGridDomains()
-{
-    for (std::map<Coord, int>::iterator i = assignment.begin();
-        i != assignment.end(); i++) {
-        std::cout << i->first << " => ";
-        grid[i->first].print();
-        std::cout << std::endl;
+    for (int i = 0; i < (int) allunits.size(); i++) {
+    	for (int j = 0; j < (int) allunits[i].size(); j++) {
+    		Coord c = allunits[i][j];
+    		units[c].push_back(std::vector<Coord>(allunits[i]));
+    		for (int k = 0; k < (int) allunits[i].size(); k++) {
+    			if (k != j) {
+    				Coord c2 = allunits[i][k];
+    				peers[c].add(c2);
+    			}
+    		}
+    	}
     }
-
+ 
 }
-
-
 int Soduku::string2int(std::string s)
 {
     std::stringstream ss(s);

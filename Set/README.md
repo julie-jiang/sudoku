@@ -52,7 +52,7 @@ Set<T> *copy_set_pointer = new Set<T>(set);
 
     ```c++
     if (set.empty()) {
-     // ...
+        // ...
     }
     ```
 
