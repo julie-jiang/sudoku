@@ -32,9 +32,7 @@ For example:
 ```
 
 ## Current Progress
-I'm currently implementing the hash table, which will be used to replace the `map` objects in `Soduku`. After that, I will debug the backtracking search algorithm, which right now doesn't really backtrack. 
-
-When the algorithm actually works, I will implement the priority queue. Right now I'm using a normal queue in place of priority queue for simplicity.
+I'm currently implementing the hash table, which will be used to replace the `map` objects in `Soduku`. After that, I will optimize my search algorithm by adding a Priority Queue.
 
 ## Data Structures
 
