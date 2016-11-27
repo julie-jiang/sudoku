@@ -186,18 +186,18 @@ void testSize()
 void testIterator()
 {
     std::cout << "\nTesting iterator \n";
-    Set<int> *set = new Set<int>;
+    Set<int> set;
     std::cout << "Output should be: 11 10 9 6 5 2 1 0 -1\n";
     std::cout << "Actual output:    ";
-    set->add(9);  set->add(5); set->add(10);
-    set->add(0);  set->add(6); set->add(11);
-    set->add(-1); set->add(1); set->add(2);
-    for (Set<int>::iterator i = set->begin(); i != set->end(); ++i)
+    set.add(9);  set.add(5); set.add(10);
+    set.add(0);  set.add(6); set.add(11);
+    set.add(-1); set.add(1); set.add(2);
+    Set<int> set2(set);
+    for (Set<int>::iterator i = set2.begin(); i != set2.end(); ++i)
     {
         std::cout << *i << " ";
     }
     std::cout << std::endl;
-    delete set;
     
 }
 void testCopyConstructor()

@@ -7,7 +7,7 @@
 
 void testIterator()
 {
-    std::cout << "\nTesting iterator  \n";
+    std::cout << "Testing iterator...";
     LinkedList<Coord, int> list;
     std::vector<int> values;
     for (int i = 0; i < 10; i++) {
@@ -28,10 +28,11 @@ void testIterator()
     for (LinkedList<Coord, int>::iterator it = list2.begin(); it != list2.end(); ++it) {
         assert(false);
     }
+    std::cout << "test passed.\n";
 }
 void testType1()
 {
-    std::cout << "\nTesting using customly defined object  \n";
+    std::cout << "Testing using customly defined object...";
     LinkedList<Coord, int> list;
     Coord c1(0, 0);
     Coord c2(4, 7);
@@ -54,10 +55,13 @@ void testType2()
         assert(it.key() == "key");
         assert(it.value().size() == 10);
     }
+
+    std::cout << "test passed.\n";
+
 }
 void testGetterSetter1()
 {
-    std::cout << "\nTesting getter and setter  \n";
+    std::cout << "Testing getter and setter...";
     LinkedList<std::string, int> list;
     
     list.insert("key1", 1);
@@ -90,11 +94,12 @@ void testGetterSetter2()
         caught_exception = true;
     }
     assert(caught_exception);
+    std::cout << "test passed.\n";
 }
 
 void testRemove1()
 {
-    std::cout << "\nTesting function remove  \n";
+    std::cout << "Testing function remove...";
     LinkedList<std::string, int> list;
     list.insert("key1", 2);
     list.insert("key1", 1);
@@ -124,22 +129,25 @@ void testRemove2()
     LinkedList<std::string, int>::iterator it = list.begin();
     assert(it.key() == "key4");
     assert(it.value() == 4);
+
+    std::cout << "test passed.\n";
 }
 
 void testEmpty()
 {
-    std::cout << "\nTesting function empty  \n";
+    std::cout << "Testing function empty...";
     
     LinkedList<std::string, int> list;
     assert(list.empty());
     list.insert("key1", 1);
     assert(not list.empty());
 
+    std::cout << "test passed.\n";
 }
 
 void testSize()
 {
-    std::cout << "\nTesting function size  \n";
+    std::cout << "Testing function size...";
     
     LinkedList<std::string, int> list;
     assert(list.size() == 0);
@@ -149,9 +157,11 @@ void testSize()
     assert(list.size() == 1);
     assert(list["key1"] == 2);
 
+    std::cout << "test passed.\n";
 }
 void testPointer()
 {
+    std::cout << "Testing using a pointer to a linkedlist...";
     LinkedList<int, int> *list = new LinkedList<int, int>;
     list->insert(1, 10);
     list->insert(2, 20);
@@ -160,10 +170,12 @@ void testPointer()
     assert(val1 == 10);
     assert(val2 == 20);
     delete list;
+
+    std::cout << "test passed.\n";
 }
 int main()
 {
-    std::cout << "============== Running tests for LinkedList ==============\n";
+    std::cout << "============== Running tests for LinkedList ==============";
     
     testSize();
     testEmpty();
@@ -175,7 +187,7 @@ int main()
     testRemove1();
     testRemove2();
     testPointer();
-    std::cout << "============== Tests for LinkedList completed! ==============\n";
+    std::cout << "============== Tests for LinkedList completed! ==============";
 	
 
 	

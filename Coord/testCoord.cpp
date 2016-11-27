@@ -104,11 +104,6 @@ int main()
     testGEQ();
     testSmallerThan();
     testLEQ();
-    Coord c1(1, 2);
-    std::map<Coord, Set<int>> mymap;
-    mymap.insert(std::pair<Coord, Set<int>>(c1, Set<int>()));
-    /*std::map<Coord, int> mymap2;
-    mymap2.insert(std::pair<Coord, int>(c1, 10));*/
     std::cout << "-----All tests passed!----\n";
 
 }

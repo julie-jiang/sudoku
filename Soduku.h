@@ -2,6 +2,7 @@
 #define SODUKU_H
 #include <cstdlib>
 #include <vector>
+#include <queue>
 #include "Set/Set.h"
 #include "Coord/Coord.h"
 #include "HashMap/HashMap.h"
@@ -18,14 +19,15 @@ class Soduku {
         HashMap<Coord, int> puzzle;
         int gridSize;
         int n;
-        void init(std::string);
         void init_data_structures();
-        void init_grid(std::string);
+        void init_grid(HashMap<Coord, Set<int>> &, std::string);
         int string2int(std::string);
-        bool solve();
-        bool assign(Coord, int);
-        bool eliminate(Coord, int);
-        void print();
+        bool solve(HashMap<Coord, Set<int>> &);
+        bool search(HashMap<Coord, Set<int>> &);
+        bool parse_grid(HashMap<Coord, Set<int>> &);
+        bool assign(HashMap<Coord, Set<int>> &, Coord, int);
+        bool eliminate(HashMap<Coord, Set<int>>&, Coord, int);
+        void print(HashMap<Coord, Set<int>> &);
 
 
 };

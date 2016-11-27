@@ -6,7 +6,7 @@
 #include "../Set/Set.h"
 void testGetterSetter()
 {
-    std::cout << "\nTesting getter and setter  \n";
+    std::cout << "Testing getter and setter...";
     HashMap<std::string, int> map;
     map.insert("key1", 1);
     map.insert("key2", 2);
@@ -22,12 +22,12 @@ void testGetterSetter()
         caughtException = true;
     }
     assert(caughtException);
-
+    std::cout << "test passed.\n";
 }
 
 void testRemove()
 {
-    std::cout << "\nTesting remove  \n";
+    std::cout << "Testing remove...";
     HashMap<std::string, int> map;
     map.insert("key", 1);
     map.remove("key");
@@ -39,23 +39,19 @@ void testRemove()
         caughtException = true;
     }
     assert(caughtException);
+    std::cout << "test passed.\n";
 
 }
 
 void testIterator1()
 {
-    std::cout << "\nTesting iterator  \n";
+    std::cout << "Testing iterator...";
     HashMap<std::string, int> map;
     int values[3] = {3, 2, 1};
     std::string keys[3] = {"key3", "key2", "key1"};
     map.insert("key1", 1);
     map.insert("key2", 2);
     map.insert("key3", 3);
-    /*for (HashMap<std::string, int>::iterator it = map.bbegin();
-         it != map.eend(); ++it) {
-        std::cout << "!" << it.key() << "!" << std::endl;
-
-    }*/
     int j = 0;
     
     for (HashMap<std::string, int>::key_iterator k = map.begin(); 
@@ -64,6 +60,7 @@ void testIterator1()
         assert(map[*k] == values[j]);
         j++;
     }
+
     
 }
 void testIterator2()
@@ -79,12 +76,12 @@ void testIterator2()
          k != map.end(); ++k) {
         std::cout << *k << std::endl;
     }
-
+    std::cout << "test passed.\n";
 }
 
 void testType1()
 {
-    std::cout << "\nTesting using custum defined object  \n";
+    std::cout << "Testing using custum defined object...";
     HashMap<Coord, int> map;
     Coord c1(1, 2);
     Coord c2(2, 3);
@@ -122,27 +119,30 @@ void testType3()
          it != map.end(); ++it) {
         assert(*it == c);
     }
+    std::cout << "test passed.\n";
 }
 void testConstructor()
 {
-    std::cout << "\nTesting constructor  \n";
+    std::cout << "Testing constructor...";
     HashMap<Coord, int> map1;
     size_t size = 200;
     HashMap<std::string, int> map2(size);
+    std::cout << "test passed.\n";
 }
 void testCopyConstructor()
 {
-    std::cout << "\nTesting copy constructor  \n";
+    std::cout << "Testing copy constructor...";
     HashMap<std::string, int> map1;
     map1.insert("key1", 10);
     map1.insert("key2", 20);
     HashMap<std::string, int> map2(map1);
     assert(map2["key1"] == map1["key1"]);
     assert(map2["key2"] == map1["key2"]);
+    std::cout << "test passed.\n";
 }
 int main()
 {
-    std::cout << "============== Running tests for Hash Map ==============\n";
+    std::cout << "============== Running tests for Hash Map ==============";
     testConstructor();
     testCopyConstructor();
     testGetterSetter();
@@ -153,7 +153,7 @@ int main()
     testIterator1();
     testIterator2();
 
-    std::cout << "============== Tests for HashMap completed! ==============\n";
+    std::cout << "============== Tests for HashMap completed! ==============";
 }
 
 
