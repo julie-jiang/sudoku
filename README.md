@@ -23,26 +23,23 @@ make
 ```
 And run:
 ```
-./sodukuit <filename>
+./sodukuit <path to list of soduku puzzles>
 ```
 
 For example: 
 ```
-./sodukuit puzzle.txt
+./sodukuit puzzle/puzzle_list.txt
 ```
-
-## Current Progress
-I'm currently implementing the hash table, which will be used to replace the `map` objects in `Soduku`. After that, I will optimize my search algorithm by adding a Priority Queue.
 
 ## Data Structures
 
 1. [Set](Set/)
 	
-	A self-balancing AVL binary search tree designed to hold the domains, or possible values, of each coordinate object `Coord`.
+	A self-balancing AVL binary search tree designed to hold any object.
 
 2. [Hash Map](HashMap/)
 	
-	A hash table designed to map coordinate objects `Coord` to their assigned values. 
+	A hash table that maps one object to another.
 
 3. Priority Queue
 	

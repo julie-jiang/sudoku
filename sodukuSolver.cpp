@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         solve_all(std::string(argv[1]));
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
-        std::cerr << "Usage: soduku filename \n";
+        std::cerr << "Usage: soduku filelist \n";
         exit(1);
     }
     
