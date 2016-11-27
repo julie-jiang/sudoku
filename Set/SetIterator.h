@@ -1,5 +1,5 @@
-#ifndef SetIterator_H
-#define SetIterator_H
+#ifndef SETITERATOR_H
+#define SETITERATOR_H
 #include <cstdlib>
 #include <stack>
 /*****************************************************************************/

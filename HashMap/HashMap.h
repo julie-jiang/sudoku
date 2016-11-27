@@ -15,24 +15,27 @@
 #include <functional>
 #include <sstream>
 #include "LinkedList/LinkedList.h"
+#include "../Set/Set.h"
+#include "../Set/SetIterator.h"
 template<typename Key, typename Value>
 
 class HashMap {
 
     public:
+        typedef SetIterator<Key> key_iterator;
         HashMap();
         HashMap(size_t);
         ~HashMap();
         Value &operator[](const Key &);
         void insert(Key, Value);
         void remove(Key);
-        typedef ListIterator<Key, Value> iterator;
-        iterator begin();
-        iterator end();
+        key_iterator begin();
+        key_iterator end();
     private:
+        Set<Key> *linkedHashKeys;
         LinkedList<Key, Value> **buckets;
         std::hash<std::string> hashFunction;
-        LinkedList<Key, Value> linkedHashMap;
+        
         size_t bucketSize;
 
         void init();
@@ -61,15 +64,15 @@ HashMap<Key, Value>::~HashMap()
 }
 
 template<typename Key, typename Value>
-ListIterator<Key, Value> HashMap<Key, Value>::begin()
+SetIterator<Key> HashMap<Key, Value>::begin()
 {
-    return linkedHashMap.begin();
+    return linkedHashKeys->begin();
 }
 
 template<typename Key, typename Value>
-ListIterator<Key, Value> HashMap<Key, Value>::end()
+SetIterator<Key> HashMap<Key, Value>::end()
 {
-    return linkedHashMap.end();
+    return linkedHashKeys->end();
 }
 
 template<typename Key, typename Value>
@@ -87,13 +90,15 @@ void HashMap<Key, Value>::init()
         buckets[i] = new LinkedList<Key, Value>();
     }
     hashFunction = std::hash<std::string>{};
+    linkedHashKeys = new Set<Key>();
 }
 
 template<typename Key, typename Value>
 void HashMap<Key, Value>::insert(Key k, Value val)
 {
     buckets[getIndex(k)]->insert(k, val);
-    linkedHashMap.insert(k, val);
+    linkedHashKeys->add(k);
+    
 }
 
 template<typename Key, typename Value>
@@ -106,7 +111,7 @@ template<typename Key, typename Value>
 void HashMap<Key, Value>::remove(Key k)
 {
     if (buckets[getIndex(k)]->remove(k)) {
-        linkedHashMap.remove(k);
+        linkedHashKeys->remove(k);
     }
 }
 

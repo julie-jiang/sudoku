@@ -44,12 +44,12 @@ HashMap<std::string, int> map(size);
 	map.remove("key1");
 	```
 
-4. Iterate through the map. 
+4. Iterate through the keys of the map. The order is not in order of insertion.
 
 	```c++
-	for (HashMap<std::string, int>::iterator it = map.begin(); it != map.end(); ++it) {
-		std::string key = it.key();
-		std::string value = it.value();
+	for (HashMap<std::string, int>::key_iterator it = map.begin(); it != map.end(); ++it) {
+		std::string key = *it;
+		int value = map[*it];
 		// ... do something
 	}
 	```

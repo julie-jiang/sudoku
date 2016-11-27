@@ -6,9 +6,11 @@
 #include <stack>
 #include <math.h>
 #include <cassert>
+#include "Soduku.h"
 #include "Set/Set.h"
 #include "Coord/Coord.h"
-#include "Soduku.h"
+#include "HashMap/HashMap.h"
+
 
 Soduku::Soduku(std::string filename, int size)
 {
@@ -133,17 +135,21 @@ void Soduku::init_grid(std::string filename)
             inFile >> s;
             int num = string2int(s);
             puzzle[c] = num;
-            values.insert(std::pair<Coord, Set<int>>(c, Set<int>()));
+            values.insert(c, Set<int>());
             for (int i = 1; i < gridSize + 1; i++) {
                 values[c].add(i);
             }
+            values[c].print();
         }
     }
     assert(puzzle.size() == 81);
-    assert(values.size() == 81);
-    for (std::map<Coord, Set<int>>::iterator i = values.begin();
-         i != values.end(); i++) {
-        assert(i->second.size() == 9);
+    //assert(values.size() == 81);
+    for (HashMap<Coord, Set<int>>::iterator i = values.begin();
+         i != values.end(); ++i) {
+        std::cout << i.key() << ": ";
+        i.value().print();
+        std::cout << std::endl;
+        assert(i.value().size() == 9);
     }
         
 
@@ -159,8 +165,8 @@ void Soduku::init_data_structures()
             Coord c2(j, i);
             allunits[2 * j].push_back(c1);
             allunits[2 * j + 1].push_back(c2);
-            units.insert(std::pair<Coord, std::vector<std::vector<Coord>>>(c1, std::vector<std::vector<Coord>>()));
-            peers.insert(std::pair<Coord, Set<Coord>>(c1, Set<Coord>()));
+            units.insert(c1, std::vector<std::vector<Coord>>());
+            peers.insert(c1, Set<Coord>());
         }
     }
     for (int i = 0; i < gridSize; i += n) {

@@ -62,7 +62,7 @@ void testAddDuplicates()
 }
 void testAdd()
 {
-    std::cout << "\n<------ Testing add function ------> \n";
+    std::cout << "\nTesting add function  \n";
     testAddLeftLeft();
     testAddLeftRight();
     testAddRightRight();
@@ -79,7 +79,7 @@ void testAdd()
  */
 void testContains() 
 {
-    std::cout << "\n<------ Testing function contains ------> \n";
+    std::cout << "\nTesting function contains  \n";
     Set<int> *set = new Set<int>;
     set->add(10); set->add(50); set->add(20);
     set->add(30); set->add(60); set->add(40);
@@ -154,7 +154,7 @@ void testRemove3()
 }
 void testRemove()
 {
-    std::cout << "\n<------ Testing function remove ------> \n";
+    std::cout << "\nTesting function remove  \n";
     testRemove1();
     testRemove2();
     testRemove3();
@@ -162,7 +162,7 @@ void testRemove()
 }
 void testSize()
 {
-    std::cout << "\n<------ Testing function size------> \n";
+    std::cout << "\nTesting function size \n";
     std::cout << "Output should be: 0 1 9\n";
     std::cout << "Actual output:    ";
     Set<int> *set1 = new Set<int>;
@@ -185,7 +185,7 @@ void testSize()
 
 void testIterator()
 {
-    std::cout << "\n<------ Testing iterator------> \n";
+    std::cout << "\nTesting iterator \n";
     Set<int> *set = new Set<int>;
     std::cout << "Output should be: 11 10 9 6 5 2 1 0 -1\n";
     std::cout << "Actual output:    ";
@@ -202,7 +202,7 @@ void testIterator()
 }
 void testCopyConstructor()
 {
-    std::cout << "\n<------ Testing copy constructor------> \n";
+    std::cout << "\nTesting copy constructor \n";
     Set<int> *set = new Set<int>;
     std::cout << "Output should be: [-1 0 1 2 5 6 9 10 11 ]\n";
     std::cout << "Actual output:    ";
@@ -216,7 +216,7 @@ void testCopyConstructor()
 }
 void testType()
 {
-    std::cout << "\n<------ Testing using Set with custom defined object------> \n";
+    std::cout << "\nTesting using Set with custom defined object \n";
     Set<Coord> *set = new Set<Coord>;
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {

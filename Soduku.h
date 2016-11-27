@@ -5,6 +5,7 @@
 #include <vector>
 #include "Set/Set.h"
 #include "Coord/Coord.h"
+#include "HashMap/HashMap.h"
 
 class Soduku {
     public:
@@ -12,9 +13,10 @@ class Soduku {
         ~Soduku();
     private:
         std::vector<std::vector<Coord>> allunits;
-        std::map<Coord, std::vector<std::vector<Coord>>> units;
-        std::map<Coord, Set<Coord>> peers;
-        std::map<Coord, Set<int>> values;
+        HashMap<Coord, std::vector<std::vector<Coord>>> units;
+        //std::map<Coord, std::vector<std::vector<Coord>>> units;
+        HashMap<Coord, Set<Coord>> peers;
+        HashMap<Coord, Set<int>> values;
         std::map<Coord, int> puzzle;
         int gridSize;
         int n;

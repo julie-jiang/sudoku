@@ -3,9 +3,10 @@
 #include <cassert>
 #include "HashMap.h"
 #include "../Coord/Coord.h"
+#include "../Set/Set.h"
 void testGetterSetter()
 {
-    std::cout << "\n<------ Testing getter and setter ------> \n";
+    std::cout << "\nTesting getter and setter  \n";
     HashMap<std::string, int> map;
     map.insert("key1", 1);
     map.insert("key2", 2);
@@ -26,7 +27,7 @@ void testGetterSetter()
 
 void testRemove()
 {
-    std::cout << "\n<------ Testing remove ------> \n";
+    std::cout << "\nTesting remove  \n";
     HashMap<std::string, int> map;
     map.insert("key", 1);
     map.remove("key");
@@ -43,41 +44,27 @@ void testRemove()
 
 void testIterator1()
 {
-    std::cout << "\n<------ Testing iterator ------> \n";
+    std::cout << "\nTesting iterator  \n";
     HashMap<std::string, int> map;
-    int values[3] = {1, 2, 3};
+    int values[3] = {3, 2, 1};
+    std::string keys[3] = {"key3", "key2", "key1"};
     map.insert("key1", 1);
     map.insert("key2", 2);
     map.insert("key3", 3);
     int j = 0;
-    for (HashMap<std::string, int>::iterator it = map.begin(); 
-         it != map.end(); ++it) {
-        assert(it.value() == values[j]);
+    
+    for (HashMap<std::string, int>::key_iterator k = map.begin(); 
+         k != map.end(); ++k) {
+        assert(*k == keys[j]);
+        assert(map[*k] == values[j]);
         j++;
     }
+    
 }
-void testIterator2()
-{
-    HashMap<Coord, int> map;
-    std::vector<int> values;
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            Coord c(i, j);
-            values.push_back(i + j);
-            map.insert(c, i + j);
-        }
-    }
-    int j = 0;
-    for (HashMap<Coord, int>::iterator it = map.begin(); 
-         it != map.end(); ++it) {
-        assert(it.value() == values[j]);
-        j++;
-    }
 
-}
-void testType()
+void testType1()
 {
-    std::cout << "\n<------ Testing using custum defined object ------> \n";
+    std::cout << "\nTesting using custum defined object  \n";
     HashMap<Coord, int> map;
     Coord c1(1, 2);
     Coord c2(2, 3);
@@ -90,9 +77,35 @@ void testType()
     assert(val2 == 20);
 
 }
+void testType2()
+{
+    HashMap<int, Coord> map;
+    Coord c1(1, 2);
+    Coord c2(2, 3);
+    map.insert(10, c1);
+    map.insert(20, c2);
+    Coord val1 = map[10];
+    Coord val2 = map[20];
+    assert(val1 == c1);
+    assert(val2 == c2);
+
+}
+void testType3()
+{
+    HashMap<Coord, Set<int>> map;
+    Coord c(1, 2);
+    map.insert(c, Set<int>());
+    for (int i = 0; i < 10; i++) {
+        map[c].add(i);
+    }
+    for (HashMap<Coord, Set<int>>::key_iterator it = map.begin(); 
+         it != map.end(); ++it) {
+        assert(*it == c);
+    }
+}
 void testConstructor()
 {
-    std::cout << "\n<------ Testing constructor ------> \n";
+    std::cout << "\nTesting constructor  \n";
     HashMap<Coord, int> map1;
     size_t size = 200;
     HashMap<std::string, int> map2(size);
@@ -103,9 +116,10 @@ int main()
     testConstructor();
     testGetterSetter();
     testRemove();
-    testType();
+    testType1();
+    testType2();
+    testType3();
     testIterator1();
-    testIterator2();
     std::cout << "============== Tests for HashMap completed! ==============\n";
 }
 

@@ -3,10 +3,11 @@
 #include <cassert>
 #include "LinkedList.h"
 #include "../../Coord/Coord.h"
+#include "../../Set/Set.h"
 
 void testIterator()
 {
-    std::cout << "\n<------ Testing iterator ------> \n";
+    std::cout << "\nTesting iterator  \n";
     LinkedList<Coord, int> list;
     std::vector<int> values;
     for (int i = 0; i < 10; i++) {
@@ -28,9 +29,9 @@ void testIterator()
         assert(false);
     }
 }
-void testType()
+void testType1()
 {
-    std::cout << "\n<------ Testing using customly defined object ------> \n";
+    std::cout << "\nTesting using customly defined object  \n";
     LinkedList<Coord, int> list;
     Coord c1(0, 0);
     Coord c2(4, 7);
@@ -41,9 +42,22 @@ void testType()
     assert(val1 = 10);
     assert(val2 = 20);
 }
+void testType2()
+{
+    LinkedList<std::string, Set<int>> list;
+    list.insert("key", Set<int>());
+    for (int i = 0; i < 10; i++) {
+        list["key"].add(i);
+    }
+    for (LinkedList<std::string, Set<int>>::iterator it = list.begin();
+         it != list.end(); ++it) {
+        assert(it.key() == "key");
+        assert(it.value().size() == 10);
+    }
+}
 void testGetterSetter1()
 {
-    std::cout << "\n<------ Testing getter and setter ------> \n";
+    std::cout << "\nTesting getter and setter  \n";
     LinkedList<std::string, int> list;
     
     list.insert("key1", 1);
@@ -80,7 +94,7 @@ void testGetterSetter2()
 
 void testRemove1()
 {
-    std::cout << "\n<------ Testing function remove ------> \n";
+    std::cout << "\nTesting function remove  \n";
     LinkedList<std::string, int> list;
     list.insert("key1", 2);
     list.insert("key1", 1);
@@ -114,7 +128,7 @@ void testRemove2()
 
 void testEmpty()
 {
-    std::cout << "\n<------ Testing function empty ------> \n";
+    std::cout << "\nTesting function empty  \n";
     
     LinkedList<std::string, int> list;
     assert(list.empty());
@@ -125,7 +139,7 @@ void testEmpty()
 
 void testSize()
 {
-    std::cout << "\n<------ Testing function size ------> \n";
+    std::cout << "\nTesting function size  \n";
     
     LinkedList<std::string, int> list;
     assert(list.size() == 0);
@@ -155,7 +169,8 @@ int main()
     testEmpty();
     testGetterSetter1();
     testGetterSetter2();
-    testType();
+    testType1();
+    testType2();
     testIterator();
     testRemove1();
     testRemove2();

@@ -27,7 +27,7 @@ class LinkedList {
 template<typename Key, typename Value>
 LinkedList<Key, Value>::LinkedList() 
 {
-    front = nullptr;
+    front = nullptr;    
 }
 
 template<typename Key, typename Value>
