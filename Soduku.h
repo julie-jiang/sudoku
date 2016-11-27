@@ -1,7 +1,6 @@
 #ifndef SODUKU_H
 #define SODUKU_H
 #include <cstdlib>
-#include <map>
 #include <vector>
 #include "Set/Set.h"
 #include "Coord/Coord.h"
@@ -14,10 +13,9 @@ class Soduku {
     private:
         std::vector<std::vector<Coord>> allunits;
         HashMap<Coord, std::vector<std::vector<Coord>>> units;
-        //std::map<Coord, std::vector<std::vector<Coord>>> units;
         HashMap<Coord, Set<Coord>> peers;
         HashMap<Coord, Set<int>> values;
-        std::map<Coord, int> puzzle;
+        HashMap<Coord, int> puzzle;
         int gridSize;
         int n;
         void init(std::string);

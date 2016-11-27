@@ -51,6 +51,11 @@ void testIterator1()
     map.insert("key1", 1);
     map.insert("key2", 2);
     map.insert("key3", 3);
+    /*for (HashMap<std::string, int>::iterator it = map.bbegin();
+         it != map.eend(); ++it) {
+        std::cout << "!" << it.key() << "!" << std::endl;
+
+    }*/
     int j = 0;
     
     for (HashMap<std::string, int>::key_iterator k = map.begin(); 
@@ -60,6 +65,21 @@ void testIterator1()
         j++;
     }
     
+}
+void testIterator2()
+{
+    HashMap<Coord, int> map;
+    Coord c1(1, 2);
+    Coord c2(2, 3);
+    Coord c3(3, 4);
+    map.insert(c1, 10);
+    map.insert(c2, 20);
+    map.insert(c3, 30);
+    for (HashMap<Coord, int>::key_iterator k = map.begin(); 
+         k != map.end(); ++k) {
+        std::cout << *k << std::endl;
+    }
+
 }
 
 void testType1()
@@ -120,6 +140,7 @@ int main()
     testType2();
     testType3();
     testIterator1();
+    testIterator2();
     std::cout << "============== Tests for HashMap completed! ==============\n";
 }
 

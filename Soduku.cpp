@@ -1,8 +1,6 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <cstdlib>
-#include <map>
 #include <stack>
 #include <math.h>
 #include <cassert>
@@ -45,10 +43,10 @@ void Soduku::print()
 
 bool Soduku::solve()
 {
-    for(std::map<Coord, int>::iterator i = puzzle.begin();
-        i != puzzle.end(); i++) {
-        Coord c = i->first;
-        int   d = i->second;
+    for(HashMap<Coord, int>::key_iterator key = puzzle.begin();
+        key != puzzle.end(); ++key) {
+        Coord c = *key;
+        int   d = puzzle[c];
         //std::cout << "solve(): at " << c << " d = " << d << std::endl;
         if (d != 0 and not assign(c, d)) {
             std::cout << "solve(): returning false because assignment " << c << " = " << d << " failed\n";
@@ -134,22 +132,18 @@ void Soduku::init_grid(std::string filename)
             Coord c(i, j);
             inFile >> s;
             int num = string2int(s);
-            puzzle[c] = num;
+            puzzle.insert(c, num);
             values.insert(c, Set<int>());
             for (int i = 1; i < gridSize + 1; i++) {
                 values[c].add(i);
             }
-            values[c].print();
         }
     }
-    assert(puzzle.size() == 81);
+    //assert(puzzle.size() == 81);
     //assert(values.size() == 81);
-    for (HashMap<Coord, Set<int>>::iterator i = values.begin();
-         i != values.end(); ++i) {
-        std::cout << i.key() << ": ";
-        i.value().print();
-        std::cout << std::endl;
-        assert(i.value().size() == 9);
+    for (HashMap<Coord, Set<int>>::key_iterator key = values.begin();
+         key != values.end(); ++key) {
+        assert(values[*key].size() == 9);
     }
         
 

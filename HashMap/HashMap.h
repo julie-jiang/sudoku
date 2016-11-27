@@ -17,12 +17,14 @@
 #include "LinkedList/LinkedList.h"
 #include "../Set/Set.h"
 #include "../Set/SetIterator.h"
+#include "MapIterator.h"
 template<typename Key, typename Value>
 
 class HashMap {
 
     public:
         typedef SetIterator<Key> key_iterator;
+        typedef MapIterator<Key, Value> iterator;
         HashMap();
         HashMap(size_t);
         ~HashMap();
@@ -31,6 +33,8 @@ class HashMap {
         void remove(Key);
         key_iterator begin();
         key_iterator end();
+        iterator bbegin();
+        iterator eend();
     private:
         Set<Key> *linkedHashKeys;
         LinkedList<Key, Value> **buckets;
@@ -61,6 +65,17 @@ HashMap<Key, Value>::~HashMap()
         delete buckets[i];
     }
 
+}
+template<typename Key, typename Value>
+MapIterator<Key, Value> HashMap<Key, Value>::bbegin()
+{
+    return MapIterator<Key, Value>(buckets, bucketSize);
+}
+template<typename Key, typename Value>
+MapIterator<Key, Value> HashMap<Key, Value>::eend()
+{
+    return MapIterator<Key, Value>(nullptr, bucketSize);
+    
 }
 
 template<typename Key, typename Value>
