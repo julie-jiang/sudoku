@@ -42,6 +42,7 @@ LinkedList<std::string, int> list;
 	if (list.empty()) {
 		// ... do something
 	}
+	```
 
 6. Iterate through the list.
 
@@ -55,9 +56,11 @@ LinkedList<std::string, int> list;
 	
 ## Testing
 Compile with:
+
 ```
 make
 ```
+
 And run:
 ```
 ./testLinkedList

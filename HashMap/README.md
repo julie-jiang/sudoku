@@ -3,7 +3,7 @@ This hash map is designed to hold Key-Value pairs, in which the keys would be `C
 
 A key is hashed by turning that key into its string form and hashing the string. This hash map would not be able to work with keys that cannot be turned into strings.
 
-Hash collisions will be resolved by chaining. So each bucket in the hash map holds a [linked list](LinkedList/) This hash table will not be able to resize or rehash, so if the number of values get too out of hand there will be a lot of hash collisions. It is therefore important to have a relative maximum bound in mind when initializing this object.
+Hash collisions will be resolved by chaining. Each bucket in the hash map holds a [linked list](LinkedList/). This hash table will not be able to resize or rehash, so if the number of values get too out of hand there will be a lot of hash collisions. It is therefore important to have a relative maximum bound in mind when initializing this object.
 
 This map is also a linked hash map. The additional memory space used to keep an additional linked list to hold all the nodes stored in the map is compensated  by faster iteration.
 
