@@ -130,10 +130,21 @@ void testConstructor()
     size_t size = 200;
     HashMap<std::string, int> map2(size);
 }
+void testCopyConstructor()
+{
+    std::cout << "\nTesting copy constructor  \n";
+    HashMap<std::string, int> map1;
+    map1.insert("key1", 10);
+    map1.insert("key2", 20);
+    HashMap<std::string, int> map2(map1);
+    assert(map2["key1"] == map1["key1"]);
+    assert(map2["key2"] == map1["key2"]);
+}
 int main()
 {
     std::cout << "============== Running tests for Hash Map ==============\n";
     testConstructor();
+    testCopyConstructor();
     testGetterSetter();
     testRemove();
     testType1();
@@ -141,6 +152,7 @@ int main()
     testType3();
     testIterator1();
     testIterator2();
+
     std::cout << "============== Tests for HashMap completed! ==============\n";
 }
 
