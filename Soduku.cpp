@@ -85,10 +85,10 @@ bool Soduku::search(HashMap<Coord, Set<int>> &domains)
     while (not c_domains.empty()) {
         int d = c_domains.pop();
         HashMap<Coord, Set<int>> copy_domains(domains);
-        if (assign(copy_domains, c, d)) {
+        if (assign(copy_domains, c, d) and search(copy_domains)) {
             domains = copy_domains;
-            return search(domains);
-        }
+            return true;
+        }        
     }
     return false;
 
