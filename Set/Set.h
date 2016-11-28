@@ -25,7 +25,6 @@ class Set {
         void remove(T);
         bool empty();
         size_t size();
-        void print();
         friend std::ostream &operator << <>(std::ostream &, const Set &);
         void printTree();
         T top();
@@ -36,7 +35,6 @@ class Set {
         SetNode<T> *add(SetNode<T> *, T);
         bool contains(SetNode<T> *, T);
         SetNode<T> *remove(SetNode<T> *, T);
-        void print(SetNode<T> *);
         void toString(SetNode<T> *, std::string &) const;
         std::string value2string(T &) const;
         void printTree(SetNode<T> *);
@@ -336,34 +334,12 @@ int Set<T>::max(int a, int b)
     return (a > b) ? a : b;
 }
 
-
-template<typename T>
-void Set<T>::print()
-{
-    std::cout << "[";
-    if (not empty()) {
-        print(root);
-    }
-    std::cout << "]";
-}
-template<typename T>
-void Set<T>::print(SetNode<T> *node)
-{
-    if (node->left != nullptr) 
-        print(node->left);
-    
-    std::cout << node->value << " ";
-
-    if (node->right != nullptr) 
-        print(node->right);
-
-}
-
 template<typename T>
 std::ostream &operator<<(std::ostream &output, const Set<T> &source)
 {
     std::string str = "[";
     source.toString(source.root, str);
+    str.erase(str.size() - 2);
     str += "]";
     output << str;
     return output;
@@ -374,7 +350,7 @@ void Set<T>::toString(SetNode<T> *node, std::string &str) const
     if (node->left != nullptr) 
         toString(node->left, str);
     
-    str += (value2string(node->value) + " ");
+    str += (value2string(node->value) + ", ");
 
     if (node->right != nullptr) 
         toString(node->right, str);

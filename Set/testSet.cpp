@@ -120,7 +120,7 @@ void testRemove2()
     set->remove(2);
     std::stringstream buffer;
     buffer << *set;
-    assert(buffer.str() == "[4 5 7 8 ]");
+    assert(buffer.str() == "[4, 5, 7, 8]");
     delete set;
 }
 void testRemove3()
@@ -138,7 +138,7 @@ void testRemove3()
     set->remove(2);
     std::stringstream buffer;
     buffer << *set;
-    assert(buffer.str() == "[4 5 ]");
+    assert(buffer.str() == "[4, 5]");
     delete set;
 
 }
@@ -197,7 +197,7 @@ void testCopyConstructor()
     Set<int> *set2 = new Set<int>(*set);
     std::stringstream buffer;
     buffer << *set2;
-    assert(buffer.str() == "[-1 0 1 2 5 6 9 10 11 ]");
+    assert(buffer.str() == "[-1, 0, 1, 2, 5, 6, 9, 10, 11]");
     std::cout << "...test passed\n";
     
 }
@@ -224,7 +224,7 @@ void testCout()
     set.add(9); set.add(5); set.add(10);
     std::stringstream buffer;
     buffer << set;
-    assert(buffer.str() == "[5 9 10 ]");
+    assert(buffer.str() == "[5, 9, 10]");
     std::cout << "...test passed\n";
 }
 

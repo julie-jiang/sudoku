@@ -70,10 +70,10 @@ Set<T> *copy_set_pointer = new Set<T>(set);
     }
     ```
     
-7. Print the elements in the set via in order traversal
+7. Use standard output to print all the elements in the set via in order traversal
 
     ```c++
-    set.print()
+    std::cout << set; // e.g. [1, 2, 3, 4, 5]
     ```
 
 8. Print the set tree with a bunch of brackets indicating parent-child relationship. This is mostly for debugging at the moment and will probably be removed later.
