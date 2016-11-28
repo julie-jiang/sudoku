@@ -24,9 +24,13 @@ class Soduku {
         int string2int(std::string);
         bool solve();
         bool search(HashMap<Coord, Set<int>> &);
+        bool solved(HashMap<Coord, Set<int>> &);
+        Coord select_unassigned_variable(HashMap<Coord, Set<int>> &);
         bool prune_grid(HashMap<Coord, Set<int>> &);
         bool assign(HashMap<Coord, Set<int>> &, Coord, int);
         bool eliminate(HashMap<Coord, Set<int>>&, Coord, int);
+        bool eliminate_from_peers(HashMap<Coord, Set<int>> &, Coord);
+        bool check_unique_remaining_values(HashMap<Coord, Set<int>> &, Coord, int);
         void print(HashMap<Coord, Set<int>> &);
         void printDomains(HashMap<Coord, Set<int>> &);
 
