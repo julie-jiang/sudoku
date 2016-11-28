@@ -17,18 +17,31 @@ The `main` function resides in `sodukuSolver.cpp`, in which an instance of the c
 The variables in `Soduku`, which are the individual grid cells, are implemented as instances of the `Coord` object, short for coordinates. It simply holds two integers x and y that specify where in the grid this object refers to.
 
 ## Usage
-Compile with:
+### Compile
 ```
 make
 ```
-And run:
+### Run
 ```
-./sodukuit <path to list of soduku puzzles>
+./soduku [--solve or -s <filename>] [--solve-all or -a <filelist>] [--write or -w <directory>] [--hide or -h]
 ```
 
-For example: 
+1. `solve`: Provide path to a Soduku puzzle
+2. `solve-all`: Provide path to a list of paths to Soduku puzzles
+3. `write`: Specify directory to write solution files to
+4. `hide`: Disable the default setting that print solutions to
+
+Client must provide one (and only one) of `solve` or `solve-all`
+
+### Examples
+To solve a single puzzle called `puzzle1.txt` in the directory `puzzle`:
 ```
-./sodukuit puzzle/puzzle_list.txt
+./soduku -solve puzzle/puzzle1.txt
+```
+
+To solve all puzzles whose paths are contained in the file `puzzle_list.txt` in the directory `puzzle`, write solutons to the directory `solutions`, and don't print to console:
+```
+./soduku -a puzzle/puzzle_list.txt -h -w solutions
 ```
 
 ## Data Structures
@@ -41,13 +54,7 @@ For example:
 	
 	A hash table that maps one object to another.
 
-3. Priority Queue
-	
-	A PQ that holds coordinate objects `Coord`, prioritized by the number of values in their domains.
 
 
 ## Testing
 To test my soduku solver, I will write a `SodukuGenerator.cpp` which will be able to generate soduku puzzles of arbitrary size. 
-
-## Read more
-Please see [my spec](Julie Jiang Comp 15 Final Project Specs.pdf) for formal definitions and algorithms rendered in beautiful LaTeX. However, some outlines of the design in the spec might be outdated, since, as you may know, plans can change.
