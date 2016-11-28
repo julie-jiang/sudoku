@@ -27,32 +27,32 @@ HashMap<std::string, int> map(size);
 ## The things it can do
 
 1. Insert a new value. If you attempt to insert a pair of value whose key already exists in the linkedlist, then the value for that key will be overwritten with the new value.
-	```c++
-	map.insert("key1", 10);
-	map.insert("key1", 20); // value of "key1" is now 20
-	```
+    ```c++
+    map.insert("key1", 10);
+    map.insert("key1", 20); // value of "key1" is now 20
+    ```
 
 2. Get value using subscript operator. Will throw logic error if key does not exist
-	
-	```c++
-	int val = map["key1"]; // val = 20
-	```
+    
+    ```c++
+    int val = map["key1"]; // val = 20
+    ```
 
 3. Remove a value using a key without returning anything. If the key does not exist in the map, then nothing will be changed.
 
-	```c++
-	map.remove("key1");
-	```
+    ```c++
+    map.remove("key1");
+    ```
 
 4. Iterate through the keys of the map. The order is not in order of insertion.
 
-	```c++
-	for (HashMap<std::string, int>::key_iterator it = map.begin(); it != map.end(); ++it) {
-		std::string key = *it;
-		int value = map[*it];
-		// ... do something
-	}
-	```
+    ```c++
+    for (HashMap<std::string, int>::key_iterator it = map.begin(); it != map.end(); ++it) {
+        std::string key = *it;
+        int value = map[*it];
+        // ... do something
+    }
+    ```
 
 
 ## Testing

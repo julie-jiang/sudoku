@@ -8,8 +8,8 @@ template<typename Key, typename Value>
 class ListNode 
 {
 
-	friend class LinkedList<Key, Value>;
-	friend class ListIterator<Key, Value>;
+    friend class LinkedList<Key, Value>;
+    friend class ListIterator<Key, Value>;
 
     private:
         Key   key;
