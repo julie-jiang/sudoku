@@ -1,35 +1,72 @@
 # Soduku Solver
-This is a Soduku solver. It can solve any provided sokudu puzzle in the form of a n^2 by n^2 grid of integers, where n is a postive integer, with the number 0 serving as a placeholder for blank grid cells. Below is an example Soduku of size 3^2 by 3^2 = 9 by 9 input on the left, and its solution output on the right:
-```
-003020600        483921657 
-900305001        967345821 
-001806400        251876493 
-008102900        548132976 
-700000008        729564138 
-006708200        136798245 
-002609500        372689514 
-800203009        814254769 
-005010300        695417382
-```
-## Design
-The `main` function resides in `sodukuSolver.cpp`, in which an instance of the class `Soduku` will be created. All of the search functions used to find a solution will be implemented within `Soduku`. The `Soduku` class also utilizes several data structures, including but not limited to AVL trees, hash tables, queues, stacks, priority queues, and maps (this will be completely replaced by hash tables in the final version).
+This is a Soduku solver. It can solve any provided sokudu puzzle in the form of a n^2 by n^2 grid of integers, where n is a postive integer, with the number 0 serving as a placeholder for blank grid cells. Below is an example Soduku of size 3^2 by 3^2 = 9 by 9.
 
-The variables in `Soduku`, which are the individual grid cells, are implemented as instances of the `Coord` object, short for coordinates. It simply holds two integers x and y that specify where in the grid this object refers to.
+Input:
+
+```
+0 0 3 0 2 0 6 0 0 
+9 0 0 3 0 5 0 0 1 
+0 0 1 8 0 6 4 0 0 
+0 0 8 1 0 2 9 0 0 
+7 0 0 0 0 0 0 0 8 
+0 0 6 7 0 8 2 0 0 
+0 0 2 6 0 9 5 0 0 
+8 0 0 2 0 3 0 0 9 
+0 0 5 0 1 0 3 0 0 
+```
+Standard cout:
+
+```
+|-----------------------| 
+| 4 8 3 | 9 2 1 | 6 5 7 | 
+| 9 6 7 | 3 4 5 | 8 2 1 | 
+| 2 5 1 | 8 7 6 | 4 9 3 | 
+|-----------------------| 
+| 5 4 8 | 1 3 2 | 9 7 6 | 
+| 7 2 9 | 5 6 4 | 1 3 8 | 
+| 1 3 6 | 7 9 8 | 2 4 5 | 
+|-----------------------| 
+| 3 7 2 | 6 8 9 | 5 1 4 | 
+| 8 1 4 | 2 5 3 | 7 6 9 | 
+| 6 9 5 | 4 1 7 | 3 8 2 | 
+|-----------------------| 
+```
+Write to file:
+
+```
+4 8 3 9 2 1 6 5 7 
+9 6 7 3 4 5 8 2 1 
+2 5 1 8 7 6 4 9 3 
+5 4 8 1 3 2 9 7 6 
+7 2 9 5 6 4 1 3 8 
+1 3 6 7 9 8 2 4 5 
+3 7 2 6 8 9 5 1 4 
+8 1 4 2 5 3 7 6 9 
+6 9 5 4 1 7 3 8 2 
+```
+
+## Design
+The `main` function resides in `Soduku_Driver.cpp`, in which an instance or instances of the class `Soduku` will be created. All of the puzzle solving functions is implemented within `Soduku`. The `Soduku` class also utilizes several data structures, including AVL trees, hash maps, queues, stacks, and vectors.
+
+The variables in `Soduku`, which are the individual grid cells, are implemented as instances of the `Coord` object (see [Coord](Coord/)), short for coordinates. It simply holds two integers x and y that specify where in the grid this object refers to.
 
 ## Usage
-### Compile
+### Compilation
 ```
 make
 ```
-### Run
+### Options 
 ```
-./soduku [--solve or -s <filename>] [--solve-all or -a <filelist>] [--write or -w <directory>] [--hide or -h]
+./soduku [--solve or -s <filename>] \
+         [--solve-all or -a <filelist>]\
+         [--write or -w <directory>] \
+         [--hide or -h]
 ```
 
 1. `solve`: Provide path to a Soduku puzzle
 2. `solve-all`: Provide path to a list of paths to Soduku puzzles
-3. `write`: Specify directory to write solution files to
-4. `hide`: Disable the default setting that print solutions to
+3. `write`: Write solution files to the specified directory
+4. `hide`: Disable the default setting that print solutions to console
 
 Client must provide one (and only one) of `solve` or `solve-all`
 
@@ -44,7 +81,7 @@ To solve all puzzles whose paths are contained in the file `puzzle_list.txt` in 
 ./soduku -a puzzle/puzzle_list.txt -h -w solutions
 ```
 
-## Data Structures
+## Data Structures that I implemented
 
 1. [Set](Set/)
 	
@@ -53,8 +90,6 @@ To solve all puzzles whose paths are contained in the file `puzzle_list.txt` in 
 2. [Hash Map](HashMap/)
 	
 	A hash table that maps one object to another.
-
-
 
 ## Testing
 To test my soduku solver, I will write a `SodukuGenerator.cpp` which will be able to generate soduku puzzles of arbitrary size. 
