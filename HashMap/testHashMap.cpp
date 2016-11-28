@@ -149,7 +149,7 @@ void testCopyConstructor()
     assert(map2["key1"] == 10);
     std::cout << "test passed.\n";
 }
-/*
+
 void testClear1()
 {
     std::cout << "Testing function clear...";
@@ -176,7 +176,7 @@ void testClear1()
     HashMap<std::string, int>::key_iterator it = map.begin();
     assert(it == map.end());
     std::cout << "test passed.\n";
-}*/
+}
 void testClear2()
 {
     HashMap<Coord, Set<int>> map;

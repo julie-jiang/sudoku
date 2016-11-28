@@ -22,14 +22,20 @@
 /*                             Public Functions                              */
 /*****************************************************************************/
 /* 
- * Parametrized constructor.
  * Initializes a Soduku object and attempts to solve it.
  */
-Soduku::Soduku(std::string filename)
+void Soduku::solve(std::string filename)
 {
     puzzle_name = filename;
-    init();
+    read_puzzle();
+    init_data_structures();
     solve();
+}
+bool Soduku::check(std::string filename)
+{
+    puzzle_name = filename;
+    read_puzzle();
+    return validate_puzzle();
 }
 
 /*
@@ -72,10 +78,9 @@ void Soduku::print()
 void Soduku::write(std::string directory)
 {
     // Open file
-    std::string raw_name = puzzle_name.substr(
-                           puzzle_name.find_last_of("/\\") + 1, 
-                           puzzle_name.find_last_of("."));
-    std::string filename = directory + "/" + raw_name +"_solution.txt";
+    std::string rawname = puzzle_name.substr(0, puzzle_name.find_last_of("."));
+    rawname = rawname.substr(puzzle_name.find_last_of("/\\") + 1);
+    std::string filename = directory + "/" + rawname +"_solution.txt";
     std::ofstream outFile(filename);
     if (not outFile.is_open()) {
         throw std::logic_error("ERROR: " + directory + 
@@ -134,6 +139,38 @@ bool Soduku::prune_grid()
         }
     }
     return true;
+}
+
+/*****************************************************************************/
+/*                           Validate Puzzle                                 */
+/*****************************************************************************/
+bool Soduku::validate_puzzle()
+{
+    for (size_t j = 0; j < gridSize; j++) {
+        allunits.push_back(std::vector<Coord>());
+        allunits.push_back(std::vector<Coord>());
+        for (size_t i = 0; i < gridSize; i++) {
+            Coord c1(i, j); Coord c2(j, i);
+            allunits[2 * j].push_back(c1);
+            allunits[2 * j + 1].push_back(c2);
+
+    for (size_t i = 0; i < gridSize; i += n) {
+        for (size_t j = 0; j < gridSize; j += n) {
+            allunits.push_back(std::vector<Coord>());
+            size_t size = allunits.size();
+            for (size_t k = i; k < n + i; k++) {
+                for (size_t l = j; l < n + j; l++) {
+                    Coord c(l, k);
+                    allunits[size - 1].push_back(c); }}}} 
+
+    for (size_t i = 0; i < allunits.size(); i++) {
+        for (size_t j = 0; j < allunits[i].size(); j++) {
+            Coord c = allunits[i][j];
+            units[c].push_back(std::vector<Coord>(allunits[i]));
+            for (size_t k = 0; k < allunits[i].size(); k++) {
+                if (k != j) {
+                    Coord c2 = allunits[i][k];
+
 }
 /*****************************************************************************/
 /*                           Backtracking search                             */
@@ -320,11 +357,6 @@ bool Soduku::check_unique_remaining_values(HashMap<Coord, Set<int>> &domains,
 /*****************************************************************************/
 /*                          Initialization Functions                         */
 /*****************************************************************************/
-void Soduku::init()
-{
-    read_puzzle();
-    init_data_structures();
-}
 /*
  * Process the input file and convert it into a Soduku puzzle.
  * Throw logic error if the file cannot be opened, or if the file does not 
@@ -332,6 +364,8 @@ void Soduku::init()
  */
 void Soduku::read_puzzle()
 {
+    // Reset data structures
+    reset(); 
     size_t num_elements = 0;
     // Open file 
     std::ifstream inFile;
@@ -418,8 +452,16 @@ void Soduku::init_data_structures()
                 if (k != j) {
                     Coord c2 = allunits[i][k];
                     peers[c].add(c2); }}}}
+    
 }
-
+void Soduku::reset()
+{
+    allunits.clear();
+    units.clear();
+    peers.clear();
+    domains.clear();
+    puzzle.clear();
+}
 
 /*****************************************************************************/
 /*                           Utility Functions                               */

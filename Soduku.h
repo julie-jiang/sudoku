@@ -24,8 +24,10 @@ class Soduku {
          * Parametrized (and only) constructor. Takes a path to a file that
          * contains a soduku puzzle as the argument and then solves it.
          */
-        Soduku(std::string);
+        Soduku() {}
         ~Soduku() {}
+        void solve(std::string);
+        bool check(std::string);
         /* 
          * Print the solutions (complete or imcomplete) to the given puzzle.
          */
@@ -35,6 +37,7 @@ class Soduku {
          * Write the solutions to the specified directory.
          */
         void write(std::string);
+        
     private:
         /* Private variables */
         std::vector<std::vector<Coord>> allunits;
@@ -57,11 +60,13 @@ class Soduku {
         bool eliminate_from_peers(HashMap<Coord, Set<int>> &, Coord);
         bool check_unique_remaining_values(HashMap<Coord, Set<int>> &, Coord, int);
 
+        bool validate_puzzle();
+
         /* Initialiation functions */
-        void init();
         void read_puzzle();
         void init_grid(std::queue<int> &);
         void init_data_structures();
+        void reset();
         
         /* Utility functions */
         int string2int(std::string);
@@ -70,6 +75,7 @@ class Soduku {
         void print_horizontal_line(int);
         int get_num_digits(int);
         std::string *get_whitespaces(int);
+        
 
 
         
