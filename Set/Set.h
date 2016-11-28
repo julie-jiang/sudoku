@@ -1,10 +1,17 @@
 #ifndef SET_H
 #define SET_H
+#include <iostream>
+#include <sstream>
 #include "SetNode.h"
 #include "SetIterator.h"
 /*****************************************************************************/
 /*                                  Header                                   */
 /*****************************************************************************/
+template<typename T>
+class Set;
+template<typename T>
+std::ostream &operator <<(std::ostream &, const Set<T> &);
+
 template<typename T>
 class Set {
     public:
@@ -19,6 +26,7 @@ class Set {
         bool empty();
         size_t size();
         void print();
+        friend std::ostream &operator << <>(std::ostream &, const Set &);
         void printTree();
         T top();
         iterator begin() const;
@@ -29,6 +37,8 @@ class Set {
         bool contains(SetNode<T> *, T);
         SetNode<T> *remove(SetNode<T> *, T);
         void print(SetNode<T> *);
+        void toString(SetNode<T> *, std::string &) const;
+        std::string value2string(T &) const;
         void printTree(SetNode<T> *);
         size_t size(SetNode<T> *, int);
         
@@ -349,6 +359,34 @@ void Set<T>::print(SetNode<T> *node)
 
 }
 
+template<typename T>
+std::ostream &operator<<(std::ostream &output, const Set<T> &source)
+{
+    std::string str = "[";
+    source.toString(source.root, str);
+    str += "]";
+    output << str;
+    return output;
+}
+template<typename T>
+void Set<T>::toString(SetNode<T> *node, std::string &str) const
+{
+    if (node->left != nullptr) 
+        toString(node->left, str);
+    
+    str += (value2string(node->value) + " ");
+
+    if (node->right != nullptr) 
+        toString(node->right, str);
+}
+template<typename T>
+std::string Set<T>::value2string(T &v) const
+{
+    std::string result;
+    std::ostringstream oss;
+    oss << v;
+    return oss.str();
+}
 template<typename T>
 void Set<T>::printTree()
 {

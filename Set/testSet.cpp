@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cassert>
+#include <sstream>
 #include <cstdlib>
 #include <stack>
 #include "Set.h"
@@ -62,7 +64,7 @@ void testAddDuplicates()
 }
 void testAdd()
 {
-    std::cout << "\nTesting add function  \n";
+    std::cout << "Testing add function...\n";
     testAddLeftLeft();
     testAddLeftRight();
     testAddRightRight();
@@ -79,25 +81,16 @@ void testAdd()
  */
 void testContains() 
 {
-    std::cout << "\nTesting function contains  \n";
+    std::cout << "Testing function contains...";
     Set<int> *set = new Set<int>;
     set->add(10); set->add(50); set->add(20);
     set->add(30); set->add(60); set->add(40);
-    // Case 1
-    std::cout << "Output should be: 1\n";
-    std::cout << "Actual output:    " << set->contains(30) << std::endl;
-    // Case 2
-    std::cout << "Output should be: 1\n";
-    std::cout << "Actual output:    " << set->contains(50) << std::endl;
-    // Case 3
-    std::cout << "Output should be: 1\n";
-    std::cout << "Actual output:    " << set->contains(20) << std::endl;
-    // Case 4
-    std::cout << "Output should be: 1\n";
-    std::cout << "Actual output:    " << set->contains(10) << std::endl;
-    // Case 5
-    std::cout << "Output should be: 0\n";
-    std::cout << "Actual output:    " << set->contains(70) << std::endl;
+    assert(set->contains(30)); // Case 1
+    assert(set->contains(50)); // Case 2
+    assert(set->contains(20)); // Case 3
+    assert(set->contains(10)); // Case 4
+    assert(not set->contains(70)); // Case 5
+    std::cout << "test passed.\n";
     delete set;
 }
 
@@ -125,10 +118,9 @@ void testRemove2()
     set->remove(3);
     set->remove(1);
     set->remove(2);
-    std::cout << "Output should be: [4 5 7 8 ]\n";
-    std::cout << "Actual output:    ";
-    set->print();
-    std::cout << std::endl;
+    std::stringstream buffer;
+    buffer << *set;
+    assert(buffer.str() == "[4 5 7 8 ]");
     delete set;
 }
 void testRemove3()
@@ -137,24 +129,22 @@ void testRemove3()
     for (int i = 1; i < 10; i++) {
         set->add(i);
     }
-    set->printTree();
-    set->remove(9); set->printTree();
-    set->remove(7); set->printTree();
-    set->remove(8); set->printTree();
-    set->remove(6); set->printTree();
-    set->remove(3); set->printTree();
-    set->remove(1);set->printTree();
-    set->remove(2);set->printTree();
-    std::cout << "Output should be: [4 5 ]\n";
-    std::cout << "Actual output:    ";
-    set->print();
-    std::cout << std::endl;
+    set->remove(9); 
+    set->remove(7); 
+    set->remove(8); 
+    set->remove(6); 
+    set->remove(3); 
+    set->remove(1);
+    set->remove(2);
+    std::stringstream buffer;
+    buffer << *set;
+    assert(buffer.str() == "[4 5 ]");
     delete set;
 
 }
 void testRemove()
 {
-    std::cout << "\nTesting function remove  \n";
+    std::cout << "Testing function remove...  \n";
     testRemove1();
     testRemove2();
     testRemove3();
@@ -162,61 +152,58 @@ void testRemove()
 }
 void testSize()
 {
-    std::cout << "\nTesting function size \n";
-    std::cout << "Output should be: 0 1 9\n";
-    std::cout << "Actual output:    ";
+    std::cout << "Testing function size...";
     Set<int> *set1 = new Set<int>;
-    std::cout << set1->size() << " ";
     Set<int> *set2 = new Set<int>;
     Set<int> *set3 = new Set<int>;
     set2->add(2);
-    std::cout << set2->size() << " ";
     set3->add(9);  set3->add(5); set3->add(10);
     set3->add(0);  set3->add(6); set3->add(11);
     set3->add(-1); set3->add(1); set3->add(2);
-    std::cout << set3->size() << " " << std::endl;
+    assert(set1->size() == 0);
+    assert(set2->size() == 1);
+    assert(set3->size() == 9);
     
     delete set1;
     delete set2;
     delete set3;
-
-
+    std::cout << "...test passed\n";
 }
 
 void testIterator()
 {
-    std::cout << "\nTesting iterator \n";
+    std::cout << "Testing iterator...";
     Set<int> set;
-    std::cout << "Output should be: 11 10 9 6 5 2 1 0 -1\n";
-    std::cout << "Actual output:    ";
     set.add(9);  set.add(5); set.add(10);
     set.add(0);  set.add(6); set.add(11);
     set.add(-1); set.add(1); set.add(2);
     Set<int> set2(set);
+    std::stringstream buffer;
     for (Set<int>::iterator i = set2.begin(); i != set2.end(); ++i)
     {
-        std::cout << *i << " ";
+        buffer << *i << " ";
     }
-    std::cout << std::endl;
+    assert(buffer.str() == "11 10 9 6 5 2 1 0 -1 ");
+    std::cout << "...test passed\n";
     
 }
 void testCopyConstructor()
 {
-    std::cout << "\nTesting copy constructor \n";
+    std::cout << "Testing copy constructor ";
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [-1 0 1 2 5 6 9 10 11 ]\n";
-    std::cout << "Actual output:    ";
     set->add(9);  set->add(5); set->add(10);
     set->add(0);  set->add(6); set->add(11);
     set->add(-1); set->add(1); set->add(2);
     Set<int> *set2 = new Set<int>(*set);
-    set2->print();
-    std::cout << std::endl;
+    std::stringstream buffer;
+    buffer << *set2;
+    assert(buffer.str() == "[-1 0 1 2 5 6 9 10 11 ]");
+    std::cout << "...test passed\n";
     
 }
 void testType()
 {
-    std::cout << "\nTesting using Set with custom defined object \n";
+    std::cout << "Testing using Set with custom defined object...";
     Set<Coord> *set = new Set<Coord>;
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
@@ -227,6 +214,18 @@ void testType()
     Set<Coord> *set2 = new Set<Coord>(*set);
     delete set;
     delete set2;
+    std::cout << "...test passed\n";
+}
+
+void testCout()
+{
+    std::cout << "Testing standard cout...";
+    Set<int> set;
+    set.add(9); set.add(5); set.add(10);
+    std::stringstream buffer;
+    buffer << set;
+    assert(buffer.str() == "[5 9 10 ]");
+    std::cout << "...test passed\n";
 }
 
 
@@ -240,5 +239,6 @@ int main()
     testIterator();
     testCopyConstructor();
     testType();
+    testCout();
     std::cout << "============== Tests for Set completed! ==============\n";
 }
