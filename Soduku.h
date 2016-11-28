@@ -28,7 +28,7 @@ class Soduku {
         bool assign(HashMap<Coord, Set<int>> &, Coord, int);
         bool eliminate(HashMap<Coord, Set<int>>&, Coord, int);
         void print(HashMap<Coord, Set<int>> &);
-        void printValues(HashMap<Coord, Set<int>> &);
+        void printDomains(HashMap<Coord, Set<int>> &);
 
 
 };

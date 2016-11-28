@@ -15,26 +15,26 @@ Soduku::Soduku(std::string filename, int size)
     gridSize = size;
     n = (int) sqrt(size);
     init_data_structures();
-    HashMap<Coord, Set<int>> values;
-    init_grid(values, filename);
-    if (solve(values)) {
+    HashMap<Coord, Set<int>> domains;
+    init_grid(domains, filename);
+    if (solve(domains)) {
         std::cout << "solved!\n";
     } else {
         std::cout << "not solved ... uh oh\n";
     }
-    print(values);
+    print(domains);
 }
 Soduku::~Soduku()
 {
 
 }
-void Soduku::print(HashMap<Coord, Set<int>> &values)
+void Soduku::print(HashMap<Coord, Set<int>> &domains)
 {
     for (int j = 0; j < gridSize; j++) {
         for (int i = 0; i < gridSize; i++) {
             Coord c(i, j);
-            if (values[c].size() == 1) {
-                 std::cout << "\033[1m\033[31m" << values[c].top() << "\033[0m ";
+            if (domains[c].size() == 1) {
+                 std::cout << "\033[1m\033[31m" << domains[c].top() << "\033[0m ";
             } else {
                 std::cout << "\033[37m0 \033[0m";
             }
@@ -42,66 +42,59 @@ void Soduku::print(HashMap<Coord, Set<int>> &values)
         std::cout << std::endl;
     }
 }
-void Soduku::printValues(HashMap<Coord, Set<int>> &values)
+void Soduku::printDomains(HashMap<Coord, Set<int>> &domains)
 {
     for (int j = 0; j < gridSize; j++) {
         for (int i = 0; i < gridSize; i++) {
             Coord c(i, j);
             std::cout << c << " = ";
-            values[c].print();
+            domains[c].print();
             std::cout << "\n";
         }
         std::cout << std::endl;
     }
 }
-bool Soduku::solve(HashMap<Coord, Set<int>> &values)
+bool Soduku::solve(HashMap<Coord, Set<int>> &domains)
 {
-    if (not parse_grid(values)) {
+    if (not parse_grid(domains)) {
         return false;
     }
-    return search(values);
+    return search(domains);
 }
-bool Soduku::parse_grid(HashMap<Coord, Set<int>> &values)
+bool Soduku::parse_grid(HashMap<Coord, Set<int>> &domains)
 {
     for(HashMap<Coord, int>::key_iterator key = puzzle.begin();
         key != puzzle.end(); ++key) {
         Coord c = *key;
         int   d = puzzle[c];
-        //std::cout << "solve(): at " << c << " d = " << d << std::endl;
-        if (d != 0 and not assign(values, c, d)) {
-            std::cout << "solve(): returning false because assignment " << c << " = " << d << " failed\n";
+        if (d != 0 and not assign(domains, c, d)) {
             return false;
         }
     }
     return true;
 }
 
-bool Soduku::search(HashMap<Coord, Set<int>> &values)
+bool Soduku::search(HashMap<Coord, Set<int>> &domains)
 {
-    std::cout << "......searching......\n";
     bool solved = true;
-    for (HashMap<Coord, Set<int>>::key_iterator key = values.begin(); 
-         key != values.end(); ++key) {
-        size_t size = values[*key].size();
+    for (HashMap<Coord, Set<int>>::key_iterator key = domains.begin(); 
+         key != domains.end(); ++key) {
+        size_t size = domains[*key].size();
         if (size != 1) {
             solved = false;
             break;
-        } else if (size < 1) {
-            std::cout << "values[*key].size() == 0! returning false. key = " << *key << " values = ";
-            values[*key].print();
-            std::cout << "\n";
-            return false;
         }
+        assert(size != 0);
     }
     if (solved) {
-        print(values);
+        print(domains);
         return true;
     } 
     Coord c(gridSize, gridSize);
     size_t min_possibilities = gridSize + 1;
-    for (HashMap<Coord, Set<int>>::key_iterator it = values.begin();
-         it != values.end(); ++it) {
-        size_t size = values[*it].size();
+    for (HashMap<Coord, Set<int>>::key_iterator it = domains.begin();
+         it != domains.end(); ++it) {
+        size_t size = domains[*it].size();
         if (size > 1 and size < min_possibilities) {
             min_possibilities = size;
             c = *it;
@@ -109,63 +102,49 @@ bool Soduku::search(HashMap<Coord, Set<int>> &values)
     }
 
     Coord dummy(gridSize, gridSize);
-    if (c == dummy) {
-        std::cout << "c == dummy! exiting\n";
-        printValues(values);
-        return false;
-    }
-    std::cout << "min possibilities c = " << c << ". ";
-    std::cout << "values[c] = ";
-    values[c].print();
-    std::cout << "\n";
-    print(values);
-    HashMap<Coord, Set<int>> copy_values(values);
-    Set<int> c_values(copy_values[c]);
-    while (not c_values.empty()) {
-        int d = c_values.pop();
-        std::cout << "values should not have changed: ";
-        copy_values[c].print();
-        std::cout << "\n";
-        std::cout << "search(): assigning " << c << " to " << d << "\n";
-        HashMap<Coord, Set<int>> copy_copy_values(copy_values);
-        if (assign(copy_copy_values, c, d)) {
-            copy_values = copy_copy_values;
-            return search(copy_values);
-        } else {
-            std::cout << "search(): assignment " << c << " to " << d << " unsuccessful.\n";
+    assert(c != dummy);
+
+    HashMap<Coord, Set<int>> copy_domains(domains);
+    Set<int> c_domains(copy_domains[c]);
+    while (not c_domains.empty()) {
+        int d = c_domains.pop();
+        HashMap<Coord, Set<int>> copy_copy_domains(copy_domains);
+        if (assign(copy_copy_domains, c, d)) {
+            copy_domains = copy_copy_domains;
+            return search(copy_domains);
         }
     }     
     return false;
 
 }
 
-bool Soduku::assign(HashMap<Coord, Set<int>> &values, Coord c, int d)
+bool Soduku::assign(HashMap<Coord, Set<int>> &domains, Coord c, int d)
 {
-    Set<int> *other_values = new Set<int>(values[c]);
-    while (not other_values->empty()) {
-        int d2 = other_values->pop();
-        if (d2 != d and not eliminate(values, c, d2)) {
+    Set<int> *other_domains = new Set<int>(domains[c]);
+    while (not other_domains->empty()) {
+        int d2 = other_domains->pop();
+        if (d2 != d and not eliminate(domains, c, d2)) {
             std::cout << "      assign(): returning false because eliminating " << d2 << " from " << c << " failed\n";
             return false;
         }
     }
-    delete other_values;
+    delete other_domains;
     return true;
 }
-bool Soduku::eliminate(HashMap<Coord, Set<int>> &values, Coord c, int d)
+bool Soduku::eliminate(HashMap<Coord, Set<int>> &domains, Coord c, int d)
 {
-    if (not values[c].contains(d)) {
+    if (not domains[c].contains(d)) {
         return true;
     }
-    values[c].remove(d);
-    if (values[c].empty()) {
-        std::cout << "              eliminate(): retruning false because values[c].empty() for c = "<< c << "\n";
+    domains[c].remove(d);
+    if (domains[c].empty()) {
+        std::cout << "              eliminate(): retruning false because domains[c].empty() for c = "<< c << "\n";
         return false; // sanity check
-    } else if (values[c].size() == 1) {
-        int d2 = values[c].top();
+    } else if (domains[c].size() == 1) {
+        int d2 = domains[c].top();
         for (Set<Coord>::iterator it = peers[c].begin(); it != peers[c].end(); ++it) {
             Coord c2 = *it;
-            if (not eliminate(values, c2, d2)) {
+            if (not eliminate(domains, c2, d2)) {
                 return false;
             }
         }
@@ -174,7 +153,7 @@ bool Soduku::eliminate(HashMap<Coord, Set<int>> &values, Coord c, int d)
         std::vector<Coord> dplaces;
         for (int j = 0; j < (int) units[c][i].size(); j++) {
             Coord c3 = units[c][i][j];
-            if (values[c3].contains(d)) {
+            if (domains[c3].contains(d)) {
                 dplaces.push_back(c3);
             } 
         }
@@ -189,7 +168,7 @@ bool Soduku::eliminate(HashMap<Coord, Set<int>> &values, Coord c, int d)
             
             return false;
         } else if (dplaces.size() == 1) {
-            if (not assign(values, dplaces[0], d)) {
+            if (not assign(domains, dplaces[0], d)) {
                 std::cout << "              eliminate(): returning false because assignment " << dplaces[0] << " = " << d << " failed\n";
                 return false;
             }
@@ -200,7 +179,7 @@ bool Soduku::eliminate(HashMap<Coord, Set<int>> &values, Coord c, int d)
 
 }
 
-void Soduku::init_grid(HashMap<Coord, Set<int>> &values, std::string filename)
+void Soduku::init_grid(HashMap<Coord, Set<int>> &domains, std::string filename)
 {
         // Open file 
     std::ifstream inFile;
@@ -217,15 +196,15 @@ void Soduku::init_grid(HashMap<Coord, Set<int>> &values, std::string filename)
             inFile >> s;
             int num = string2int(s);
             puzzle.insert(c, num);
-            values.insert(c, Set<int>());
+            domains.insert(c, Set<int>());
             for (int i = 1; i < gridSize + 1; i++) {
-                values[c].add(i);
+                domains[c].add(i);
             }
         }
     } 
-    for (HashMap<Coord, Set<int>>::key_iterator key = values.begin();
-         key != values.end(); ++key) {
-        assert(values[*key].size() == 9);
+    for (HashMap<Coord, Set<int>>::key_iterator key = domains.begin();
+         key != domains.end(); ++key) {
+        assert(domains[*key].size() == 9);
     }
         
 
