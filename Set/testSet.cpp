@@ -2,74 +2,101 @@
 #include <cassert>
 #include <sstream>
 #include <cstdlib>
+#include <vector>
 #include <stack>
 #include "Set.h"
 #include "../Coord/Coord.h"
 
-
-void testAddLeftLeft()
+/* Left left unbalance */
+void testAdd1()
 {
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [[[[] 10 []] 20 []] 30 [[[] 40 []] 50 [[] 60 []]]] \n"; 
     set->add(60); set->add(50); set->add(30);
     set->add(20); set->add(40); set->add(10);
-    std::cout << "Actual output:    ";
-    set->printTree();
+    std::string solution = std::string("30\n")
+                         + std::string("    50\n")
+                         + std::string("        60\n")
+                         + std::string("        40\n")
+                         + std::string("    20\n")
+                         + std::string("        10\n");
+    assert(set->tree() == solution);
+
     delete set;
 
 }
-void testAddLeftRight()
+/* Left right unbalance */
+void testAdd2()
 {
 
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [[[[] 10 []] 20 [[] 30 []]] 40 [[] 50 [[] 60 []]]] \n"; 
     set->add(60); set->add(20); set->add(50);
     set->add(10); set->add(40); set->add(30);
-    std::cout << "Actual output:    ";
-    set->printTree();
+    std::string solution = std::string("40\n")
+                         + std::string("    50\n")
+                         + std::string("        60\n")
+                         + std::string("    20\n")
+                         + std::string("        30\n")
+                         + std::string("        10\n");
+    assert(set->tree() == solution);
     delete set;
 
 }
-void testAddRightRight()
+/* Right right unbalance */
+void testAdd3()
 {
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [[[[] 10 []] 20 [[] 30 []]] 40 [[] 50 [[] 60 []]]] \n"; 
     set->add(10); set->add(20); set->add(40);
     set->add(30); set->add(50); set->add(60);
-    std::cout << "Actual output:    ";
-    set->printTree();
+    std::string solution = std::string("40\n")
+                         + std::string("    50\n")
+                         + std::string("        60\n")
+                         + std::string("    20\n")
+                         + std::string("        30\n")
+                         + std::string("        10\n");
+    assert(set->tree() == solution);
     delete set;
 }
-void testAddRightLeft()
+/* Right left unbalance */
+void testAdd4()
 {
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [[[[] 10 []] 20 []] 30 [[[] 40 []] 50 [[] 60 []]]] \n"; 
     set->add(10); set->add(50); set->add(20);
     set->add(30); set->add(60); set->add(40);
-    std::cout << "Actual output:    ";
-    set->printTree();
+    std::string solution = std::string("30\n")
+                         + std::string("    50\n")
+                         + std::string("        60\n")
+                         + std::string("        40\n")
+                         + std::string("    20\n")
+                         + std::string("        10\n");
+    assert(set->tree() == solution);
     delete set;
 }
-void testAddDuplicates()
+/* testing adding duplicates */
+void testAdd5()
 {
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [[[[] 10 []] 20 []] 30 [[[] 40 []] 50 [[] 60 []]]] \n"; 
     set->add(10); set->add(50); set->add(20);
     set->add(30); set->add(60); set->add(40);
     set->add(30); set->add(50); set->add(10);
-    std::cout << "Actual output:    ";
-    set->printTree();
+    std::string solution = std::string("30\n")
+                         + std::string("    50\n")
+                         + std::string("        60\n")
+                         + std::string("        40\n")
+                         + std::string("    20\n")
+                         + std::string("        10\n");
+    assert(set->tree() == solution);
     delete set;
 
 }
 void testAdd()
 {
-    std::cout << "Testing add function...\n";
-    testAddLeftLeft();
-    testAddLeftRight();
-    testAddRightRight();
-    testAddRightLeft();
-    testAddDuplicates();
+    std::cout << "Testing add function...";
+    testAdd1(); // Left left unbalance 
+    testAdd2(); // Left right unbalance
+    testAdd3(); // Right right unbalance
+    testAdd4(); // Right left unbalance
+    testAdd5(); // Adding duplicates
+    std::cout << "test passed\n";
 }
 /*
  * Tests contains when
@@ -94,60 +121,114 @@ void testContains()
     delete set;
 }
 
+/* Left left unbalance*/
 void testRemove1()
 {
     Set<int> *set = new Set<int>;
-    std::cout << "Output should be: [[[[] -1 []] 0 []] 1 [[[[] 2 []] 5 [[] 6 []]] 9 [[] 11 []]]]\n";
-    set->add(9);  set->add(5); set->add(10);
-    set->add(0);  set->add(6); set->add(11);
-    set->add(-1); set->add(1); set->add(2);
-    set->remove(10);
-    std::cout << "Actual output:    ";
-    set->printTree();
+    set->add(70); set->add(50); set->add(80);
+    set->add(20); set->add(60); set->add(90);
+    set->add(10); set->add(30); set->add(40);
+    set->remove(80);
+    std::string solution = std::string("30\n")
+                         + std::string("    70\n")
+                         + std::string("        90\n")
+                         + std::string("        50\n")
+                         + std::string("            60\n")
+                         + std::string("            40\n")
+                         + std::string("    20\n")
+                         + std::string("        10\n");
+    assert(set->tree() == solution);
     delete set;
 }
 
+/* Left right unbalance */
 void testRemove2()
 {
     Set<int> *set = new Set<int>;
-    for (int i = 1; i < 10; i++) {
-        set->add(i);
-    }
-    set->remove(9);
-    set->remove(6);
-    set->remove(3);
-    set->remove(1);
-    set->remove(2);
-    std::stringstream buffer;
-    buffer << *set;
-    assert(buffer.str() == "[4, 5, 7, 8]");
-    delete set;
-}
-void testRemove3()
-{
-    Set<int> *set = new Set<int>;
-    for (int i = 1; i < 10; i++) {
-        set->add(i);
-    }
-    set->remove(9); 
-    set->remove(7); 
-    set->remove(8); 
-    set->remove(6); 
-    set->remove(3); 
-    set->remove(1);
-    set->remove(2);
-    std::stringstream buffer;
-    buffer << *set;
-    assert(buffer.str() == "[4, 5]");
+    set->add(70); set->add(50); set->add(80);
+    set->add(20); set->add(60); set->add(90);
+    set->add(10); set->add(30); set->add(40);
+    set->remove(10); set->remove(80);
+    std::string solution = std::string("50\n")
+                         + std::string("    70\n")
+                         + std::string("        90\n")
+                         + std::string("        60\n")
+                         + std::string("    30\n")
+                         + std::string("        40\n")
+                         + std::string("        20\n");
+    assert(set->tree() == solution);
     delete set;
 
 }
+
+/* Right right unbalance */
+void testRemove3()
+{
+    Set<int> *set = new Set<int>;
+    set->add(30); set->add(10); set->add(40);
+    set->add(20); set->add(60); set->add(90);
+    set->add(50); set->add(70); set->add(80);
+    set->remove(10);
+    std::string solution = std::string("60\n")
+                         + std::string("    80\n")
+                         + std::string("        90\n")
+                         + std::string("        70\n")
+                         + std::string("    30\n")
+                         + std::string("        40\n")
+                         + std::string("            50\n")
+                         + std::string("        20\n");
+    assert(set->tree() == solution);
+    delete set;
+}
+/* Right left unbalance */
+void testRemove4()
+{
+    Set<int> *set = new Set<int>;
+    set->add(30); set->add(10); set->add(40);
+    set->add(20); set->add(80); set->add(90);
+    set->add(50); set->add(70); set->add(60);
+    set->remove(80); set->remove(10);
+    std::string solution = std::string("50\n")
+                         + std::string("    70\n")
+                         + std::string("        90\n")
+                         + std::string("        60\n")
+                         + std::string("    30\n")
+                         + std::string("        40\n")
+                         + std::string("        20\n");
+    assert(set->tree() == solution);
+    delete set;
+}
+
+void testRemove7()
+{
+    Set<Coord> *set = new Set<Coord>;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            Coord c(i, j);
+            set->add(c);
+        }
+    }
+
+    std::vector<Coord> v;
+    for (Set<Coord>::iterator it = set->begin(); it != set->end(); ++it) {
+        v.push_back(*it);
+    }
+    
+    for (size_t i = 0; i < v.size(); i++) {
+        //std::cout << "Removing " << v[i] << " \n";
+        set->remove(v[i]);
+    } std::cout << "\n";
+    std::cout << *set << "\n";
+}
 void testRemove()
 {
-    std::cout << "Testing function remove...  \n";
+    std::cout << "Testing function remove...  ";
     testRemove1();
     testRemove2();
     testRemove3();
+    testRemove4();
+    //testRemove7();
+    std::cout << "test passed\n";
 
 }
 void testSize()
@@ -216,15 +297,28 @@ void testType()
     delete set2;
     std::cout << "...test passed\n";
 }
-
-void testCout()
+void testCout1()
 {
-    std::cout << "Testing standard cout...";
     Set<int> set;
     set.add(9); set.add(5); set.add(10);
     std::stringstream buffer;
     buffer << set;
     assert(buffer.str() == "[5, 9, 10]");
+    
+}
+void testCout2()
+{
+    Set<int> set;
+    std::stringstream buffer;
+    buffer << set;
+    assert(buffer.str() == "[]");
+}
+void testCout()
+{
+    std::cout << "Testing standard cout...";
+    testCout1();
+    testCout2();
+
     std::cout << "...test passed\n";
 }
 

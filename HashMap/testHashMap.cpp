@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <cassert>
 #include "HashMap.h"
@@ -149,7 +150,7 @@ void testCopyConstructor()
     std::cout << "test passed.\n";
 }
 /*
-void testClear()
+void testClear1()
 {
     std::cout << "Testing function clear...";
     HashMap<std::string, int> map;
@@ -176,7 +177,21 @@ void testClear()
     assert(it == map.end());
     std::cout << "test passed.\n";
 }*/
-void testAssignmentOperator()
+void testClear2()
+{
+    HashMap<Coord, Set<int>> map;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            Coord c(i, j);
+            map.insert(c, Set<int>());
+            for (int k = 0; k < 5; k++) {
+                map[c].add(k);
+            }
+        }
+    }
+    map.clear();
+}
+void testAssignmentOperator1()
 {
     std::cout << "Testing assignment operator...";
     HashMap<std::string, int> map1;
@@ -188,7 +203,30 @@ void testAssignmentOperator()
     map2 = map1;
     assert(map2["key1"] == 10);
     assert(map2["key2"] == 20);
-    std::cout << "test passed.\n";
+    
+}
+void testAssignmentOperator2()
+{
+    HashMap<Coord, Set<int>> map1;
+    HashMap<Coord, Set<int>> map2;
+    Coord c1(1, 2);
+    map1.insert(c1, Set<int>());
+    map2.insert(c1, Set<int>());
+    for (int i = 0; i < 10; i++) {
+        map1[c1].add(i);
+        map2[c1].add(i);
+    }
+    Coord c2(3, 4);
+    map1.insert(c2, Set<int>());
+    for (int i = 100; i < 106; i++) {
+        map1[c2].add(i);
+    }
+    map2 = map1;
+    std::stringstream buffer;
+    buffer << map2[c2];
+    assert(buffer.str() == "[100, 101, 102, 103, 104, 105]");
+    std::cout << "...test passed\n";
+
 }
 int main()
 {
@@ -202,8 +240,10 @@ int main()
     testType3();
     testIterator1();
     testIterator2();
-    //testClear();
-    testAssignmentOperator();
+    //testClear1();
+    testClear2();
+    testAssignmentOperator1();
+    testAssignmentOperator2();
 
     std::cout << "============== Tests for HashMap completed! ==============\n";
 }

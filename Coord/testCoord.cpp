@@ -1,4 +1,7 @@
 #include <iostream>
+#include <sstream>
+#include <string.h>
+#include <stdio.h>
 #include "Coord.h"
 #include "../Set/Set.h"
 #include <cstdlib>
@@ -92,7 +95,15 @@ void testLEQ()
     assert(not (c3 <= c2));
     std::cout <<"test passed.\n";
 }
-
+void testCout()
+{
+    std::cout << "Testing standard ostream out ...";
+    Coord c1(1, 2);
+    std::stringstream buffer;
+    buffer << c1;
+    assert(buffer.str() == "(1, 2)");
+    std::cout <<"test passed.\n";
+}
 
 int main()
 {
@@ -104,6 +115,7 @@ int main()
     testGEQ();
     testSmallerThan();
     testLEQ();
+    testCout();
     std::cout << "======All tests passed!======\n";
 
 }

@@ -37,6 +37,7 @@ class HashMap {
         key_iterator end() const;
         iterator bbegin();
         iterator eend();
+        void clear();
         
     private:
         Set<Key> *linkedHashKeys;
@@ -48,7 +49,7 @@ class HashMap {
         size_t getIndex(Key) const;
         std::string toString(Key) const;
         void deepCopy(const HashMap &);
-        void clear();
+        //void clear();
 };
 
 /*****************************************************************************/
@@ -177,11 +178,9 @@ size_t HashMap<Key, Value>::getIndex(Key k) const
 template<typename Key, typename Value>
 std::string HashMap<Key, Value>::toString(Key k) const
 {
-    std::string result;
     std::ostringstream oss;
     oss << k;
-    result = oss.str();
-    return result;
+    return oss.str();
 }
 
 

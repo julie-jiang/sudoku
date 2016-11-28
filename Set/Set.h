@@ -1,6 +1,7 @@
 #ifndef SET_H
 #define SET_H
 #include <iostream>
+#include <cassert>
 #include <sstream>
 #include "SetNode.h"
 #include "SetIterator.h"
@@ -26,7 +27,7 @@ class Set {
         bool empty();
         size_t size();
         friend std::ostream &operator << <>(std::ostream &, const Set &);
-        void printTree();
+        std::string tree();
         T top();
         iterator begin() const;
         iterator end() const;
@@ -37,9 +38,8 @@ class Set {
         SetNode<T> *remove(SetNode<T> *, T);
         void toString(SetNode<T> *, std::string &) const;
         std::string value2string(T &) const;
-        void printTree(SetNode<T> *);
+        void tree(SetNode<T> *, int, std::string &);
         size_t size(SetNode<T> *, int);
-        
         int getBalance(SetNode<T> *);
         int height(SetNode<T> *);
         int max(int, int);
@@ -135,43 +135,32 @@ void Set<T>::add(T val)
 template<typename T>
 SetNode<T> *Set<T>::add(SetNode<T> *node, T val)
 {
-    // Make new SetNode 
-    if (node == nullptr) {
+    if (node == nullptr) // Make new SetNode
         node = new SetNode<T>(val);
-
-    // Insert left if currSetNode is greater than newSetNode
-    } else if (node->value > val) {
+    else if (node->value > val)  // Insert left
         node->left = add(node->left, val);
-
-    // Insert right if SetNode is smaller than s
-    } else  if (node->value < val) {
+    else  if (node->value < val)  // Insert right
         node->right = add(node->right, val);
-    }
     
     // Update height
-    node->height = max(height(node->left), height(node->right)) + 1;
+    node->height = max(height(node->left), height(node->right)) + 1; 
     int balance = getBalance(node);
     
     if (balance > 1) {
-        // Right right unbalance 
-        if (val > node->right->value) {    
+        if (val > node->right->value) {  // Right right unbalance 
             return rotateLeft(node);
-        // Right left unbalance
-        } else { // val < SetNode->right->value              
+        } else { // Right left unbalance
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }
     } else if (balance < -1) {
-        // Left left unbalance
-        if (val < node->left->value) {
+        if (val < node->left->value) { // Left left unbalance
             return rotateRight(node);
-        // Left right unbalance
-        } else { // val > SetNode->left->value
+        } else {// Left right unbalance
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
     }
-
     return node;
 }
 template<typename T>
@@ -195,25 +184,20 @@ SetNode<T> *Set<T>::remove(SetNode<T> *node, T val)
     // Standard BST removal 
     if (node == nullptr) 
         return node;
-   
-   // If SetNode == val, remove SetNode    
-    if (val == node->value) 
+     
+    if (val == node->value)   // If SetNode == val, remove SetNode  
         node = removeSetNode(node); 
 
-    // Search left subtree if SetNode > s  
-    else if (val < node->value)
+    else if (val < node->value) // Search left subtree if SetNode > s  
         node->left = remove(node->left, val);
-        
-
-    // Search right subtree if SetNode < s
-    else 
-        node->right = remove(node->right, val);  
-
-    if (node == nullptr) 
-        return node;
     
-    // Update height
-    node = updateHeight(node);
+    else  // Search right subtree if SetNode < s
+        node->right = remove(node->right, val);  
+    
+    if (node == nullptr) // Don't need to update height if node is nullptr
+        return node;
+   
+    node = updateHeight(node); // Update height
 
     return node;
 }
@@ -225,22 +209,18 @@ SetNode<T> *Set<T>::updateHeight(SetNode<T> *node)
     int balance = getBalance(node);
         
     if (balance > 1) {
-        // Right right unbalance   
-        if (getBalance(root->right) >= 0) {   
+        if (getBalance(node->right) >= 0) { // Right right unbalance   
             return rotateLeft(node);
 
-        // Right left unbalance 
-        } else {            
+        } else { // Right left unbalance 
             node->right = rotateRight(node->right);
             return rotateLeft(node);
         }
     } else if (balance < -1) {
-        // Left left unbalance
-        if (getBalance(root->left) <= 0) { 
+        if (getBalance(node->left) <= 0) { // Left left unbalance
             return rotateRight(node);
-
-        // Right left unbalance
-        } else { 
+        
+        } else { // Left right unbalance
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
@@ -261,9 +241,7 @@ SetNode<T> *Set<T>::removeSetNode(SetNode<T> *node)
     // Else if SetNode has only one or no child.
     } else {
         SetNode<T> *temp = node->left ? node->left : node->right;
-
-        // If SetNode has no child
-        if (temp == nullptr) {
+        if (temp == nullptr) { // If SetNode has no child
             temp = node;
             node = nullptr;
         } else {
@@ -271,9 +249,9 @@ SetNode<T> *Set<T>::removeSetNode(SetNode<T> *node)
         }
         delete temp;
     }
-
     return node;
 }
+
 template<typename T>
 SetNode<T> *Set<T>::getMinSetNode(SetNode<T> *node)
 {
@@ -296,7 +274,7 @@ SetNode<T> *Set<T>::rotateLeft(SetNode<T> *node)
 
     node->height       = max(height(node->left), height(node->right)) + 1;
     rightChild->height = max(height(rightChild->left), height(rightChild->right)) + 1;
-    
+
     return rightChild;
 }
 template<typename T>
@@ -307,9 +285,10 @@ SetNode<T> *Set<T>::rotateRight(SetNode<T> *node)
 
     leftChild->right = node;
     node->left       = leftRightChild;
-
+    
     node->height      = max(height(node->left), height(node->right)) + 1;
     leftChild->height = max(height(leftChild->left), height(leftChild->right)) + 1;
+    
     return leftChild;
 
 }
@@ -338,8 +317,10 @@ template<typename T>
 std::ostream &operator<<(std::ostream &output, const Set<T> &source)
 {
     std::string str = "[";
-    source.toString(source.root, str);
-    str.erase(str.size() - 2);
+    if (source.root != nullptr) {
+        source.toString(source.root, str);
+        str.erase(str.size() - 2);
+    }
     str += "]";
     output << str;
     return output;
@@ -364,31 +345,27 @@ std::string Set<T>::value2string(T &v) const
     return oss.str();
 }
 template<typename T>
-void Set<T>::printTree()
+std::string Set<T>::tree()
 {
-    std::cout << "[";
+    std::string str_tree = "";
     if (not empty()) {
-        printTree(root);
+        tree(root, 0, str_tree);
     }
-    std::cout << "]" << std::endl;
+    return str_tree;
 }
 template<typename T>
-void Set<T>::printTree(SetNode<T> *node)
+void Set<T>::tree(SetNode<T> *node, int depth, std::string &str_tree)
 {
-    // Traverse left subtree 
-    std::cout << "[";
-    if (node->left != nullptr) {    
-        printTree(node->left);  
-    } 
-    // Print current SetNode
-    std::cout << "] " << node->value << " [";
-    
-    // Traverse right subtree
-    if (node->right != nullptr) {
-        printTree(node->right);
+    std::string indent = "";
+    for (int i = 0; i < depth; i++) {
+        indent += "    ";
     }
-    std::cout << "]";
-    
+    str_tree += (indent + value2string(node->value) + "\n");
+    if (node->right != nullptr)
+        tree(node->right, depth + 1, str_tree);
+    if (node->left!= nullptr)
+        tree(node->left, depth + 1, str_tree);
+
 }
 template<typename T>
 size_t Set<T>::size()
