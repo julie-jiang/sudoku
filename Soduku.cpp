@@ -42,6 +42,18 @@ void Soduku::print(HashMap<Coord, Set<int>> &values)
         std::cout << std::endl;
     }
 }
+void Soduku::printValues(HashMap<Coord, Set<int>> &values)
+{
+    for (int j = 0; j < gridSize; j++) {
+        for (int i = 0; i < gridSize; i++) {
+            Coord c(i, j);
+            std::cout << c << " = ";
+            values[c].print();
+            std::cout << "\n";
+        }
+        std::cout << std::endl;
+    }
+}
 bool Soduku::solve(HashMap<Coord, Set<int>> &values)
 {
     if (not parse_grid(values)) {
@@ -70,27 +82,38 @@ bool Soduku::search(HashMap<Coord, Set<int>> &values)
     bool solved = true;
     for (HashMap<Coord, Set<int>>::key_iterator key = values.begin(); 
          key != values.end(); ++key) {
-        if (values[*key].size() != 1) {
+        size_t size = values[*key].size();
+        if (size != 1) {
             solved = false;
             break;
+        } else if (size < 1) {
+            std::cout << "values[*key].size() == 0! returning false. key = " << *key << " values = ";
+            values[*key].print();
+            std::cout << "\n";
+            return false;
         }
     }
     if (solved) {
+        print(values);
         return true;
     } 
-    HashMap<Coord, Set<int>>::key_iterator it = values.begin();
-    Coord *cptr = nullptr;
+    Coord c(gridSize, gridSize);
     size_t min_possibilities = gridSize + 1;
-    while (it != values.end()) {
+    for (HashMap<Coord, Set<int>>::key_iterator it = values.begin();
+         it != values.end(); ++it) {
         size_t size = values[*it].size();
-        if (size > 2 and size < min_possibilities) {
+        if (size > 1 and size < min_possibilities) {
             min_possibilities = size;
-            *cptr = *it;
+            c = *it;
         }
-        ++it;
     }
-    assert(cptr != nullptr);
-    Coord c = &cptr;
+
+    Coord dummy(gridSize, gridSize);
+    if (c == dummy) {
+        std::cout << "c == dummy! exiting\n";
+        printValues(values);
+        return false;
+    }
     std::cout << "min possibilities c = " << c << ". ";
     std::cout << "values[c] = ";
     values[c].print();
@@ -100,8 +123,13 @@ bool Soduku::search(HashMap<Coord, Set<int>> &values)
     Set<int> c_values(copy_values[c]);
     while (not c_values.empty()) {
         int d = c_values.pop();
+        std::cout << "values should not have changed: ";
+        copy_values[c].print();
+        std::cout << "\n";
         std::cout << "search(): assigning " << c << " to " << d << "\n";
-        if (assign(copy_values, c, d)) {
+        HashMap<Coord, Set<int>> copy_copy_values(copy_values);
+        if (assign(copy_copy_values, c, d)) {
+            copy_values = copy_copy_values;
             return search(copy_values);
         } else {
             std::cout << "search(): assignment " << c << " to " << d << " unsuccessful.\n";

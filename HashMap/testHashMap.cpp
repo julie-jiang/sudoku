@@ -66,15 +66,21 @@ void testIterator1()
 void testIterator2()
 {
     HashMap<Coord, int> map;
+    std::vector<Coord> coords;
     Coord c1(1, 2);
     Coord c2(2, 3);
     Coord c3(3, 4);
     map.insert(c1, 10);
     map.insert(c2, 20);
     map.insert(c3, 30);
+    coords.push_back(c3);
+    coords.push_back(c2);
+    coords.push_back(c1);
+    int i = 0;
     for (HashMap<Coord, int>::key_iterator k = map.begin(); 
          k != map.end(); ++k) {
-        std::cout << *k << std::endl;
+        assert(*k == coords[i]);
+        i++;
     }
     std::cout << "test passed.\n";
 }
@@ -138,11 +144,55 @@ void testCopyConstructor()
     HashMap<std::string, int> map2(map1);
     assert(map2["key1"] == map1["key1"]);
     assert(map2["key2"] == map1["key2"]);
+    map1.insert("key1", 30);
+    assert(map2["key1"] == 10);
+    std::cout << "test passed.\n";
+}
+/*
+void testClear()
+{
+    std::cout << "Testing function clear...";
+    HashMap<std::string, int> map;
+    map.insert("key1", 10);
+    map.insert("key2", 20);
+    map.clear();
+    bool caughtException1 = false;
+    try {
+        int val = map["key1"];
+        (void) val;
+    } catch (std::logic_error) {
+        caughtException1 = true;
+    }
+    assert(caughtException1);
+    bool caughtException2 = false;
+    try {
+        int val = map["key2"];
+        (void) val;
+    } catch (std::logic_error) {
+        caughtException2 = true;
+    }
+    assert(caughtException2);
+    HashMap<std::string, int>::key_iterator it = map.begin();
+    assert(it == map.end());
+    std::cout << "test passed.\n";
+}*/
+void testAssignmentOperator()
+{
+    std::cout << "Testing assignment operator...";
+    HashMap<std::string, int> map1;
+    map1.insert("key1", 10);
+    map1.insert("key2", 20);
+    HashMap<std::string, int> map2;
+    map2.insert("key1", 30);
+    map2.insert("key2", 40);
+    map2 = map1;
+    assert(map2["key1"] == 10);
+    assert(map2["key2"] == 20);
     std::cout << "test passed.\n";
 }
 int main()
 {
-    std::cout << "============== Running tests for Hash Map ==============";
+    std::cout << "============== Running tests for Hash Map ==============\n";
     testConstructor();
     testCopyConstructor();
     testGetterSetter();
@@ -152,8 +202,10 @@ int main()
     testType3();
     testIterator1();
     testIterator2();
+    //testClear();
+    testAssignmentOperator();
 
-    std::cout << "============== Tests for HashMap completed! ==============";
+    std::cout << "============== Tests for HashMap completed! ==============\n";
 }
 
 

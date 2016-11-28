@@ -175,7 +175,7 @@ void testPointer()
 }
 int main()
 {
-    std::cout << "============== Running tests for LinkedList ==============";
+    std::cout << "============== Running tests for LinkedList ==============\n";
     
     testSize();
     testEmpty();
@@ -187,7 +187,7 @@ int main()
     testRemove1();
     testRemove2();
     testPointer();
-    std::cout << "============== Tests for LinkedList completed! ==============";
+    std::cout << "============== Tests for LinkedList completed! ==============\n";
 	
 
 	
