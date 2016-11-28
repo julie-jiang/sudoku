@@ -1,11 +1,13 @@
 /*
  * Implementations of the Soduku class.
  * This class can solve a soduku puzzle of any size.
- * To solve a soduku puzzle, provide a path to a file that contains
- * valid soduku puzzle. 
- *      Soduku soduku(puzzle.txt);
- * To see the solutions (if there are any):
- *      soduku.print();
+ *
+ * Usage: 
+ *      To solve a soduku puzzle, provide a path to a file that contains
+ *      valid soduku puzzle: 
+ *              Soduku soduku(puzzle.txt);
+ *      To see the solutions (if there are any):
+ *              soduku.print();
  */
 #include <iostream>
 #include <sstream>
@@ -35,6 +37,7 @@ Soduku::Soduku(std::string filename)
  * value of each Coord is printed via standard cout. If the solution 
  * is incomplete, then the Coords that don't have assigned values will be have
  * '0' printed instead in bold red.
+ * This is printed with gridlines!
  */
 void Soduku::print()
 {
@@ -56,6 +59,35 @@ void Soduku::print()
         } std::cout << std::endl;
     }
     print_horizontal_line();
+}
+/*
+ * Write the solutions to the specified directory. 
+ */
+
+void Soduku::write(std::string directory)
+{
+    // Open file
+    std::string raw_name = puzzle_name.substr(
+                           puzzle_name.find_last_of("/\\") + 1, 
+                           puzzle_name.find_last_of("."));
+    std::string filename = directory + "/" + raw_name +"_solution.txt";
+    std::ofstream outFile(filename);
+    if (not outFile.is_open()) {
+        throw std::logic_error("ERROR: " + directory + 
+                               " is not a valid directory");
+    }
+    // Write to file
+    for (size_t j = 0; j < gridSize; j++) {
+        for (size_t i = 0; i < gridSize; i++) {
+            Coord c(i, j);
+            if (this->domains[c].size() == 1) {
+                 outFile << this->domains[c].top() << " ";
+            } else {
+                outFile << "\033[1m\033[31m0\033[0m ";
+            }
+        } outFile << std::endl;
+    }
+    outFile.close();
 }
 
 /*****************************************************************************/
@@ -173,7 +205,6 @@ Coord Soduku::select_unassigned_variable(HashMap<Coord, Set<int>> &domains)
 }
 /*****************************************************************************/
 /*                         Constraint Propagation                            */
-/*            https://en.wikipedia.org/wiki/Constraint_satisfaction          */
 /*****************************************************************************/
 /*
  * Assign Coord c to a value d by eliminating all other values from its domain.
@@ -308,6 +339,7 @@ void Soduku::read_puzzle()
         elements->push(string2int(s));
         num_elements++;
     }
+    inFile.close();
     // Get grid size
     gridSize = square_root(num_elements);
     n = square_root(gridSize);

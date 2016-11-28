@@ -26,11 +26,15 @@ class Soduku {
          */
         Soduku(std::string);
         ~Soduku() {}
-
         /* 
          * Print the solutions (complete or imcomplete) to the given puzzle.
          */
         void print();
+
+        /*
+         * Write the solutions to the specified directory.
+         */
+        void write(std::string);
     private:
         /* Private variables */
         std::vector<std::vector<Coord>> allunits;
