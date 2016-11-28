@@ -96,7 +96,7 @@ void testLEQ()
 
 int main()
 {
-    std::cout << "-----Running tests for Coord-----\n";
+    std::cout << "======Running tests for Coord======\n";
     testConstructor();
     testGetSet();
     testEqual();
@@ -104,6 +104,6 @@ int main()
     testGEQ();
     testSmallerThan();
     testLEQ();
-    std::cout << "-----All tests passed!----\n";
+    std::cout << "======All tests passed!======\n";
 
 }

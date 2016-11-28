@@ -27,6 +27,7 @@ class HashMap {
         HashMap(size_t);
         HashMap(const HashMap &);
         ~HashMap();
+        HashMap &operator=(const HashMap &);
         Value &operator[](const Key &) const;
         void insert(Key, Value);
         void remove(Key);
@@ -36,16 +37,18 @@ class HashMap {
         key_iterator end() const;
         iterator bbegin();
         iterator eend();
+        
     private:
         Set<Key> *linkedHashKeys;
         LinkedList<Key, Value> **buckets;
         std::hash<std::string> hashFunction;
-        
         size_t bucketSize;
 
         void init();
         size_t getIndex(Key) const;
         std::string toString(Key) const;
+        void deepCopy(const HashMap &);
+        void clear();
 };
 
 /*****************************************************************************/
@@ -78,10 +81,34 @@ HashMap<Key, Value>::HashMap(const HashMap &source)
 {
     this->bucketSize = source.bucketSize;
     init();
+    deepCopy(source);
+}
+template<typename Key, typename Value>
+HashMap<Key, Value> &HashMap<Key, Value>::operator=(const HashMap &source)
+{
+    this->bucketSize = source.bucketSize;
+    clear();
+    deepCopy(source);
+    return *this;
+}
+
+template<typename Key, typename Value>
+void HashMap<Key, Value>::clear()
+{
+    for (HashMap<Key, Value>::key_iterator it = linkedHashKeys->begin(); 
+         it != linkedHashKeys->end(); ++it) { 
+        remove(*it);
+    }
+}
+
+template<typename Key, typename Value>
+void HashMap<Key, Value>::deepCopy(const HashMap &source)
+{
     for (HashMap<Key, Value>::key_iterator it = source.begin(); 
          it != source.end(); ++it) {
         insert(*it, source[*it]);
     }
+
 }
 template<typename Key, typename Value>
 MapIterator<Key, Value> HashMap<Key, Value>::bbegin()
