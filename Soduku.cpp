@@ -41,15 +41,19 @@ Soduku::Soduku(std::string filename)
  */
 void Soduku::print()
 {
-   for (size_t j = 0; j < gridSize; j++) {
+    int max_char_length = get_num_digits(gridSize);
+    std::string *whitespace = get_whitespaces(max_char_length);
+
+    for (size_t j = 0; j < gridSize; j++) {
         if (j % n == 0) {
-            print_horizontal_line();
+            print_horizontal_line(max_char_length);
         }
         std::cout << "| ";
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
             if (this->domains[c].size() == 1) {
-                 std::cout << this->domains[c].top() << " ";
+                int number= this->domains[c].top();
+                std::cout << number << whitespace[get_num_digits(number) - 1];
             } else {
                 std::cout << "\033[1m\033[31m0\033[0m ";
             }
@@ -58,7 +62,8 @@ void Soduku::print()
             }
         } std::cout << std::endl;
     }
-    print_horizontal_line();
+    print_horizontal_line(max_char_length);
+    delete [] whitespace;
 }
 /*
  * Write the solutions to the specified directory. 
@@ -77,11 +82,14 @@ void Soduku::write(std::string directory)
                                " is not a valid directory");
     }
     // Write to file
+    int max_char_length = get_num_digits(gridSize);
+    std::string *whitespace = get_whitespaces(max_char_length);
     for (size_t j = 0; j < gridSize; j++) {
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
             if (this->domains[c].size() == 1) {
-                 outFile << this->domains[c].top() << " ";
+                int number= this->domains[c].top();
+                outFile << number << whitespace[get_num_digits(number) - 1];
             } else {
                 outFile << "\033[1m\033[31m0\033[0m ";
             }
@@ -433,10 +441,11 @@ void Soduku::printDomains(HashMap<Coord, Set<int>> &domains)
 /*
  * Print helper function. Prints a horizontal line.
  */
-void Soduku::print_horizontal_line()
+void Soduku::print_horizontal_line(int max_char_length)
 {
     std::cout << "|";
-    for (size_t i = 0; i < (gridSize + n) * 2 - 1; i++) {
+    size_t length = gridSize * (max_char_length + 1) + n * 2 - 1;
+    for (size_t i = 0; i < length; i++) {
         std::cout << "-";
     }
     std::cout <<"| \n";
@@ -476,3 +485,28 @@ int Soduku::string2int(std::string s)
 
     return result;
 }
+/*
+ * Get the number of digits in the given int */
+int Soduku::get_num_digits(int num)
+{
+    int i = 1;
+    int digits = 1;
+    while (num / i > 9) {
+        i *= 10;
+        digits++;
+    }
+    return digits;
+}
+std::string *Soduku::get_whitespaces(int max_char_length)
+{
+    std::string *whitespace = new std::string [max_char_length];
+    for (int i = 0; i < max_char_length; i++) {
+        whitespace[i] = "";
+        for (int j = i; j < max_char_length; j++) {
+            whitespace[i] += " ";
+        }
+    }
+    return whitespace;
+}
+
+

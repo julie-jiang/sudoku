@@ -67,7 +67,9 @@ class Soduku {
         int string2int(std::string);
         size_t square_root(size_t);
         void printDomains(HashMap<Coord, Set<int>> &);
-        void print_horizontal_line();
+        void print_horizontal_line(int);
+        int get_num_digits(int);
+        std::string *get_whitespaces(int);
 
 
         
