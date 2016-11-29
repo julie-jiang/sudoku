@@ -14,7 +14,7 @@ void testIterator()
         for (int j = 0; j < 10; j++) {
             Coord c(i, j);
             values.push_back(i + j);
-            list.insert(c, i + j);
+            assert(list.insert(c, i + j));
         }
     }
     int i = 0;
@@ -36,8 +36,8 @@ void testType1()
     LinkedList<Coord, int> list;
     Coord c1(0, 0);
     Coord c2(4, 7);
-    list.insert(c1, 10);
-    list.insert(c2, 20);
+    assert(list.insert(c1, 10));
+    assert(list.insert(c2, 20));
     int val1 = list[c1];
     int val2 = list[c2];
     assert(val1 = 10);
@@ -46,7 +46,7 @@ void testType1()
 void testType2()
 {
     LinkedList<std::string, Set<int>> list;
-    list.insert("key", Set<int>());
+    assert(list.insert("key", Set<int>()));
     for (int i = 0; i < 10; i++) {
         list["key"].add(i);
     }
@@ -64,9 +64,9 @@ void testGetterSetter1()
     std::cout << "Testing getter and setter...";
     LinkedList<std::string, int> list;
     
-    list.insert("key1", 1);
-    list.insert("key2", 1);
-    list.insert("key2", 2);
+    assert(list.insert("key1", 1));
+    assert(list.insert("key2", 1));
+    assert(not list.insert("key2", 2));
     
     int val1 = list["key1"];
     int val2 = list["key2"];
@@ -101,10 +101,10 @@ void testRemove1()
 {
     std::cout << "Testing function remove...";
     LinkedList<std::string, int> list;
-    list.insert("key1", 2);
-    list.insert("key1", 1);
-    list.insert("key2", 1);
-    list.insert("key3", 2);
+    assert(list.insert("key1", 2));
+    assert(not list.insert("key1", 1));
+    assert(list.insert("key2", 1));
+    assert(list.insert("key3", 2));
     assert(list.remove("key2"));
     assert(not list.remove("key4"));
     assert(list.remove("key1"));
@@ -116,10 +116,10 @@ void testRemove1()
 void testRemove2()
 {
     LinkedList<std::string, int> list;
-    list.insert("key1", 1);
-    list.insert("key2", 2);
-    list.insert("key3", 3);
-    list.insert("key4", 4);
+    assert(list.insert("key1", 1));
+    assert(list.insert("key2", 2));
+    assert(list.insert("key3", 3));
+    assert(list.insert("key4", 4));
     assert(list.remove("key1"));
     assert(list.size() == 3);
     assert(list.remove("key2"));
@@ -139,7 +139,7 @@ void testEmpty()
     
     LinkedList<std::string, int> list;
     assert(list.empty());
-    list.insert("key1", 1);
+    assert(list.insert("key1", 1));
     assert(not list.empty());
 
     std::cout << "test passed.\n";
@@ -151,9 +151,9 @@ void testSize()
     
     LinkedList<std::string, int> list;
     assert(list.size() == 0);
-    list.insert("key1", 1);
+    assert(list.insert("key1", 1));
     assert(list.size() == 1);
-    list.insert("key1", 2);
+    assert(not list.insert("key1", 2));
     assert(list.size() == 1);
     assert(list["key1"] == 2);
 
@@ -163,8 +163,8 @@ void testPointer()
 {
     std::cout << "Testing using a pointer to a linkedlist...";
     LinkedList<int, int> *list = new LinkedList<int, int>;
-    list->insert(1, 10);
-    list->insert(2, 20);
+    assert(list->insert(1, 10));
+    assert(list->insert(2, 20));
     int val1 = (*list)[1];
     int val2 = (*list)[2];
     assert(val1 == 10);

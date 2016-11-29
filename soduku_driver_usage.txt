@@ -13,6 +13,6 @@ Mandatory Argument (must provide one and only one of the following):
 --check-all  or -ca Check the validity of all solved Soduku puzzles. 
                     Provide path to a list of paths to solved Soduku puzzles.
 
-Optional Arguments for --solve or --solve-all
+Optional Arguments for --solve or --solve-all:
 --write or -w   Write solution files to the specified directory.
 --hide  or -h   Disable the default setting that print solutions to console.

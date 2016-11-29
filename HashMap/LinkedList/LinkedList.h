@@ -14,7 +14,7 @@ class LinkedList {
         bool empty();
         size_t size(); 
         Value &operator[](const Key &);
-        void insert(Key, Value);
+        bool insert(Key, Value);
         bool remove(Key);
         iterator begin(); 
         iterator end();
@@ -89,7 +89,7 @@ Value &LinkedList<Key, Value>::operator[](const Key &k)
 
 
 template<typename Key, typename Value>
-void LinkedList<Key, Value>::insert(Key k, Value v)
+bool LinkedList<Key, Value>::insert(Key k, Value v)
 {
     ListNode<Key, Value> *newNode = new ListNode<Key, Value>(k, v);
     if (empty()) {
@@ -101,13 +101,14 @@ void LinkedList<Key, Value>::insert(Key k, Value v)
             if (current->key == k) {
                 current->val = v;
                 delete newNode;
-                return;
+                return false;
             }
             previous = current;
             current = current->next;
         }
         previous->next = newNode;
     }
+    return true;
 }
 
 template<typename Key, typename Value>

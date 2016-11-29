@@ -76,10 +76,11 @@ To solve a single puzzle called `puzzle1.txt` in the directory `puzzle`:
 ./soduku -solve puzzle/puzzle1.txt
 ```
 
-To solve all puzzles whose paths are contained in the file `puzzle_list.txt` in the directory `puzzle`, write solutons to the directory `solutions`, and don't print to console:
+To solve all puzzles whose paths are contained in `data/puzzles/set1/puzzle_list.txt`, write solutons to the directory `data/solutions/set1`, and hide output to terminal:
 ```
-./soduku -a puzzle/puzzle_list.txt -h -w solutions
+./soduku --solve-all data/puzzles/set1/puzzle_list.txt --hide --write data/solutions/set1
 ```
+
 
 ## Data Structures that I implemented
 

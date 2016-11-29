@@ -39,11 +39,14 @@ class HashMap {
         LinkedList<Key, Value> **buckets;
         std::hash<std::string> hashFunction;
         size_t num_buckets;
+        size_t num_elements;
+
 
         void init();
         size_t getIndex(Key) const;
         std::string toString(Key) const;
         void deepCopy(const HashMap &);
+
 };
 
 /*****************************************************************************/
@@ -138,7 +141,10 @@ void HashMap<Key, Value>::init()
 template<typename Key, typename Value>
 void HashMap<Key, Value>::insert(Key k, Value val)
 {
-    buckets[getIndex(k)]->insert(k, val);
+    if (buckets[getIndex(k)]->insert(k, val)) {
+        num_elements++;
+    }
+
     
 }
 
@@ -151,7 +157,9 @@ Value &HashMap<Key, Value>::operator[](const Key &k) const
 template<typename Key, typename Value>
 void HashMap<Key, Value>::remove(Key k)
 {
-    buckets[getIndex(k)]->remove(k);
+    if (buckets[getIndex(k)]->remove(k)) {
+        num_elements--;
+    }
 }
 
 template<typename Key, typename Value>

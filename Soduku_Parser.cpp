@@ -1,10 +1,49 @@
+/* 
+ * Soduku_Parser.cpp
+ * Implementaion of the class Soduku_Parser.cpp.
+ * Parses command line arguments for the soduku program.
+ *
+ * By:   Julie Jiang
+ * UTLN: yjiang06
+ * Comp 15 Fall 2016 Independent Project
+ */
+/*****************************************************************************/
+/*                                 Usage                                     */
+/*****************************************************************************/
+/* 
+ * Parses the command line inputs for the soduku program. The possible commands
+ * are as follows:
+ * Usage: ./soduku [--solve     or -s  <filename>] \
+ *                 [--solve-all or -sa <filelist>] \
+ *                 [--check     or -c  <filename>] \
+ *                 [--check-all or -ca <directory>] \
+ * 
+ * Mandatory Argument (must provide one and only one of the following):
+ * --solve      or -s  Solve a single Soduku puzzle. 
+ *                     Provide path to a unsolved Soduku puzzle.
+ * --solve-all  or -sa Solve all Soduku puzzles. 
+ *                     Provide path to a list of paths to unsolved Soduku puzzles
+ * --check      or -c  Check the validity of a single Soduku puzzle. 
+ *                     Provided path to a unsolved Soduku puzzle.
+ * --check-all  or -ca Check the validity of all solved Soduku puzzles. 
+ *                     Provide path to a list of paths to solved Soduku puzzles.
+ * 
+ * Optional Arguments for --solve or --solve-all:
+ * --write or -w   Write solution files to the specified directory.
+ * --hide  or -h   Disable the default setting that print solutions to console.
+ * 
+ * Default settings:
+ * write = false and print = true
+ */
 #include <iostream>
 #include <fstream>
 #include "Soduku_Parser.h"
 Soduku_Parser::Soduku_Parser(int argc, char *argv [])
 {
+    // Initialize booleans
     solve_one = solve_all = check_one = check_all = write = false;
     print = true;
+    // Must have at least 3 arguments
     if (argc < 3) {
         throw std::logic_error("ERROR: missing mandatory argument");
     }
@@ -12,6 +51,9 @@ Soduku_Parser::Soduku_Parser(int argc, char *argv [])
     input_path = std::string(argv[2]);
     parse_optional_arguments(argc, argv);
 }
+/*
+ * Parse the first argument and stores the input_path.
+ */
 void Soduku_Parser::parse_first_argument(std::string arg)
 {
     if (arg == "--solve" or arg == "-s") {
@@ -26,6 +68,9 @@ void Soduku_Parser::parse_first_argument(std::string arg)
         throw std::logic_error("ERROR: Invalid mandatory argument");
     }
 }
+/*
+ * Parses any additional optional arguments
+ */
 void Soduku_Parser::parse_optional_arguments(int argc, char *argv[])
 {
     int i = 3;
@@ -43,8 +88,11 @@ void Soduku_Parser::parse_optional_arguments(int argc, char *argv[])
         }
         i++;
     }
-
 }
+/*
+ * Prints help (usage) message with cerr.
+ * This is a static method.
+ */
 void Soduku_Parser::help_message()
 {
     std::ifstream inFile("soduku_driver_usage.txt");

@@ -1,7 +1,6 @@
 /* 
- * Soduku_Parser.h
- * Header file for the class Soduku_Parser.cpp.
- * Parses command line arguments for the soduku program.
+ * Soduku_Main.cpp
+ * Implementaion of the main function for the soduku program.
  *
  * By:   Julie Jiang
  * UTLN: yjiang06
@@ -11,8 +10,7 @@
 /*                                 Usage                                     */
 /*****************************************************************************/
 /* 
- * Parses the command line inputs for the soduku program. The possible commands
- * are as follows:
+ * Compile with: make
  * Usage: ./soduku [--solve     or -s  <filename>] \
  *                 [--solve-all or -sa <filelist>] \
  *                 [--check     or -c  <filename>] \
@@ -31,38 +29,31 @@
  * Optional Arguments for --solve or --solve-all:
  * --write or -w   Write solution files to the specified directory.
  * --hide  or -h   Disable the default setting that print solutions to console.
- * 
- * Default settings:
- * write = false and print = true
  */
-#ifndef SODUKU_PARSER_H
-#define SODUKU_PARSER_H
-#include <string>
-class Soduku_Parser {
-	public:
-		/* Parse command line input */
-		Soduku_Parser(int, char **); 
+#include <iostream>
+#include "Soduku_Parser.h"
+#include "Soduku_Driver.h"
+int main(int argc, char *argv[])
+{
+    try {
+        // Parse input
+        Soduku_Parser parser(argc, argv);
 
-		/* Print usage with cerr */
-		static void help_message();
+        // Take one action 
+        if (parser.solve_one) 
+            solve_one(parser);
+        else if (parser.solve_all)
+            solve_all(parser);
+        else if (parser.check_one)
+            check_one(parser.input_path);
+        else
+            check_all(parser.input_path);
 
-		/* Stores input and output paths to soduku puzzles */
-		std::string input_path;
-		std::string output_path;
-
-		/* Only one of the following four booleans should be true */
-		bool solve_one; 
-		bool solve_all;
-		bool check_one;
-		bool check_all;
-
-		/* write defaults to false and print defaults to true */
-		bool write;
-		bool print;
-	private:
-
-		void parse_first_argument(std::string);
-		void parse_optional_arguments(int , char **);
-
-};
-#endif
+    } catch (const std::exception &e) {
+        
+        // If any exceptions are caught, print error messages and exit.
+        std::cerr << e.what() << std::endl;
+        Soduku_Parser::help_message();
+        exit(1);
+    }
+}
