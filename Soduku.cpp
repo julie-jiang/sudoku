@@ -4,7 +4,7 @@
  *
  * Usage: 
  *      To solve a soduku puzzle, provide a path to a file that contains
- *      valid soduku puzzle: 
+ *      an unsolved soduku puzzle: 
  *              Soduku soduku(puzzle.txt);
  *      To see the solutions (if there are any):
  *              soduku.print();
@@ -27,14 +27,13 @@
 void Soduku::solve(std::string filename)
 {
     puzzle_name = filename;
-    read_puzzle();
-    init_data_structures();
+    init();
     solve();
 }
 bool Soduku::check(std::string filename)
 {
     puzzle_name = filename;
-    read_puzzle();
+    init();
     return validate_puzzle();
 }
 
@@ -47,6 +46,7 @@ bool Soduku::check(std::string filename)
  */
 void Soduku::print()
 {
+    // TODO: Check that there exists a puzzle! 
     int max_char_length = get_num_digits(gridSize);
     std::string *whitespace = get_whitespaces(max_char_length);
 
@@ -77,9 +77,10 @@ void Soduku::print()
 
 void Soduku::write(std::string directory)
 {
+    // TODO: Check that there exists a puzzle!  
     // Open file
     std::string rawname = puzzle_name.substr(0, puzzle_name.find_last_of("."));
-    rawname = rawname.substr(puzzle_name.find_last_of("/\\") + 1);
+    rawname = rawname.substr(rawname.find_last_of("/\\") + 1);
     std::string filename = directory + "/" + rawname +"_solution.txt";
     std::ofstream outFile(filename);
     if (not outFile.is_open()) {
@@ -123,13 +124,13 @@ bool Soduku::solve()
     return result;
 }
 /*
- * Prune the grid by assigning values as indicated by the inititial puzzle. 
+ * Prune the grid by assigning values as indicated by the initial puzzle. 
  * Enforce constraint consistency for each value assigned.
  * Returns false if any contradictions arises.
  */
 bool Soduku::prune_grid()
 {
-    for(HashMap<Coord, int>::key_iterator key = puzzle.begin();
+    for (HashMap<Coord, int>::key_iterator key = puzzle.begin();
         key != puzzle.end(); ++key) {
         Coord c = *key;
         int   d = puzzle[c];
@@ -141,37 +142,7 @@ bool Soduku::prune_grid()
     return true;
 }
 
-/*****************************************************************************/
-/*                           Validate Puzzle                                 */
-/*****************************************************************************/
-bool Soduku::validate_puzzle()
-{
-    for (size_t j = 0; j < gridSize; j++) {
-        allunits.push_back(std::vector<Coord>());
-        allunits.push_back(std::vector<Coord>());
-        for (size_t i = 0; i < gridSize; i++) {
-            Coord c1(i, j); Coord c2(j, i);
-            allunits[2 * j].push_back(c1);
-            allunits[2 * j + 1].push_back(c2);
 
-    for (size_t i = 0; i < gridSize; i += n) {
-        for (size_t j = 0; j < gridSize; j += n) {
-            allunits.push_back(std::vector<Coord>());
-            size_t size = allunits.size();
-            for (size_t k = i; k < n + i; k++) {
-                for (size_t l = j; l < n + j; l++) {
-                    Coord c(l, k);
-                    allunits[size - 1].push_back(c); }}}} 
-
-    for (size_t i = 0; i < allunits.size(); i++) {
-        for (size_t j = 0; j < allunits[i].size(); j++) {
-            Coord c = allunits[i][j];
-            units[c].push_back(std::vector<Coord>(allunits[i]));
-            for (size_t k = 0; k < allunits[i].size(); k++) {
-                if (k != j) {
-                    Coord c2 = allunits[i][k];
-
-}
 /*****************************************************************************/
 /*                           Backtracking search                             */
 /*****************************************************************************/
@@ -355,8 +326,53 @@ bool Soduku::check_unique_remaining_values(HashMap<Coord, Set<int>> &domains,
     return true;
 }
 /*****************************************************************************/
+/*                           Validate Puzzle                                 */
+/*****************************************************************************/
+bool Soduku::validate_puzzle()
+{
+    for (size_t j = 0; j < gridSize; j++) {
+        Set<int> *unit1 = new_unit();
+        Set<int> *unit2 = new_unit();
+        for (size_t i = 0; i < gridSize; i++) {
+            Coord c1(i, j); Coord c2(j, i);
+            if (not unit1->contains(puzzle[c1]) or 
+                not unit2->contains(puzzle[c2]))
+                return false;
+            unit1->remove(puzzle[c1]);
+            unit2->remove(puzzle[c2]);
+        }
+        if (not unit1->empty() or not unit2->empty()) 
+            return false;
+        delete unit1; delete unit2;
+    }
+    for (size_t i = 0; i < gridSize; i += n) {
+        for (size_t j = 0; j < gridSize; j += n) {
+            Set<int> *unit3 = new_unit();
+            for (size_t k = i; k < n + i; k++) {
+                for (size_t l = j; l < n + j; l++) {
+                    Coord c3(l, k);
+                    if (not unit3->contains(puzzle[c3])) 
+                        return false;
+                    unit3->remove(puzzle[c3]);
+                }
+            }
+            if (not unit3->empty()) 
+                return false;
+            delete unit3;
+        }   
+    }
+    return true;
+}
+
+/*****************************************************************************/
 /*                          Initialization Functions                         */
 /*****************************************************************************/
+void Soduku::init()
+{
+    reset();
+    read_puzzle();
+    init_data_structures();
+}
 /*
  * Process the input file and convert it into a Soduku puzzle.
  * Throw logic error if the file cannot be opened, or if the file does not 
@@ -406,11 +422,7 @@ void Soduku::init_grid(std::queue<int> &elements)
             int num = elements.front();
             elements.pop();
             puzzle.insert(c, num);
-            domains.insert(c, Set<int>());
-            // Domain can be any number from 1 to gridSize
-            for (size_t i = 1; i < gridSize + 1; i++) {
-                domains[c].add(i);
-            }
+            domains.insert(c, Set<int>(*new_unit()));
         }
     }
 }
@@ -425,6 +437,8 @@ void Soduku::init_grid(std::queue<int> &elements)
  */
 void Soduku::init_data_structures()
 {
+    std::vector<std::vector<Coord>> allunits;
+
     for (size_t j = 0; j < gridSize; j++) {
         allunits.push_back(std::vector<Coord>());
         allunits.push_back(std::vector<Coord>());
@@ -456,7 +470,6 @@ void Soduku::init_data_structures()
 }
 void Soduku::reset()
 {
-    allunits.clear();
     units.clear();
     peers.clear();
     domains.clear();
@@ -539,6 +552,22 @@ int Soduku::get_num_digits(int num)
     }
     return digits;
 }
+/*
+ * Based on the maximum number of digits (max_char_length) of the values 
+ * in this puzzle, compute the number whitespaces needed for every value
+ * so that a each value plus their associate whitespaces span the same
+ * number of characters. 
+ *
+ * For example, if the largest possible value is 121, then max_char_length = 3.
+ * Therefore numbers with one digits will be paired with 3 spaces, 
+ * numbers with two digits will be paired with 2 spaces, and 
+ * numbers with three digits will be paired with 1 space. 
+ *      whitespace[0] = "   ";
+ *      whitespace[1] = "  ";
+ *      whitespace[2] = " ";
+ * 
+ * Return a pointer to a array of strings of length max_char_length.
+ */
 std::string *Soduku::get_whitespaces(int max_char_length)
 {
     std::string *whitespace = new std::string [max_char_length];
@@ -549,6 +578,18 @@ std::string *Soduku::get_whitespaces(int max_char_length)
         }
     }
     return whitespace;
+}
+/*
+ * Make a new set of units that contains one of every possible value.
+ * Return a pointer to this new set.
+ */
+Set<int> *Soduku::new_unit()
+{
+    Set<int> *one_unit = new Set<int>;
+    for (int i = 1; i <= (int) gridSize; i++) {
+        one_unit->add(i);
+    }
+    return one_unit;
 }
 
 

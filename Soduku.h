@@ -40,7 +40,7 @@ class Soduku {
         
     private:
         /* Private variables */
-        std::vector<std::vector<Coord>> allunits;
+        // TODO: Hashmap size?!
         HashMap<Coord, std::vector<std::vector<Coord>>> units;
         HashMap<Coord, Set<Coord>> peers;
         HashMap<Coord, Set<int>> domains;
@@ -63,10 +63,11 @@ class Soduku {
         bool validate_puzzle();
 
         /* Initialiation functions */
+        void init();
+        void reset();
         void read_puzzle();
         void init_grid(std::queue<int> &);
         void init_data_structures();
-        void reset();
         
         /* Utility functions */
         int string2int(std::string);
@@ -75,6 +76,7 @@ class Soduku {
         void print_horizontal_line(int);
         int get_num_digits(int);
         std::string *get_whitespaces(int);
+        Set<int> *new_unit();
         
 
 

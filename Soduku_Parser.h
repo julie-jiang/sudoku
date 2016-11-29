@@ -4,20 +4,17 @@ class Soduku_Parser {
 	public:
 		Soduku_Parser(int, char **);
 		static void help_message();
-		std::string filename;
+		std::string input_path;
+		std::string output_path;
 		bool solve_one; 
-		std::string filelist;
 		bool solve_all;
-		std::string directory;
+		bool check_one;
+		bool check_all;
 		bool write;
 		bool print;
 	private:
-		bool arg_solve(std::string);
-		bool arg_solve_all(std::string);
-		bool arg_write(std::string);
-		bool arg_hide(std::string);
-
-
+		void parse_first_argument(std::string);
+		void parse_optional_arguments(int , char **);
 
 };
 #endif

@@ -1,65 +1,58 @@
 #include <iostream>
+#include <fstream>
 #include "Soduku_Parser.h"
 Soduku_Parser::Soduku_Parser(int argc, char *argv [])
 {
-    int i = 1;
-    solve_one = solve_all = write = false;
+    solve_one = solve_all = check_one = check_all = write = false;
     print = true;
+    if (argc < 3) {
+        throw std::logic_error("ERROR: missing mandatory argument");
+    }
+    parse_first_argument(std::string(argv[1]));
+    input_path = std::string(argv[2]);
+    parse_optional_arguments(argc, argv);
+}
+void Soduku_Parser::parse_first_argument(std::string arg)
+{
+    if (arg == "--solve" or arg == "-s") {
+        solve_one = true;
+    } else if (arg == "--solve-all" or arg == "-sa") {
+        solve_all = true;
+    } else if (arg == "--check" or arg == "-c") {
+        check_one = true;
+    } else if (arg == "--check-all" or arg == "-ca") {
+        check_all = true;
+    } else {
+        throw std::logic_error("ERROR: Invalid mandatory argument");
+    }
+}
+void Soduku_Parser::parse_optional_arguments(int argc, char *argv[])
+{
+    int i = 3;
     while (i < argc) {
-        if (not solve_one and arg_solve(argv[i]) and i + 1 < argc) {
-            filename = std::string(argv[i + 1]);
-            i++;
-            solve_one = true;
-        } else if ((not solve_all) and arg_solve_all(argv[i]) and i + 1 < argc) {
-            filelist = std::string(argv[i + 1]);
-            solve_all = true;
-            i++;
-        } else if ((not write) and arg_write(argv[i]) and i + 1 < argc) {
-            directory = std::string(argv[i + 1]);
+        std::string arg = argv[i];
+        if ((arg == "--write" or arg == "-w") and i + 1 < argc) {
             write = true;
+            output_path = argv[i + 1];
             i++;
-        } else if (arg_hide(argv[i])) {
-            print = false; 
+        } else if (arg == "--hide" or arg == "-h") {
+            print = false;
         } else {
-            throw std::logic_error("ERROR: Invalid command line arguments");
+            throw std::logic_error("ERROR: Unknown command line argument " + 
+                                    arg);
         }
         i++;
     }
-    if (not solve_one != solve_all) {
-        throw std::logic_error("ERROR: either solve one or solve all!");
-    }
-}
-bool Soduku_Parser::arg_solve(std::string arg)
-{  
-    return (arg == "--solve" or arg == "-s");
-}
-bool Soduku_Parser::arg_solve_all(std::string arg)
-{
-    return (arg == "--solve-all" or arg == "-a");
-}
-bool Soduku_Parser::arg_write(std::string arg)
-{
-    return (arg == "--write" or arg == "-w");
-}
-bool Soduku_Parser::arg_hide(std::string arg)
-{
-    return (arg == "--hide" or arg == "-h");
+
 }
 void Soduku_Parser::help_message()
 {
-    std::cerr << "Usage: ./soduku [--solve     or -s <filename>] \\ \n"
-                 "                [--solve-all or -a <filelist>] \\ \n"
-                 "                [--write     or -w <directory>] \\ \n"
-                 "                [--hide      or -h]\n"    
-                 "\n"
-                 "solve      Provide path to a Soduku puzzle\n"
-                 "solve-all  Provide path to a list of paths to Soduku"
-                             "puzzles\n"
-                 "write      Write solution files to the specified directory\n"
-                 "hide       Disable the default setting that print solutions "
-                             "to console\n"
-                 "Note: must provide one (and only one) of 'solve' or "
-                 "'solve-all'\n";
+    std::ifstream inFile("soduku_driver_usage.txt");
+    std::string line;
+    while (not inFile.eof()) {
+        getline(inFile, line);
+        std::cerr << line << std::endl;
+    }
 }
 
 
