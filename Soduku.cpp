@@ -7,7 +7,8 @@
 /*****************************************************************************/
 /* First create an instance of Soduku:
  *              Soduku soduku;
- * Solve a puzzle:
+ *
+ * To solve a puzzle:
  *      Provide a path to a file that contains an unsolved soduku puzzle: 
  *              soduku.solve(puzzle.txt);
  *      To see the solutions:
@@ -17,7 +18,7 @@
  *      For both of these options, if the puzzle is only partially solved, then
  *      grid cells with indeterminate values will be printed as bold red '0'.
  *
- * Check the validity of a puzzle:
+ * To check the validity of a puzzle:
  *      Provide a path to a file that contains a (maybe) solved soduku puzzle:
  *          bool result = soduku.check(puzzle_solutions.txt);
  * 
@@ -143,10 +144,10 @@ bool Soduku::solve()
  */
 bool Soduku::prune_grid()
 {
-    for (HashMap<Coord, int>::key_iterator key = puzzle.begin();
-        key != puzzle.end(); ++key) {
-        Coord c = *key;
-        int   d = puzzle[c];
+    for (HashMap<Coord, int>::iterator it = puzzle.begin();
+        it != puzzle.end(); ++it) {
+        Coord c = it.key();
+        int   d = it.value();
         // If d is an assigned value and assignment failed, return false.
         if (d != 0 and not assign(this->domains, c, d)) {
             return false;
@@ -180,7 +181,8 @@ bool Soduku::search(HashMap<Coord, Set<int>> &domains)
         if (assign(copy_domains, c, d) and search(copy_domains)) {
             domains = copy_domains;
             return true;
-        }        
+        } // If assignment or recursive search didn't work, keep trying until 
+          // c_domains is not empty        
     }
     // If none of the values in the domain works, then return false.
     return false;
@@ -192,9 +194,9 @@ bool Soduku::search(HashMap<Coord, Set<int>> &domains)
  */
 bool Soduku::solved(HashMap<Coord, Set<int>> &domains) 
 {
-    for (HashMap<Coord, Set<int>>::key_iterator key = domains.begin(); 
-         key != domains.end(); ++key) {
-        size_t size = domains[*key].size();
+    for (HashMap<Coord, Set<int>>::iterator it = domains.begin(); 
+         it != domains.end(); ++it) {
+        size_t size = it.value().size();
         if (size != 1) {
             return false;
         }
@@ -211,20 +213,21 @@ bool Soduku::solved(HashMap<Coord, Set<int>> &domains)
  */
 Coord Soduku::select_unassigned_variable(HashMap<Coord, Set<int>> &domains)
 {
-    // Begin with a dummy c. This Coord don't exist in the real puzzle.
+    // Begin with a dummy Coord object. This Coord don't exist in the real 
+    // puzzle.
     Coord c(gridSize, gridSize);
     size_t min_size = gridSize + 1;
 
     // Iterate through the domain to find the one smallest in size.
-    for (HashMap<Coord, Set<int>>::key_iterator it = domains.begin();
+    for (HashMap<Coord, Set<int>>::iterator it = domains.begin();
          it != domains.end(); ++it) {
-        size_t size = domains[*it].size();
+        size_t size = it.value().size();
 
         // Variables (Coords) with domains of size == 1 are considered 
         // assigned variables. So we look for ones that are > 1.
         if (size > 1 and size < min_size) {
             min_size = size;
-            c = *it;
+            c = it.key();
         }
     }
 
