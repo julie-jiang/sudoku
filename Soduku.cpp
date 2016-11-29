@@ -2,12 +2,25 @@
  * Implementations of the Soduku class.
  * This class can solve a soduku puzzle of any size.
  *
- * Usage: 
- *      To solve a soduku puzzle, provide a path to a file that contains
- *      an unsolved soduku puzzle: 
- *              Soduku soduku(puzzle.txt);
- *      To see the solutions (if there are any):
+/*****************************************************************************/
+/*                                 Usage                                     */
+/*****************************************************************************/
+/* First create an instance of Soduku:
+ *              Soduku soduku;
+ * Solve a puzzle:
+ *      Provide a path to a file that contains an unsolved soduku puzzle: 
+ *              soduku.solve(puzzle.txt);
+ *      To see the solutions:
  *              soduku.print();
+ *      Or output the solutions to a file:
+ *              soduku.write(filename.txt);
+ *      For both of these options, if the puzzle is only partially solved, then
+ *      grid cells with indeterminate values will be printed as bold red '0'.
+ *
+ * Check the validity of a puzzle:
+ *      Provide a path to a file that contains a (maybe) solved soduku puzzle:
+ *          bool result = soduku.check(puzzle_solutions.txt);
+ * 
  */
 #include <iostream>
 #include <sstream>
@@ -328,34 +341,52 @@ bool Soduku::check_unique_remaining_values(HashMap<Coord, Set<int>> &domains,
 /*****************************************************************************/
 /*                           Validate Puzzle                                 */
 /*****************************************************************************/
+/*
+ * Validate the puzzle stored in 'puzzle'. This is done checking to see that 
+ * each unit in the puzzle contains one and only one of the values from 1 to
+ * gridSize. A unit is defined to be a row, column or a subgrid of size n by n.
+ *
+ * Here an important helper function used is new_unit(), which builds a new 
+ * Set that contains one of all the values from 1 to gridSize.
+ *
+ * Returns true if puzzle is valid. 
+ */
 bool Soduku::validate_puzzle()
 {
+    // Check that each row and column contains one and only one of the 
+    // values from 1 to gridSize
     for (size_t j = 0; j < gridSize; j++) {
         Set<int> *unit1 = new_unit();
         Set<int> *unit2 = new_unit();
         for (size_t i = 0; i < gridSize; i++) {
             Coord c1(i, j); Coord c2(j, i);
+            // Contradiction if the value does not exist in the units
             if (not unit1->contains(puzzle[c1]) or 
                 not unit2->contains(puzzle[c2]))
                 return false;
             unit1->remove(puzzle[c1]);
             unit2->remove(puzzle[c2]);
         }
+        // Contradiction if the units are not empty
         if (not unit1->empty() or not unit2->empty()) 
             return false;
         delete unit1; delete unit2;
     }
+    // Check that each subgrid contains one and only one of the values
+    // from 1 to gridSize
     for (size_t i = 0; i < gridSize; i += n) {
         for (size_t j = 0; j < gridSize; j += n) {
             Set<int> *unit3 = new_unit();
             for (size_t k = i; k < n + i; k++) {
                 for (size_t l = j; l < n + j; l++) {
                     Coord c3(l, k);
+                    // Contradiction if the value does not exist in the subgrid
                     if (not unit3->contains(puzzle[c3])) 
                         return false;
                     unit3->remove(puzzle[c3]);
                 }
             }
+            // Contradiction if the units are not empty
             if (not unit3->empty()) 
                 return false;
             delete unit3;

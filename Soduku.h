@@ -2,12 +2,25 @@
  * Header file for the Soduku class.
  * This class can solve a soduku puzzle of any size.
  *
- * Usage: 
- *      To solve a soduku puzzle, provide a path to a file that contains
- *      valid soduku puzzle: 
- *              Soduku soduku(puzzle.txt);
- *      To see the solutions (if there are any):
+/*****************************************************************************/
+/*                                 Usage                                     */
+/*****************************************************************************/
+/* First create an instance of Soduku:
+ *              Soduku soduku;
+ * Solve a puzzle:
+ *      Provide a path to a file that contains an unsolved soduku puzzle: 
+ *              soduku.solve(puzzle.txt);
+ *      To see the solutions:
  *              soduku.print();
+ *      Or output the solutions to a file:
+ *              soduku.write(filename.txt);
+ *      For both of these options, if the puzzle is only partially solved, then
+ *      grid cells with indeterminate values will be printed as bold red '0'.
+ *
+ * Check the validity of a puzzle:
+ *      Provide a path to a file that contains a (maybe) solved soduku puzzle:
+ *          bool result = soduku.check(puzzle_solutions.txt);
+ * 
  */
 #ifndef SODUKU_H
 #define SODUKU_H
@@ -20,10 +33,6 @@
 
 class Soduku {
     public:
-        /*
-         * Parametrized (and only) constructor. Takes a path to a file that
-         * contains a soduku puzzle as the argument and then solves it.
-         */
         Soduku() {}
         ~Soduku() {}
         void solve(std::string);
