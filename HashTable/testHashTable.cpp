@@ -221,7 +221,18 @@ void testAssignmentOperator2()
     buffer << ht2[c2];
     assert(buffer.str() == "[100, 101, 102, 103, 104, 105]");
     std::cout << "...test passed\n";
-
+}
+void testResize()
+{
+    std::cout << "Testing resize function...";
+    HashTable<std::string, int> ht1;
+    ht1.insert("key1", 10);
+    ht1.insert("key2", 20);
+    HashTable<std::string, int> ht2(ht1);
+    ht2.resize(50);
+    assert(ht2["key1"] == ht1["key1"]);
+    assert(ht2["key2"] == ht1["key2"]);
+    std::cout << "...test passed\n";
 }
 int main()
 {
@@ -239,23 +250,8 @@ int main()
     testClear2();
     testAssignmentOperator1();
     testAssignmentOperator2();
+    testResize();
 
-    HashTable<Coord, Set<int>> *units = 
-    new HashTable<Coord, Set<int>>(81);
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            Coord c(i, j);
-            units->insert(c, Set<int>());
-            (*units)[c].add(5);
-        }
-    }
-    HashTable<Coord, Set<int>> *newunits = new HashTable<Coord, Set<int>>(*units);
-    newunits = units;
-    for (HashTable<Coord, Set<int>>::iterator it = newunits->begin(); 
-         it != newunits->end(); ++it) {
-        std::cout << it.key () << it.value() << std::endl;
-        size_t size = it.value().size();
-    }
     std::cout << "============== Tests for HashTable completed! ==============\n";
 }
 

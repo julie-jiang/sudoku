@@ -35,7 +35,7 @@ class Soduku {
     
     protected:
         // variables
-        HashTable<Coord, int> puzzle;
+        HashTable<Coord, int> *puzzle;
         std::string puzzle_name;
         size_t gridSize;
         size_t n;

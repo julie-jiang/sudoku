@@ -1,10 +1,4 @@
-/*
- * Hash table
- * 1) able to look up quickly given the key
- * 2) return some sort of none when key is not in table
- * 3) able to remove and insert keys quickly
- * 4) assume that resizing and rehashing is not necessary
- */
+
 
 /*****************************************************************************/
 /*                                  Header                                   */
@@ -22,8 +16,7 @@ template<typename Key, typename Value>
 class HashTable {
 
     public:
-        HashTable();
-        HashTable(size_t);
+        HashTable(size_t = 100);
         HashTable(const HashTable &);
         ~HashTable();
         HashTable &operator=(const HashTable &);
@@ -34,12 +27,14 @@ class HashTable {
         iterator begin() const;
         iterator end() const;
         void clear();
+        void resize(size_t);
         
     private:
         LinkedList<Key, Value> **buckets;
         std::hash<std::string> hashFunction;
         size_t num_buckets;
         size_t num_elements;
+        const float kLoadFactor = 0.75;
 
 
         void init();
@@ -48,31 +43,24 @@ class HashTable {
         void deepCopy(const HashTable &);
 
 };
-
 /*****************************************************************************/
-/*                              Implementations                              */
+/*           Big Three, Initialization and other helper functions            */
 /*****************************************************************************/
 
-
-template<typename Key, typename Value>
-HashTable<Key, Value>::HashTable()
-{
-    num_buckets = 100;
-    init();
-}
 template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable(size_t size)
 {
     num_buckets = size;
     init();
-
 }
+
 template<typename Key, typename Value>
 HashTable<Key, Value>::~HashTable()
 {
     for (size_t i = 0; i < num_buckets; i++) {
         delete buckets[i];
     }
+    delete buckets;
 }
 template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable(const HashTable &source)
@@ -117,6 +105,29 @@ void HashTable<Key, Value>::deepCopy(const HashTable &source)
 
 }
 template<typename Key, typename Value>
+void HashTable<Key, Value>::resize(size_t new_size)
+{
+    HashTable<Key, Value> ht_original = *this;
+    clear();
+    this->num_buckets = new_size;
+    init();
+    deepCopy(ht_original);
+
+}
+template<typename Key, typename Value>
+void HashTable<Key, Value>::init()
+{
+    buckets = new LinkedList<Key, Value> *[num_buckets];
+    for (size_t i = 0; i < num_buckets; i++) {
+        buckets[i] = new LinkedList<Key, Value>();
+    }
+    hashFunction = std::hash<std::string>{};
+}
+
+/*****************************************************************************/
+/*                           Iterator functions                              */
+/*****************************************************************************/
+template<typename Key, typename Value>
 HTIterator<Key, Value> HashTable<Key, Value>::begin() const
 {
     return HTIterator<Key, Value>(buckets, num_buckets);
@@ -129,15 +140,6 @@ HTIterator<Key, Value> HashTable<Key, Value>::end() const
 }
 
 
-template<typename Key, typename Value>
-void HashTable<Key, Value>::init()
-{
-    buckets = new LinkedList<Key, Value> *[num_buckets];
-    for (size_t i = 0; i < num_buckets; i++) {
-        buckets[i] = new LinkedList<Key, Value>();
-    }
-    hashFunction = std::hash<std::string>{};
-}
 
 template<typename Key, typename Value>
 void HashTable<Key, Value>::insert(Key k, Value val)
@@ -145,8 +147,9 @@ void HashTable<Key, Value>::insert(Key k, Value val)
     if (buckets[getIndex(k)]->insert(k, val)) {
         num_elements++;
     }
-
-    
+    if ((float) num_elements / num_buckets > kLoadFactor) {
+        resize((size_t) num_elements / kLoadFactor);
+    }
 }
 
 template<typename Key, typename Value>

@@ -34,13 +34,13 @@ void Soduku_Generator::write_puzzle(std::string directory, int index)
     for (size_t j = 0; j < gridSize; j++) {
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
-            int number = puzzle[c];
+            int number = (*puzzle)[c];
 			outFile << number << whitespace[get_num_digits(number) - 1];
         } outFile << std::endl;
     }
     outFile.close();
     delete [] whitespace;
-    std::cout << "Generated puzzle can be found at: " << filename << "\n";
+    
 }
 
 void Soduku_Generator::print_puzzle()
@@ -54,7 +54,7 @@ void Soduku_Generator::print_puzzle()
         std::cout << "| ";
 		for (size_t j = 0; j < gridSize; j++) {
 			Coord c(i, j);
-			int number = puzzle[c];
+			int number = (*puzzle)[c];
 			if (number == 0) {
 				std::cout << "\033[1m\033[31m0\033[0m" << whitespace[get_num_digits(number) - 1];
 			} else {
@@ -94,8 +94,8 @@ bool Soduku_Generator::eliminate_one_value()
 	int x = rand() % gridSize;
 	int y = rand() % gridSize;
 	Coord c(x, y);
-	if (puzzle[c] != 0) {
-		puzzle[c] = 0;
+	if ((*puzzle)[c] != 0) {
+		(*puzzle)[c] = 0;
 		return true;
 	}
 	return false;
@@ -108,7 +108,7 @@ bool Soduku_Generator::search(Coord c)
 	std::vector<int> *numbers = get_shuffled_numbers();
 	for (size_t k = 0; k < gridSize; k++) {
 		if (satisfies_constraints((*numbers)[k], c)) {
-			puzzle[c] = (*numbers)[k];
+			(*puzzle)[c] = (*numbers)[k];
 		
 			if (search(next_coord(c))) {
 				delete numbers;
@@ -137,10 +137,10 @@ bool Soduku_Generator::satisfies_constraints(int value, Coord c)
 	int y = c[1];
 	for (int i = 0; i < (int) gridSize; i++) {
 		Coord c1(i, y); Coord c2(x, i);
-		if (i != x and puzzle[c1] == value) { // check row
+		if (i != x and (*puzzle)[c1] == value) { // check row
 			return false;
 		}
-		if (i != y and puzzle[c2] == value) { // check column
+		if (i != y and (*puzzle)[c2] == value) { // check column
 			return false;
 		}
 	}
@@ -151,7 +151,7 @@ bool Soduku_Generator::satisfies_constraints(int value, Coord c)
 	for (int i = i_begin; i < i_end; i++) {
 		for (int j = j_begin; j < j_end; j++) {
 			Coord c3(i, j);
-			if (c3 != c and puzzle[c3] == value) {
+			if (c3 != c and (*puzzle)[c3] == value) {
 				return false;
 			}
 		}
@@ -163,7 +163,7 @@ void Soduku_Generator::init_blank_puzzle()
 	for (size_t i = 0; i < gridSize; i++) {
 		for (size_t j = 0; j < gridSize; j++) {
 			Coord c(i, j);
-			puzzle.insert(c, 0);
+			puzzle->insert(c, 0);
 		}
 	}
 }

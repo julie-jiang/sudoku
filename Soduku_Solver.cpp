@@ -132,7 +132,7 @@ void Soduku_Solver::write_solution(std::string directory)
         } outFile << std::endl;
     }
     outFile.close();
-    std::cout << "Solved puzzle can be found at: " << filename << "\n";
+    
 }
 
 /*****************************************************************************/
@@ -159,8 +159,8 @@ bool Soduku_Solver::solve()
    Returns false if any contradictions arises. */
 bool Soduku_Solver::prune_grid()
 {
-    for (HashTable<Coord, int>::iterator it = puzzle.begin();
-         it != puzzle.end(); ++it) {
+    for (HashTable<Coord, int>::iterator it = puzzle->begin();
+         it != puzzle->end(); ++it) {
         Coord c = it.key();
         int   d = it.value();
         // If d is an assigned value and assignment failed, return false.
@@ -376,6 +376,7 @@ void Soduku_Solver::init_containers()
 {
     units = new HashTable<Coord, std::vector<std::vector<Coord>>>(container_size);
     peers = new HashTable<Coord, Set<Coord>>(container_size);
+    domains.resize(container_size);
 
     std::vector<std::vector<Coord>> allunits;
     for (size_t j = 0; j < gridSize; j++) {

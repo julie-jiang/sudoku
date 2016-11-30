@@ -54,11 +54,11 @@ bool Soduku_Checker::check_rows_columns()
         for (size_t i = 0; i < gridSize; i++) {
             Coord c1(i, j); Coord c2(j, i);
             // Contradiction if the value does not exist in the units
-            if (not unit1->contains(puzzle[c1]) or 
-                not unit2->contains(puzzle[c2]))
+            if (not unit1->contains((*puzzle)[c1]) or 
+                not unit2->contains((*puzzle)[c2]))
                 return false;
-            unit1->remove(puzzle[c1]);
-            unit2->remove(puzzle[c2]);
+            unit1->remove((*puzzle)[c1]);
+            unit2->remove((*puzzle)[c2]);
         }
         // Contradiction if the units are not empty
         if (not unit1->empty() or not unit2->empty()) 
@@ -82,9 +82,9 @@ bool Soduku_Checker::check_subgrid()
                 for (size_t l = j; l < n + j; l++) {
                     Coord c3(l, k);
                     // Contradiction if the value does not exist in the subgrid
-                    if (not unit3->contains(puzzle[c3])) 
+                    if (not unit3->contains((*puzzle)[c3])) 
                         return false;
-                    unit3->remove(puzzle[c3]);
+                    unit3->remove((*puzzle)[c3]);
                 }
             }
             // Contradiction if the units are not empty

@@ -76,12 +76,13 @@ void Soduku::read_puzzle()
 void Soduku::init_grid(std::queue<int> &elements)
 {
     // initialize grid
+    puzzle = new HashTable<Coord, int>(container_size);
     for (size_t j = 0; j < gridSize; j++) {
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
             int num = elements.front();
             elements.pop();
-            puzzle.insert(c, num);
+            puzzle->insert(c, num);
             ;
         }
     }

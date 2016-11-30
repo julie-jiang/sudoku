@@ -101,6 +101,7 @@ void solve_all_and_write(Soduku_Parser &parser)
                                  get_raw_name(puzzle_name) + 
                                  "_solution.txt");
         outFile << file_name << std::endl;
+        std::cout << "Solved puzzle can be found at: " << file_name << "\n";
     }
     outFile.close();
 
@@ -165,6 +166,9 @@ void generate(Soduku_Parser &parser)
         if (parser.write) {
             generator.write_puzzle(parser.output_path, i + 1);
         }
+        std::string filename = parser.output_path
+                               + "/puzzle" + int2string(i) + ".txt";
+        std::cout << "Generated puzzle can be found at: " << filename << "\n";
     }
 }
 
