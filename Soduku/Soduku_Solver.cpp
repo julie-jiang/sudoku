@@ -1,7 +1,8 @@
 /* 
    Soduku_Solver.cpp
    Implementations for the Soduku_Solver class, a class derived from Soduku.
-   This class can solve a soduku puzzle of any size.
+   This class can solve a soduku puzzle of any size, using a depth first 
+   backtracking search algorithm + constraint propagation.
  
    By:   Julie Jiang
    UTLN: yjiang06
@@ -66,11 +67,17 @@ Soduku_Solver::Soduku_Solver(std::string filename)
     init_containers();
     solve();
 }
+/* Destructor */
+Soduku_Solver::~Soduku_Solver()
+{
+    delete units;
+    delete peers;
+}
 
-/* Print the solved or incomplete soduku puzzle as a 2D grid. The assigned 
-   value of each grid cell is printed via standard cout. If the solution 
-   is incomplete, then the grid cells that don't have assigned values will be 
-   have '0' printed instead in bold red.
+
+/* Print the solved or partially solved soduku puzzle as a 2D grid via standard
+   cout. If the solution is only partial, then the grid cells that don't have 
+   assigned values will be have '0' printed instead in bold red.
    This is printed with gridlines!  */
 void Soduku_Solver::print_solution()
 {
@@ -98,10 +105,11 @@ void Soduku_Solver::print_solution()
     print_horizontal_line(max_char_length);
     delete [] whitespace;
 }
-/* Write the solutions to the specified directory as a .txt file. 
-   Files will be named the same as their original filename + "_solutions". 
-   For example, if the original puzzle name was called "some_puzzle.txt" then
-   the output file will be called "some_puzzle_solutions.txt". 
+/* Write the solutions (complete or partial) to the specified directory as 
+   a .txt file. Files will be named the same as their original filename + 
+   "_solutions". For example, if the original puzzle name was called 
+   "some_puzzle.txt" then the output file will be called 
+   "some_puzzle_solutions.txt". 
 
    The puzzle will be written without gridlines and with 0 in place of any 
    grid cells with indeterminate values.
@@ -173,41 +181,42 @@ bool Soduku_Solver::prune_grid()
 /*****************************************************************************/
 /*                           Backtracking search                             */
 /*****************************************************************************/
-/*
- * A depth-first backtracking search algorithm. 
- */
+
+/* A recursive depth-first backtracking search algorithm.
+   Returns true if a legal value can be assigned to a selected Coord at this 
+   recursion level.  */
 bool Soduku_Solver::search(HashTable<Coord, Set<int>> &domains)
 {
-    // If it is solved, then no need to go further
+    // Base case. If it is solved, then no need to go further
     if (solved(domains)) {
         return true;
     } 
+    // Select the next Coord to be assigned according to the minimum value
+    // heuristics
+    Coord c = select_unassigned_Coord(domains);
     
-    Coord c = select_unassigned_variable(domains);
-    
-    // Try all the domains. For each domain, enforce constraint consistency. 
+    // Try all the domains. For each assigned domain, enforce constraint 
+    // consistency. 
     // Use a new copy of domains for every recursion. 
     Set<int> domains_of_c(domains[c]);
     
     while (not domains_of_c.empty()) {
         int d = domains_of_c.pop();
         HashTable<Coord, Set<int>> copy_domains(domains);
+
+        // If assignment is successful, then resursively search. If the 
+        // recursion is successful, return true.
         if (assign(copy_domains, c, d) and search(copy_domains)) {
             domains = copy_domains;
             return true;
         } // If assignment or recursive search didn't work, keep trying until 
           // domains_of_c is not empty    
-        //delete copy_domains;    
     }
-    // If none of the values in the domain works, then return false.
-    
-    return false;
+    return false; // None of the values in the domain works
 }
 
-/*
- * Return true if puzzle is solved. A puzzle is considered solved if there is
- * one and only one value in the domain of every Coord.
- */
+/* Return true if puzzle is solved. A puzzle is considered solved if there is
+   one and only one value in the domain of every Coord. */
 bool Soduku_Solver::solved(HashTable<Coord, Set<int>> &domains) 
 {
     int i = 1; 
@@ -223,12 +232,10 @@ bool Soduku_Solver::solved(HashTable<Coord, Set<int>> &domains)
     return true;
 }
 
-/*
- * Select an unassigned variable according to the minimum value heuristic.
- * That is, select one with the least number of possible values.
- * Return the selected variable, or Coord.
- */
-Coord Soduku_Solver::select_unassigned_variable(
+/* Select an unassigned variable according to the minimum value heuristic.
+   That is, select one with the least number of possible values.
+   Return the selected Coord */
+Coord Soduku_Solver::select_unassigned_Coord(
                                             HashTable<Coord, Set<int>> &domains)
 {
     // Begin with a dummy Coord object. This Coord don't exist in the real 
@@ -256,10 +263,9 @@ Coord Soduku_Solver::select_unassigned_variable(
 /*****************************************************************************/
 /*                         Constraint Propagation                            */
 /*****************************************************************************/
-/*
- * Assign Coord c to a value d by eliminating all other values from its domain.
- * Return true if assignment is successful
- */
+
+/* Assign Coord c to a value d by eliminating all other values from its domain.
+   Return true if assignment is successful. */
 bool Soduku_Solver::assign(HashTable<Coord, Set<int>> &domains, Coord c, int d)
 {
     Set<int> *other_domains = new Set<int>(domains[c]);
@@ -275,16 +281,14 @@ bool Soduku_Solver::assign(HashTable<Coord, Set<int>> &domains, Coord c, int d)
     delete other_domains;
     return true;
 }
-/*
- * Eliminate a value d from the domain of a Coord c by first removing d from 
- * domain[c], then enforce constraint consistency. Constraint consistency is
- * enforced in two steps.
- *      1) If d is the only value left in the domain of c, then eliminate d 
- *         from the domains of all of c's peers. 
- *      2) For every unit that contains c, if there is only one place Coord for 
- *         which that d can be assigned to, then assign that Coord to d.
- * Return true if elimination is successful.
- */
+/* Eliminate a value d from the domain of a Coord c by first removing d from 
+   domain[c], then enforce constraint consistency. Constraint consistency is
+   enforced in two steps.
+        1) If d is the only value left in the domain of c, then eliminate d 
+           from the domains of all of c's peers. 
+        2) For every unit that contains c, if there is only one place Coord for 
+           which that d can be assigned to, then assign that Coord to d.
+   Return true if elimination is successful. */
 bool Soduku_Solver::eliminate(HashTable<Coord, Set<int>> &domains, Coord c, 
                               int d)
 {
@@ -305,22 +309,20 @@ bool Soduku_Solver::eliminate(HashTable<Coord, Set<int>> &domains, Coord c,
     }
     return true;
 }
-/*
- * First step in the two step process of constraint propagation. 
- * If d is the only value left in the domain of c, then eliminate d from the 
- * domains of all of c's peers. 
- * Return true if elimination is successful
- */
+/* First step in the two step process of constraint propagation. 
+   If d is the only value left in the domain of c, then eliminate d from the 
+   domains of all of c's peers. 
+   Return true if elimination is successful. */
 bool Soduku_Solver::eliminate_from_peers(HashTable<Coord, Set<int>> &domains, 
                                          Coord c)
 {
-
-    if (domains[c].size() == 1) {
-        int d = domains[c].top();
+    if (domains[c].size() == 1) {  // If Coord c has only one value left
+        int d = domains[c].top(); 
+        // Iterate through c's peers and eliminate d from all of them
         for (Set<Coord>::iterator it = (*peers)[c].begin(); 
              it != (*peers)[c].end(); ++it) {
             Coord c2 = *it;
-            // Return false if eliminating d from c2 is unsuccessful
+            // Return false if eliminating d from c's peer is unsuccessful
             if (not eliminate(domains, c2, d)) {
                 return false;
             }
@@ -329,18 +331,16 @@ bool Soduku_Solver::eliminate_from_peers(HashTable<Coord, Set<int>> &domains,
     return true;
 }
 
-/*
- * Second step in the two step process of constraint propagation. 
- * For every unit that contains c, if there is only one place Coord for 
- * which that d can be assigned to, then assign that Coord to d.
- * Return true if no contradiction is found.
- */
+/* Second step in the two step process of constraint propagation. 
+   For every unit that contains c, if there is only one place Coord for 
+   which that d can be assigned to, then assign that Coord to d.
+   Return true if no contradiction is found. */
 bool Soduku_Solver::check_unique_remaining_values(
                            HashTable<Coord, Set<int>> &domains, Coord c, int d)
 {
     // For each unit that contains c
     for (size_t i = 0; i < (*units)[c].size(); i++) {
-        // Obtain a list of possible places that int d can be
+        // Obtain a list of possible places that d can be
         std::vector<Coord> possible_places; 
         for (size_t j = 0; j < (*units)[c][i].size(); j++) {
             Coord c2 = (*units)[c][i][j];
@@ -363,22 +363,30 @@ bool Soduku_Solver::check_unique_remaining_values(
 /*****************************************************************************/
 /*                               Initialization                              */
 /*****************************************************************************/
-/*
- * Initialize other data structures.
- * "allunits" contains a list of the units in the puzzle. A unit contains a 
- * list of a set of coordinates that lie in the same row, column, or n by n 
- * subgrid.
- * "units" maps a Coord (a set of coordinates) to all the units that contain
- * that Coord.
- * "peers" maps a Coord to all the other Coords that share a common unit.
- */
+/* Initialize some of the containers.
+   "allunits" contains a list of the units in the puzzle. A unit contains a 
+   list of a set of coordinates that lie in the same row, column, or n by n 
+   subgrid.
+   "units" maps a Coord (a set of coordinates) to all the units that contain
+   that Coord.
+   "peers" maps a Coord to all the other Coords that share a common unit.
+   This function is  calls three helper functions in order to meet the max 30
+   line requirement for functions. */
 void Soduku_Solver::init_containers()
 {
-    units = new HashTable<Coord, std::vector<std::vector<Coord>>>(container_size);
+    units = new HashTable<Coord, std::vector<std::vector<Coord>>>
+                (container_size);
     peers = new HashTable<Coord, Set<Coord>>(container_size);
     domains.resize(container_size);
-
     std::vector<std::vector<Coord>> allunits;
+    init_containers1(allunits);
+    init_containers2(allunits);
+    init_containers3(allunits);
+}
+/* Add all the row and column units to "allunits". Initialize a new Set or 
+   vector for each Coord in "peers", "units" and "domains". */
+void Soduku_Solver::init_containers1(std::vector<std::vector<Coord>> &allunits)
+{
     for (size_t j = 0; j < gridSize; j++) {
         allunits.push_back(std::vector<Coord>());
         allunits.push_back(std::vector<Coord>());
@@ -388,8 +396,13 @@ void Soduku_Solver::init_containers()
             allunits[2 * j + 1].push_back(c2);
             units->insert(c1, std::vector<std::vector<Coord>>());
             peers->insert(c1, Set<Coord>()); 
-            this->domains.insert(c1, Set<int>(*new_unit())); }} // TODO: memory link?
-
+            this->domains.insert(c1, Set<int>(*new_unit())); // TODO: memory link?
+        } 
+    }
+}
+/* Add all the subgrid units to "allunits". */
+void Soduku_Solver::init_containers2(std::vector<std::vector<Coord>> &allunits)
+{
     for (size_t i = 0; i < gridSize; i += n) {
         for (size_t j = 0; j < gridSize; j += n) {
             allunits.push_back(std::vector<Coord>());
@@ -397,8 +410,15 @@ void Soduku_Solver::init_containers()
             for (size_t k = i; k < n + i; k++) {
                 for (size_t l = j; l < n + j; l++) {
                     Coord c(l, k);
-                    allunits[size - 1].push_back(c); }}}} 
-
+                    allunits[size - 1].push_back(c); 
+                }
+            }
+        } 
+    }
+}
+/* Add all the subgrid units in "allunits" to "units", and fill in "peers". */
+void Soduku_Solver::init_containers3(std::vector<std::vector<Coord>> &allunits)
+{
     for (size_t i = 0; i < allunits.size(); i++) {
         for (size_t j = 0; j < allunits[i].size(); j++) {
             Coord c = allunits[i][j];
@@ -406,22 +426,16 @@ void Soduku_Solver::init_containers()
             for (size_t k = 0; k < allunits[i].size(); k++) {
                 if (k != j) {
                     Coord c2 = allunits[i][k];
-                    (*peers)[c].add(c2); }}}}
-    
+                    (*peers)[c].add(c2); 
+                }
+            }
+        }
+    }
 }
 /*****************************************************************************/
 /*                           Utility Functions                               */
 /*****************************************************************************/
-Soduku_Solver::~Soduku_Solver()
-{
-    delete units;
-    delete peers;
-}
-
-
-/*
- * Print the remaining legal values of each Coord. For debugging purposes.
- */
+/* Print the remaining legal values of each Coord. For debugging purposes. */
 void Soduku_Solver::printDomains(HashTable<Coord, Set<int>> &domains)
 {
     for (size_t j = 0; j < gridSize; j++) {

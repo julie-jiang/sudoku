@@ -1,0 +1,5 @@
+data/solutions/set6/puzzle1_solution.txt
+data/solutions/set6/puzzle2_solution.txt
+data/solutions/set6/puzzle3_solution.txt
+data/solutions/set6/puzzle4_solution.txt
+data/solutions/set6/puzzle5_solution.txt

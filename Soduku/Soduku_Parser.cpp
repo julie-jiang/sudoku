@@ -10,31 +10,51 @@
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
-/* 
- * Parses the command line inputs for the soduku program. The possible commands
- * are as follows:
- * Usage: ./soduku [--solve     or -s  <filename>] \
- *                 [--solve-all or -sa <filelist>] \
- *                 [--check     or -c  <filename>] \
- *                 [--check-all or -ca <directory>] \
- * 
- * Mandatory Argument (must provide one and only one of the following):
- * --solve      or -s  Solve a single Soduku puzzle. 
- *                     Provide path to a unsolved Soduku puzzle.
- * --solve-all  or -sa Solve all Soduku puzzles. 
- *                     Provide path to a list of paths to unsolved Soduku puzzles
- * --check      or -c  Check the validity of a single Soduku puzzle. 
- *                     Provided path to a unsolved Soduku puzzle.
- * --check-all  or -ca Check the validity of all solved Soduku puzzles. 
- *                     Provide path to a list of paths to solved Soduku puzzles.
- * 
- * Optional Arguments for --solve or --solve-all:
- * --write or -w   Write solution files to the specified directory.
- * --hide  or -h   Disable the default setting that print solutions to console.
- * 
- * Default settings:
- * write = false and print = true
- */
+/*
+Usage: ./soduku [--solve     or -s  <filename>] \
+                [--solve-all or -sa <filelist>] \
+                [--check     or -c  <filename>] \
+                [--check-all or -ca <filelist>] \
+                [--generate  or -g  <some number>]
+
+Mandatory flags (must provide one and only one of the following FIRST):
+--solve      or -s  <filename>
+                    Solve a single Soduku puzzle. 
+                    Provide path to a unsolved Soduku puzzle.
+--solve-all  or -sa <filelist>
+                    Solve all Soduku puzzles. 
+                    Provide path to a list of paths to unsolved Soduku puzzles
+--check      or -c  <filename>
+                    Check the validity of a single Soduku puzzle. 
+                    Provided path to a unsolved Soduku puzzle.
+--check-all  or -ca <filelist>
+                    Check the validity of all solved Soduku puzzles. 
+                    Provide path to a list of paths to solved Soduku puzzles.
+--generate   or -g  <some number>
+                    Generate one or many Soduku puzzle, depending on the next 
+                    integer argument provided. If no subsequent argument is 
+                    provided or if the next argument is a flag, then the number 
+                    of puzzles to be generated will default to 1.
+--help       or -h  See more usage information.
+
+Optional flags for --solve, --solve-all or --generate:
+--write      or -w   <directory>
+                    Write puzzle to the specified directory as a .txt file.
+--hide       or -h  Disable the default setting that print puzzle to console.
+
+More optional flags for --generate:
+--difficulty or -d  <level>
+                    Generate either "hard", "medium" or "easy" soduku puzzles.
+                    Default setting is "medium".
+--size       or -n  <some number>
+                    Generate a puzzle based on the given size. E.g. if the 
+                    argument is 16, then a 16 by 16 Soduku puzzle will be 
+                    generated. This number must be a perfect square.
+                    Default setting is 9.
+ 
+ Default settings:
+ write = false, print = true, num_generate = 1, generate_difficulty = "medium" 
+ and generate_size = 9 */
 #include <iostream>
 #include <fstream>
 #include "Soduku_Parser.h"
@@ -43,28 +63,30 @@ Soduku_Parser::Soduku_Parser(int argc, char *argv [])
 {
     init_default_settings();
 
-    if (argc < 2) { // Must have at least 2 arguments
+    if (argc < 2) {  // Must have at least 2 arguments
         throw std::logic_error("ERROR: missing mandatory arguments");
     }
 
     parse_first_flag(std::string(argv[1]));
-    if (not generate) {
-        if (argc < 3) {
+    if (not generate) {  // Must be a subsequent argument that specify an
+        if (argc < 3) {  // input path
             throw std::logic_error("ERROR: missing mandatory arguments");
         }
         input_path = std::string(argv[2]);
         parse_optional_flags(3, argc, argv);
-    } else if (argc > 2) {
-        if (std::string(argv[2]).substr(0, 1) == "-") {
+
+    } else if (argc > 2) {  // If generate
+        // If next argument is a flag
+        if (std::string(argv[2]).substr(0, 1) == "-") { 
             parse_optional_flags(2, argc, argv);
+        // Else next argument specifies the number of puzzles to generate
         } else {
             num_generate = string2int(std::string(argv[2]));
-            std::cout << num_generate << "\n";
             parse_optional_flags(3, argc, argv);
         }
     }
 }
-// Initialize default settings
+/* Initialize default settings */
 void Soduku_Parser::init_default_settings()
 {
     solve_one = solve_all = check_one = check_all = write = generate = false;
@@ -73,9 +95,7 @@ void Soduku_Parser::init_default_settings()
     num_generate = 1;
     generate_size = 9;
 }
-/*
- * Parse the first argument and stores the input_path.
- */
+/* Parse the first argument and stores the input_path. */
 void Soduku_Parser::parse_first_flag(std::string arg)
 {
     if (arg == "--solve" or arg == "-s") {
@@ -88,16 +108,14 @@ void Soduku_Parser::parse_first_flag(std::string arg)
         check_all = true;
     } else if (arg == "--generate" or arg == "-g") {
         generate = true;
-    } else if (arg == "--help" or arg == "-h") {
+    } else if (arg == "--help" or arg == "-h") { // Terminate and print usage
         print_usage();
         exit(0);
     } else {
         throw std::logic_error("ERROR: Invalid mandatory argument");
     }
 }
-/*
- * Parses any additional optional arguments
- */
+/* Parses any additional optional arguments */
 void Soduku_Parser::parse_optional_flags(int i, int argc, char *argv[])
 {
     while (i < argc) {
@@ -123,6 +141,7 @@ void Soduku_Parser::parse_optional_flags(int i, int argc, char *argv[])
         i++;
     }
 }
+/* Prints the full doc on usage of the program. */
 void Soduku_Parser::print_usage()
 {
     std::ifstream inFile("soduku_driver_usage.txt");
@@ -132,10 +151,8 @@ void Soduku_Parser::print_usage()
         std::cout << line << std::endl;
     }
 }
-/*
- * Prints a quick blurb of usage with cerr.
- * This is a static method.
- */
+/* Prints a quick blurb of usage with cerr.
+   This is a static method. */
 void Soduku_Parser::help_message()
 {
     std::cerr << "Usage: ./soduku [--solve     or -s  <filename>] or \n";

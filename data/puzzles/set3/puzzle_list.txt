@@ -1,0 +1,10 @@
+data/puzzles/set3/puzzle1.txt
+data/puzzles/set3/puzzle2.txt
+data/puzzles/set3/puzzle3.txt
+data/puzzles/set3/puzzle4.txt
+data/puzzles/set3/puzzle5.txt
+data/puzzles/set3/puzzle6.txt
+data/puzzles/set3/puzzle7.txt
+data/puzzles/set3/puzzle8.txt
+data/puzzles/set3/puzzle9.txt
+data/puzzles/set3/puzzle10.txt

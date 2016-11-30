@@ -1,0 +1,10 @@
+data/solutions/set3/puzzle1_solution.txt
+data/solutions/set3/puzzle2_solution.txt
+data/solutions/set3/puzzle3_solution.txt
+data/solutions/set3/puzzle4_solution.txt
+data/solutions/set3/puzzle5_solution.txt
+data/solutions/set3/puzzle6_solution.txt
+data/solutions/set3/puzzle7_solution.txt
+data/solutions/set3/puzzle8_solution.txt
+data/solutions/set3/puzzle9_solution.txt
+data/solutions/set3/puzzle10_solution.txt

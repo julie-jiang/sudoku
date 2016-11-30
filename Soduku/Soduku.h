@@ -30,8 +30,10 @@
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
 
-// Everything is protected
+// Everything except for the destructor is protected
 class Soduku { 
+    public:
+      ~Soduku();
     
     protected:
         // variables
@@ -44,8 +46,7 @@ class Soduku {
         // Initialiation functions 
         void read_puzzle();
         void init_grid(std::queue<int> *);
-        
-        
+          
         // Utility functions 
         size_t square_root(size_t);
         Set<int> *new_unit();

@@ -29,7 +29,10 @@
 #include "../Set/Set.h"
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
-
+Soduku::~Soduku()
+{
+    delete puzzle;
+}
 
 /*****************************************************************************/
 /*                         Initialization Functions                          */
@@ -88,8 +91,6 @@ void Soduku::init_grid(std::queue<int> *elements)
 /*****************************************************************************/
 /*                           Utility Functions                               */
 /*****************************************************************************/
-
-
 /*
  * Find the square root of the given number. 
  * Throw logic error if no perfect square root can be found.
@@ -109,7 +110,6 @@ size_t Soduku::square_root(size_t num)
     throw std::logic_error("Error: File " + puzzle_name + 
                            " does not contain valid Soduku puzzle");
 }
-
 
 /*
  * Make a new set of units that contains one of every possible value.
@@ -138,7 +138,7 @@ Set<int> *Soduku::new_unit()
  *      whitespace[1] = "  ";
  *      whitespace[2] = " ";
  * 
- * Return a pointer to a array of strings of length max_char_length.
+ * Returns a pointer to a array of strings of length max_char_length.
  */
 std::string *Soduku::get_whitespaces(int max_char_length)
 {
@@ -151,9 +151,7 @@ std::string *Soduku::get_whitespaces(int max_char_length)
     }
     return whitespace;
 }
-/*
- * Get the number of digits in the given int 
- */
+/* Returns the number of digits in the given int */
 int Soduku::get_num_digits(int num)
 {
     int i = 1;
@@ -164,9 +162,7 @@ int Soduku::get_num_digits(int num)
     }
     return digits;
 }
-/*
- * Print helper function. Prints a horizontal line.
- */
+/* Print helper function. Prints a horizontal line. */
 void Soduku::print_horizontal_line(int max_char_length)
 {
     std::cout << "|";

@@ -233,7 +233,7 @@ void testResize()
 }
 int main()
 {
-    std::cout << "============== Running tests for Hash Table ==============\n";
+    std::cout << "============ Running tests for Hash Table ============\n";
     testConstructor();
     testCopyConstructor();
     testGetterSetter();
@@ -249,7 +249,7 @@ int main()
     testAssignmentOperator2();
     testResize();
 
-    std::cout << "============== Tests for HashTable completed! ==============\n";
+    std::cout << "============ Tests for HashTable completed! ============\n";
 }
 
 
