@@ -57,15 +57,23 @@ class Soduku_Parser {
 		bool check_all;
 		bool generate;
 
+		/* Variables for the generate option */
 		int num_generate;
+		int generate_size;
+		std::string generate_difficulty;
+
 
 		/* write defaults to false and print defaults to true */
 		bool write;
 		bool print;
 	private:
 
-		void parse_first_argument(std::string);
-		void parse_optional_arguments(int, int, char **);
+		void parse_first_flag(std::string);
+		void parse_optional_flags(int, int, char **);
+
+		void init_default_settings();
+
+		void print_usage();
 
 
 };

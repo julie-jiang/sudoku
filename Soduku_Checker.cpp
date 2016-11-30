@@ -34,7 +34,7 @@
  *
  * Returns true if puzzle is valid. 
  */
-bool Soduku_Checker::check(std::string filename)
+bool Soduku_Checker::check_solution(std::string filename)
 {
     puzzle_name = filename;
     read_puzzle();

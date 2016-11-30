@@ -76,7 +76,7 @@ Soduku_Solver::Soduku_Solver(std::string filename)
  * '0' printed instead in bold red.
  * This is printed with gridlines!
  */
-void Soduku_Solver::print()
+void Soduku_Solver::print_solution()
 {
     int max_char_length = get_num_digits(gridSize);
     std::string *whitespace = get_whitespaces(max_char_length);
@@ -106,7 +106,7 @@ void Soduku_Solver::print()
  * Write the solutions to the specified directory. 
  */
 
-void Soduku_Solver::write(std::string directory)
+void Soduku_Solver::write_solution(std::string directory)
 {
     // Open file
     std::string rawname = get_raw_name(puzzle_name);
@@ -131,6 +131,7 @@ void Soduku_Solver::write(std::string directory)
         } outFile << std::endl;
     }
     outFile.close();
+    std::cout << "Solved puzzle can be found at: " << filename << "\n";
 }
 
 /*****************************************************************************/
@@ -424,15 +425,3 @@ void Soduku_Solver::printDomains(HashTable<Coord, Set<int>> &domains)
     }
 }
 
-/*
- * Print helper function. Prints a horizontal line.
- */
-void Soduku_Solver::print_horizontal_line(int max_char_length)
-{
-    std::cout << "|";
-    size_t length = gridSize * (max_char_length + 1) + n * 2 - 1;
-    for (size_t i = 0; i < length; i++) {
-        std::cout << "-";
-    }
-    std::cout <<"| \n";
-}

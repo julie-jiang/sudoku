@@ -1,26 +1,23 @@
 #include <iostream>
 #include <fstream>
-#include <stdlib.h>
-#include <time.h>
 #include <vector>
 #include "Soduku_Generator.h"
 #include "Coord/Coord.h"
 #include "Soduku_Util.h"
 
-Soduku_Generator::Soduku_Generator()
+Soduku_Generator::Soduku_Generator(std::string difficulty, int size)
 {
-	gridSize = 9;
+	gridSize = size;
 	n = square_root(gridSize);
 	init_blank_puzzle();
-	srand(time(NULL));
-	Coord c(0, 0); // initial coordinates
-	if (search(c)) {
-		std::cout << "puzzle found!\n";
-	} else {
-		std::cout << "puzzle not found\n";
-	}
-	make_puzzle();
-	//print_puzzle();
+	while (not search()) {}  // Loop until we find completed soduku puzzle
+	make_puzzle(difficulty); // Randomly eliminate some variables
+}
+bool Soduku_Generator::search()
+{
+	// initial coordinates
+	Coord c(0, 0);
+	return search(c);
 }
 void Soduku_Generator::write_puzzle(std::string directory, int index)
 {
@@ -38,18 +35,56 @@ void Soduku_Generator::write_puzzle(std::string directory, int index)
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
             int number = puzzle[c];
-            if (number == 0) {
+			outFile << number << whitespace[get_num_digits(number) - 1];
+        } outFile << std::endl;
+    }
+    outFile.close();
+    delete [] whitespace;
+    std::cout << "Generated puzzle can be found at: " << filename << "\n";
+}
+
+void Soduku_Generator::print_puzzle()
+{
+	int max_char_length = get_num_digits(gridSize);
+    std::string *whitespace = get_whitespaces(max_char_length);
+	for (size_t i = 0; i < gridSize; i++) {
+		if (i % n == 0) {
+            print_horizontal_line(max_char_length);
+        }
+        std::cout << "| ";
+		for (size_t j = 0; j < gridSize; j++) {
+			Coord c(i, j);
+			int number = puzzle[c];
+			if (number == 0) {
 				std::cout << "\033[1m\033[31m0\033[0m" << whitespace[get_num_digits(number) - 1];
 			} else {
 				std::cout << number << whitespace[get_num_digits(number) - 1];
 			}
-        } outFile << std::endl;
-    }
-    outFile.close();
+			if ((j + 1) % n == 0) {
+                std::cout << "| ";
+            }
+		} 
+		std::cout << std::endl;
+	}
+	print_horizontal_line(max_char_length);
+    delete [] whitespace;
 }
-void Soduku_Generator::make_puzzle()
+
+void Soduku_Generator::make_puzzle(std::string difficulty)
 {
-	int num_eliminate = 40;
+	// eliminate roughly 80% of all the variables if difficulty is hard, 50% if 
+	// difficulty is medium, and 30% is the difficulty is easy.
+	int num_eliminate;
+	if (difficulty == "hard") { 		
+		num_eliminate = (gridSize * gridSize) * 4 / 5; 
+	} else if (difficulty == "medium") {
+		num_eliminate = (gridSize * gridSize) / 2;
+	} else if (difficulty == "easy") {
+		num_eliminate = (gridSize * gridSize) * 3 / 10;
+	} else {
+		throw std::logic_error("ERROR: " + difficulty + " is not a valid " 
+			                   "difficulty option.");
+	}
 	for (int i = 0; i < num_eliminate; i++) {
 		while (not eliminate_one_value()){}
 	}
@@ -148,20 +183,4 @@ std::vector<int> *Soduku_Generator::get_shuffled_numbers()
 		(*numbers)[i] ^= (*numbers)[j];
 	}
 	return numbers;
-}
-void Soduku_Generator::print_puzzle()
-{
-	for (size_t i = 0; i < gridSize; i++) {
-		for (size_t j = 0; j < gridSize; j++) {
-			Coord c(i, j);
-			if (puzzle[c] == 0) {
-				std::cout << "\033[1m\033[31m0\033[0m ";
-			} else {
-				std::cout << puzzle[c] << " ";
-			}
-		} 
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-
 }

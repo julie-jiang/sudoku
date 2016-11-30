@@ -30,12 +30,12 @@
  */
 void solve_one(Soduku_Parser &parser)
 {
-    Soduku_Solver soduku(parser.input_path);
+    Soduku_Solver solver(parser.input_path);
     if (parser.print) {
-        soduku.print();
+        solver.print_solution();
     }
     if (parser.write) {
-        soduku.write(parser.output_path);
+        solver.write_solution(parser.output_path);
     }
 }
 /* 
@@ -60,9 +60,9 @@ void solve_all(Soduku_Parser &parser)
     // Solve each puzzle 
     std::string puzzle_name;
     while (inFile >> puzzle_name) {
-        Soduku_Solver soduku(puzzle_name);
+        Soduku_Solver solver(puzzle_name);
         if (parser.print) {
-            soduku.print();
+            solver.print_solution();
         }
     }
 }
@@ -91,11 +91,11 @@ void solve_all_and_write(Soduku_Parser &parser)
     // Solve each puzzle 
     std::string puzzle_name;
     while (inFile >> puzzle_name) {
-        Soduku_Solver soduku(puzzle_name);
+        Soduku_Solver solver(puzzle_name);
         if (parser.print) {
-            soduku.print();
+            solver.print_solution();
         }
-        soduku.write(parser.output_path);
+        solver.write_solution(parser.output_path);
         // Output the file name to outFile
         std::string file_name = (parser.output_path + "/" + 
                                  get_raw_name(puzzle_name) + 
@@ -112,8 +112,8 @@ void solve_all_and_write(Soduku_Parser &parser)
  */
 bool check_one(std::string input_file)
 {
-    Soduku_Checker soduku;
-    if (soduku.check(input_file)) {
+    Soduku_Checker checker;
+    if (checker.check_solution(input_file)) {
         std::cout << input_file << " is a solved Soduku puzzle!\n";
         return true;
     } else {
@@ -138,8 +138,8 @@ bool check_all(std::string input_file)
     // Solve each puzzle 
     std::string puzzle_name;
     while (inFile >> puzzle_name) {
-        Soduku_Checker soduku;
-        if (not soduku.check(puzzle_name)) {
+        Soduku_Checker checker;
+        if (not checker.check_solution(puzzle_name)) {
             std::cout << "Uh oh ... " << puzzle_name << " is not solved :(\n";
             all_pass = false;
         }
@@ -157,11 +157,14 @@ bool check_all(std::string input_file)
 void generate(Soduku_Parser &parser)
 {
     for (int i = 0; i < parser.num_generate; i++) {
-        Soduku_Generator soduku;
-        if (parser.print)
-            soduku.print_puzzle();
-        if (parser.write)
-            soduku.write_puzzle(parser.output_path, i + 1);
+        Soduku_Generator generator(parser.generate_difficulty, 
+                                   parser.generate_size);
+        if (parser.print) {
+            generator.print_puzzle();
+        }
+        if (parser.write) {
+            generator.write_puzzle(parser.output_path, i + 1);
+        }
     }
 }
 

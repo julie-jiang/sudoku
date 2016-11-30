@@ -24,7 +24,7 @@
 class Soduku_Checker: public Soduku
 {
 	public:
-		bool check(std::string);
+		bool check_solution(std::string);
 	private:
 		bool check_rows_columns();
 		bool check_subgrid();

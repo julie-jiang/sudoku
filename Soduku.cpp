@@ -1,29 +1,28 @@
 /* 
  * Soduku.cpp
- * Implementations of the Soduku class.
+ * Implementations of the Soduku class, a base class for Soduku_Solver, 
  * 
  * By:   Julie Jiang
  * UTLN: yjiang06
  * Comp 15 Fall 2016 Independent Project
  */
 /*****************************************************************************/
-/*                               Abstract                                    */
+/*                                  Blurb                                    */
 /*****************************************************************************/
-/*
- * This is a useless class on its own. Therefore the default constructor has 
- * been made private. The classes Soduku_Solver and Soduku_Checker are derived
- * classes of this class. Soduku_Solver solves a given soduku puzzle; 
- * Soduku_Checker checks the validity of a solved puzzle. Please refer to them 
- * for more usage information.
- *
- * This class holds functions that are shared between Soduku_Solver and 
- * Soduku_Checker.
- */
+/* This is a useless class on its own. The classes Soduku_Solver,
+   Soduku_Checker, and Soduku_Generator are derived classes of this class. 
+   Soduku_Solver solves a given soduku puzzle
+   Soduku_Checker checks the validity of a solved puzzle. 
+   Soduku_Generator generates a valid soduku puzzle. 
+   Please refer to them for more usage information.
+
+   This class holds methods and variables that are shared amongst Soduku_Solver 
+   and Soduku_Checker, and Soduku_Generator. These are mostly utility and 
+   initialization methods.                                                    
+*/
 
 #include <iostream>
 #include <fstream>
-#include <stack>
-#include <cassert>
 #include "Soduku.h"
 #include "Soduku_Util.h"
 #include "Set/Set.h"
@@ -165,5 +164,16 @@ int Soduku::get_num_digits(int num)
     }
     return digits;
 }
-
+/*
+ * Print helper function. Prints a horizontal line.
+ */
+void Soduku::print_horizontal_line(int max_char_length)
+{
+    std::cout << "|";
+    size_t length = gridSize * (max_char_length + 1) + n * 2 - 1;
+    for (size_t i = 0; i < length; i++) {
+        std::cout << "-";
+    }
+    std::cout <<"| \n";
+}
 

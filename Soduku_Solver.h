@@ -35,10 +35,10 @@ class Soduku_Solver: public Soduku
 		Soduku_Solver(std::string);
 
         /* Print the solutions (complete or imcomplete) of the given puzzle. */
-        void print();
+        void print_solution();
 
         /* Write the solutions to the specified directory. */
-        void write(std::string);
+        void write_solution(std::string);
         
 	private:
         /* Default constructor made private so it can't be called */
@@ -59,7 +59,7 @@ class Soduku_Solver: public Soduku
         /* Other init/helper functions */
         void init_data_structures();
         void printDomains(HashTable<Coord, Set<int>> &);
-        void print_horizontal_line(int);
+        
         
 
         /* Private Variables */

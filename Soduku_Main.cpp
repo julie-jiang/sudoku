@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
             check_one(parser.input_path);
         } else if (parser.check_all) {
             check_all(parser.input_path);
-        } else if (parser.generate) {
+        } else {
+            srand(time(NULL));
             generate(parser);
         }
 

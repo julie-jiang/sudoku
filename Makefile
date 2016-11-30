@@ -12,9 +12,4 @@ test: Soduku_Tester.cpp
 	                   Soduku_Driver.cpp Soduku_Solver.cpp Soduku_Checker.cpp \
 	                   Soduku_Util.cpp Soduku_Generator.cpp -o test_soduku
 
-generator: Soduku_Generator.cpp
-	${CXX} ${CXXFLAGS} Soduku_Generator.cpp Soduku.cpp Coord/Coord.cpp \
-					   generator.cpp Soduku_Util.cpp -o generate
-
-
 .PHONY: soduku
