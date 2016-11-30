@@ -46,7 +46,7 @@ Write to file:
 ```
 
 ## Design
-The `main` function resides in `Soduku_Driver.cpp`, in which an instance or instances of the class `Soduku` will be created. All of the puzzle solving functions is implemented within `Soduku`. The `Soduku` class also utilizes several data structures, including AVL trees, hash maps, queues, stacks, and vectors.
+The `main` function resides in `Soduku_Driver.cpp`, in which an instance or instances of the class `Soduku` will be created. All of the puzzle solving functions is implemented within `Soduku`. The `Soduku` class also utilizes several data structures, including AVL trees, Hash Tables, queues, stacks, and vectors.
 
 The variables in `Soduku`, which are the individual grid cells, are implemented as instances of the `Coord` object (see [Coord](Coord/)), short for coordinates. It simply holds two integers x and y that specify where in the grid this object refers to.
 
@@ -88,7 +88,7 @@ To solve all puzzles whose paths are contained in `data/puzzles/set1/puzzle_list
 	
 	A self-balancing AVL binary search tree designed to hold any object.
 
-2. [Hash Map](HashMap/)
+2. [Hash Table](HashTable/)
 	
 	A hash table that maps one object to another.
 

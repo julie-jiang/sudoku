@@ -40,14 +40,15 @@ int main(int argc, char *argv[])
         Soduku_Parser parser(argc, argv);
 
         // Take one action 
-        if (parser.solve_one) 
+        if (parser.solve_one) {
             solve_one(parser);
-        else if (parser.solve_all)
+        } else if (parser.solve_all) {
             solve_all(parser);
-        else if (parser.check_one)
+        } else if (parser.check_one) {
             check_one(parser.input_path);
-        else
+        } else if (parser.check_all) {
             check_all(parser.input_path);
+        }
 
     } catch (const std::exception &e) {
         

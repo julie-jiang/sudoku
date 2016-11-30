@@ -80,7 +80,7 @@ void solve_all_and_write(Soduku_Parser &parser)
     }
     // Open the output file that contains list of paths to solution files
     std::string output_filelist = (parser.output_path + "/" + 
-                                   get_raw_filename(parser.input_path) +
+                                   get_raw_name(parser.input_path) +
                                    "_solutions_list.txt");
     std::ofstream outFile(output_filelist);
     if (not outFile.is_open()) {
@@ -97,7 +97,7 @@ void solve_all_and_write(Soduku_Parser &parser)
         soduku.write(parser.output_path);
         // Output the file name to outFile
         std::string file_name = (parser.output_path + "/" + 
-                                 get_raw_filename(puzzle_name) + 
+                                 get_raw_name(puzzle_name) + 
                                  "_solution.txt");
         outFile << file_name << std::endl;
     }

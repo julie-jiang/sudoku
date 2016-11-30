@@ -1,17 +1,17 @@
-#ifndef MAPITERATOR_H
-#define MAPITERATOR_H
+#ifndef HTIterator_H
+#define HTIterator_H
 /*****************************************************************************/
 /*                                  Header                                   */
 /*****************************************************************************/
-template<typename Key, typename Value> class HashMap;
+template<typename Key, typename Value> class HashTable;
 template<typename Key, typename Value>
-class MapIterator {
+class HTIterator {
     public:
-        friend class HashMap<Key, Value>;
-        MapIterator &operator++();
+        friend class HashTable<Key, Value>;
+        HTIterator &operator++();
         // Simple straight forward functions 
-        bool operator==(const MapIterator &source) { return (it == source.it);}
-        bool operator!=(const MapIterator &source) { return (it != source.it);}
+        bool operator==(const HTIterator &source) { return (it == source.it);}
+        bool operator!=(const HTIterator &source) { return (it != source.it);}
         Key   key()   { return it.key(); }
         Value value() { return it.value(); }
 
@@ -20,14 +20,14 @@ class MapIterator {
         LinkedList<Key, Value> **buckets;
         size_t bucketIndex;
         size_t num_buckets;
-        MapIterator(LinkedList<Key, Value> **buckets, int size);
+        HTIterator(LinkedList<Key, Value> **buckets, int size);
         
 };
 /*****************************************************************************/
 /*                              Implementations                              */
 /*****************************************************************************/
 template<typename Key, typename Value>
-MapIterator<Key, Value>::MapIterator(LinkedList<Key, Value> **buckets, int size)
+HTIterator<Key, Value>::HTIterator(LinkedList<Key, Value> **buckets, int size)
 {
     this->buckets = buckets;
     num_buckets = size;
@@ -43,7 +43,7 @@ MapIterator<Key, Value>::MapIterator(LinkedList<Key, Value> **buckets, int size)
     }
 }
 template<typename Key, typename Value>
-MapIterator<Key, Value> &MapIterator<Key, Value>::operator++()
+HTIterator<Key, Value> &HTIterator<Key, Value>::operator++()
 {
     ++it;
     if (it == buckets[bucketIndex]->end()) {

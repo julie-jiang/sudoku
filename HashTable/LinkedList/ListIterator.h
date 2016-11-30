@@ -1,12 +1,12 @@
 #ifndef LISTITERATOR_H
 #define LISTITERATOR_H
-template<typename Key, typename Value> class MapIterator;
+template<typename Key, typename Value> class HTIterator;
 template<typename Key, typename Value>
 class ListIterator
 {
     public:
         friend class LinkedList<Key, Value>;
-        friend class MapIterator<Key, Value>;
+        friend class HTIterator<Key, Value>;
         ListIterator() : iter_node(0) {}
 
         ListIterator &operator++() {

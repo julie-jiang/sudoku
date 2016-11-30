@@ -16,8 +16,8 @@
  * Soduku_Checker checks the validity of a solved puzzle. Please refer to them 
  * for more usage information.
  *
- * This class holds functions that are shared between Soduku_Solver and 
- * Soduku_Checker.
+ * This class holds methods and variables that are shared between Soduku_Solver 
+ * and Soduku_Checker.
  */
 
 #ifndef SODUKU_H
@@ -27,16 +27,13 @@
 #include <queue>
 #include "Set/Set.h"
 #include "Coord/Coord.h"
-#include "HashMap/HashMap.h"
+#include "HashTable/HashTable.h"
 
 class Soduku {
     protected:
         /* Protected variables */
-        // TODO: Hashmap size?!
-        HashMap<Coord, std::vector<std::vector<Coord>>> units;
-        HashMap<Coord, Set<Coord>> peers;
-        HashMap<Coord, Set<int>> domains;
-        HashMap<Coord, int> puzzle;
+        // TODO: HashTable size?!
+        HashTable<Coord, int> puzzle;
         std::string puzzle_name;
         size_t gridSize;
         size_t n;
@@ -50,9 +47,6 @@ class Soduku {
         size_t square_root(size_t);
         Set<int> *new_unit();
         int string2int(std::string);
-    private:
-        // Default constructor made private so it can't be called
-        Soduku() {} 
 
 };
 #endif

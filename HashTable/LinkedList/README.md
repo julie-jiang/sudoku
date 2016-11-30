@@ -1,5 +1,5 @@
 # Linked List
-This is the linked list used in the [hash map](../). The nodes in the linked list consist of a key and a value.
+This is the linked list used in the [Hash Table](../). The nodes in the linked list consist of a key and a value.
 
 ## Intialization
 To create a new linked list with strings as keys and ints as values

@@ -28,7 +28,7 @@
 #include "Soduku.h"
 #include "Set/Set.h"
 #include "Coord/Coord.h"
-#include "HashMap/HashMap.h"
+#include "HashTable/HashTable.h"
 
 
 /*****************************************************************************/

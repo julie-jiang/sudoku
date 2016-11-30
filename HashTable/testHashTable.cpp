@@ -2,22 +2,22 @@
 #include <sstream>
 #include <vector>
 #include <cassert>
-#include "HashMap.h"
+#include "HashTable.h"
 #include "../Coord/Coord.h"
 #include "../Set/Set.h"
 void testGetterSetter()
 {
     std::cout << "Testing getter and setter...";
-    HashMap<std::string, int> map;
-    map.insert("key1", 1);
-    map.insert("key2", 2);
-    int val1 = map["key1"];
-    int val2 = map["key2"];
+    HashTable<std::string, int> ht;
+    ht.insert("key1", 1);
+    ht.insert("key2", 2);
+    int val1 = ht["key1"];
+    int val2 = ht["key2"];
     assert(val1 == 1);
     assert(val2 == 2);
     bool caughtException = false;
     try {
-        int val3 = map["key3"];
+        int val3 = ht["key3"];
         (void) val3;
     } catch (std::logic_error) {
         caughtException = true;
@@ -29,12 +29,12 @@ void testGetterSetter()
 void testRemove()
 {
     std::cout << "Testing remove...";
-    HashMap<std::string, int> map;
-    map.insert("key", 1);
-    map.remove("key");
+    HashTable<std::string, int> ht;
+    ht.insert("key", 1);
+    ht.remove("key");
     bool caughtException = false;
     try {
-        int val = map["key"];
+        int val = ht["key"];
         (void) val;
     } catch (std::logic_error) {
         caughtException = true;
@@ -47,28 +47,28 @@ void testRemove()
 void testIterator1()
 {
     std::cout << "Testing iterator...";
-    HashMap<std::string, int> map;
-    map.insert("key1", 1);
-    map.insert("key2", 2);
-    map.insert("key3", 3);
-    for (HashMap<std::string, int>::iterator k = map.begin(); 
-         k != map.end(); ++k) {
-        assert(k.value() == map[k.key()]);
+    HashTable<std::string, int> ht;
+    ht.insert("key1", 1);
+    ht.insert("key2", 2);
+    ht.insert("key3", 3);
+    for (HashTable<std::string, int>::iterator k = ht.begin(); 
+         k != ht.end(); ++k) {
+        assert(k.value() == ht[k.key()]);
     } 
     
 }
 void testIterator2()
 {
-    HashMap<Coord, int> map;
+    HashTable<Coord, int> ht;
     Coord c1(1, 2);
     Coord c2(2, 3);
     Coord c3(3, 4);
-    map.insert(c1, 10);
-    map.insert(c2, 20);
-    map.insert(c3, 30);
-    for (HashMap<Coord, int>::iterator k = map.begin(); 
-         k != map.end(); ++k) {
-        assert(k.value() == map[k.key()]);
+    ht.insert(c1, 10);
+    ht.insert(c2, 20);
+    ht.insert(c3, 30);
+    for (HashTable<Coord, int>::iterator k = ht.begin(); 
+         k != ht.end(); ++k) {
+        assert(k.value() == ht[k.key()]);
     }
     
 }
@@ -76,15 +76,15 @@ void testIterator2()
 void testIterator3()
 {
     
-    HashMap<Coord, Set<int>> map;
+    HashTable<Coord, Set<int>> ht;
     Coord c(1, 2);
-    map.insert(c, Set<int>());
+    ht.insert(c, Set<int>());
     for (int i = 0; i < 5; i++) {
-        map[c].add(i);
+        ht[c].add(i);
     }
     
-    for (HashMap<Coord, Set<int>>::iterator k = map.begin(); 
-         k != map.end(); ++k) {
+    for (HashTable<Coord, Set<int>>::iterator k = ht.begin(); 
+         k != ht.end(); ++k) {
         std::stringstream buffer;
         buffer << k.value();
         assert(buffer.str() == "[0, 1, 2, 3, 4]");
@@ -96,27 +96,27 @@ void testIterator3()
 void testType1()
 {
     std::cout << "Testing using custum defined object...";
-    HashMap<Coord, int> map;
+    HashTable<Coord, int> ht;
     Coord c1(1, 2);
     Coord c2(2, 3);
     Coord c3(3, 4);
-    map.insert(c1, 10);
-    map.insert(c2, 20);
-    int val1 = map[c1];
-    int val2 = map[c2];
+    ht.insert(c1, 10);
+    ht.insert(c2, 20);
+    int val1 = ht[c1];
+    int val2 = ht[c2];
     assert(val1 == 10);
     assert(val2 == 20);
 
 }
 void testType2()
 {
-    HashMap<int, Coord> map;
+    HashTable<int, Coord> ht;
     Coord c1(1, 2);
     Coord c2(2, 3);
-    map.insert(10, c1);
-    map.insert(20, c2);
-    Coord val1 = map[10];
-    Coord val2 = map[20];
+    ht.insert(10, c1);
+    ht.insert(20, c2);
+    Coord val1 = ht[10];
+    Coord val2 = ht[20];
     assert(val1 == c1);
     assert(val2 == c2);
     std::cout << "test passed.\n";
@@ -125,35 +125,35 @@ void testType2()
 void testConstructor()
 {
     std::cout << "Testing constructor...";
-    HashMap<Coord, int> map1;
+    HashTable<Coord, int> ht1;
     size_t size = 200;
-    HashMap<std::string, int> map2(size);
+    HashTable<std::string, int> ht2(size);
     std::cout << "test passed.\n";
 }
 void testCopyConstructor()
 {
     std::cout << "Testing copy constructor...";
-    HashMap<std::string, int> map1;
-    map1.insert("key1", 10);
-    map1.insert("key2", 20);
-    HashMap<std::string, int> map2(map1);
-    assert(map2["key1"] == map1["key1"]);
-    assert(map2["key2"] == map1["key2"]);
-    map1.insert("key1", 30);
-    assert(map2["key1"] == 10);
+    HashTable<std::string, int> ht1;
+    ht1.insert("key1", 10);
+    ht1.insert("key2", 20);
+    HashTable<std::string, int> ht2(ht1);
+    assert(ht2["key1"] == ht1["key1"]);
+    assert(ht2["key2"] == ht1["key2"]);
+    ht1.insert("key1", 30);
+    assert(ht2["key1"] == 10);
     std::cout << "test passed.\n";
 }
 
 void testClear1()
 {
     std::cout << "Testing function clear...";
-    HashMap<std::string, int> map;
-    map.insert("key1", 10);
-    map.insert("key2", 20);
-    map.clear();
+    HashTable<std::string, int> ht;
+    ht.insert("key1", 10);
+    ht.insert("key2", 20);
+    ht.clear();
     bool caughtException1 = false;
     try {
-        int val = map["key1"];
+        int val = ht["key1"];
         (void) val;
     } catch (std::logic_error) {
         caughtException1 = true;
@@ -161,71 +161,71 @@ void testClear1()
     assert(caughtException1);
     bool caughtException2 = false;
     try {
-        int val = map["key2"];
+        int val = ht["key2"];
         (void) val;
     } catch (std::logic_error) {
         caughtException2 = true;
     }
     assert(caughtException2);
-    HashMap<std::string, int>::iterator it = map.begin();
-    assert(it == map.end());
+    HashTable<std::string, int>::iterator it = ht.begin();
+    assert(it == ht.end());
    
 }
 void testClear2()
 {
-    HashMap<Coord, Set<int>> map;
+    HashTable<Coord, Set<int>> ht;
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
             Coord c(i, j);
-            map.insert(c, Set<int>());
+            ht.insert(c, Set<int>());
             for (int k = 0; k < 5; k++) {
-                map[c].add(k);
+                ht[c].add(k);
             }
         }
     }
-    map.clear();
+    ht.clear();
     std::cout << "test passed.\n";
 }
 void testAssignmentOperator1()
 {
     std::cout << "Testing assignment operator...";
-    HashMap<std::string, int> map1;
-    map1.insert("key1", 10);
-    map1.insert("key2", 20);
-    HashMap<std::string, int> map2;
-    map2.insert("key1", 30);
-    map2.insert("key2", 40);
-    map2 = map1;
-    assert(map2["key1"] == 10);
-    assert(map2["key2"] == 20);
+    HashTable<std::string, int> ht1;
+    ht1.insert("key1", 10);
+    ht1.insert("key2", 20);
+    HashTable<std::string, int> ht2;
+    ht2.insert("key1", 30);
+    ht2.insert("key2", 40);
+    ht2 = ht1;
+    assert(ht2["key1"] == 10);
+    assert(ht2["key2"] == 20);
     
 }
 void testAssignmentOperator2()
 {
-    HashMap<Coord, Set<int>> map1;
-    HashMap<Coord, Set<int>> map2;
+    HashTable<Coord, Set<int>> ht1;
+    HashTable<Coord, Set<int>> ht2;
     Coord c1(1, 2);
-    map1.insert(c1, Set<int>());
-    map2.insert(c1, Set<int>());
+    ht1.insert(c1, Set<int>());
+    ht2.insert(c1, Set<int>());
     for (int i = 0; i < 10; i++) {
-        map1[c1].add(i);
-        map2[c1].add(i);
+        ht1[c1].add(i);
+        ht2[c1].add(i);
     }
     Coord c2(3, 4);
-    map1.insert(c2, Set<int>());
+    ht1.insert(c2, Set<int>());
     for (int i = 100; i < 106; i++) {
-        map1[c2].add(i);
+        ht1[c2].add(i);
     }
-    map2 = map1;
+    ht2 = ht1;
     std::stringstream buffer;
-    buffer << map2[c2];
+    buffer << ht2[c2];
     assert(buffer.str() == "[100, 101, 102, 103, 104, 105]");
     std::cout << "...test passed\n";
 
 }
 int main()
 {
-    std::cout << "============== Running tests for Hash Map ==============\n";
+    std::cout << "============== Running tests for Hash Table ==============\n";
     testConstructor();
     testCopyConstructor();
     testGetterSetter();
@@ -239,7 +239,7 @@ int main()
     testClear2();
     testAssignmentOperator1();
     testAssignmentOperator2();
-    std::cout << "============== Tests for HashMap completed! ==============\n";
+    std::cout << "============== Tests for HashTable completed! ==============\n";
 }
 
 

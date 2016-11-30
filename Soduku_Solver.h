@@ -26,7 +26,7 @@
 #define SODUKU_SOLVER_H
 #include "Soduku.h"
 #include "Coord/Coord.h"
-#include "HashMap/HashMap.h"
+#include "HashTable/HashTable.h"
 #include "Set/Set.h"
 class Soduku_Solver: public Soduku
 {
@@ -39,6 +39,7 @@ class Soduku_Solver: public Soduku
 
         /* Write the solutions to the specified directory. */
         void write(std::string);
+        
 	private:
         /* Default constructor made private so it can't be called */
 		Soduku_Solver() {} 
@@ -46,21 +47,26 @@ class Soduku_Solver: public Soduku
         /* Solve functions */
 		bool solve();
         bool prune_grid();
-        bool search(HashMap<Coord, Set<int>> &);
-        bool solved(HashMap<Coord, Set<int>> &);
-        Coord select_unassigned_variable(HashMap<Coord, Set<int>> &);
-        bool assign(HashMap<Coord, Set<int>> &, Coord, int);
-        bool eliminate(HashMap<Coord, Set<int>>&, Coord, int);
-        bool eliminate_from_peers(HashMap<Coord, Set<int>> &, Coord);
-        bool check_unique_remaining_values(HashMap<Coord, Set<int>> &, 
+        bool search(HashTable<Coord, Set<int>> &);
+        bool solved(HashTable<Coord, Set<int>> &);
+        Coord select_unassigned_variable(HashTable<Coord, Set<int>> &);
+        bool assign(HashTable<Coord, Set<int>> &, Coord, int);
+        bool eliminate(HashTable<Coord, Set<int>>&, Coord, int);
+        bool eliminate_from_peers(HashTable<Coord, Set<int>> &, Coord);
+        bool check_unique_remaining_values(HashTable<Coord, Set<int>> &, 
                                            Coord, int);
 
         /* Other init/helper functions */
         void init_data_structures();
-        void printDomains(HashMap<Coord, Set<int>> &);
+        void printDomains(HashTable<Coord, Set<int>> &);
         void print_horizontal_line(int);
         int get_num_digits(int);
         std::string *get_whitespaces(int);
+
+        /* Private Variables */
+        HashTable<Coord, std::vector<std::vector<Coord>>> units;
+        HashTable<Coord, Set<Coord>> peers;
+        HashTable<Coord, Set<int>> domains;
 
 };
 #endif

@@ -10,27 +10,27 @@
 /*                                  Header                                   */
 /*****************************************************************************/
 
-#ifndef HASHMAP_H
-#define HASHMAP_H
+#ifndef HASHTABLE_H
+#define HASHTABLE_H
 #include <functional>
 #include <sstream>
 #include <stack>
 #include "LinkedList/LinkedList.h"
-#include "MapIterator.h"
+#include "HTIterator.h"
 template<typename Key, typename Value>
 
-class HashMap {
+class HashTable {
 
     public:
-        HashMap();
-        HashMap(size_t);
-        HashMap(const HashMap &);
-        ~HashMap();
-        HashMap &operator=(const HashMap &);
+        HashTable();
+        HashTable(size_t);
+        HashTable(const HashTable &);
+        ~HashTable();
+        HashTable &operator=(const HashTable &);
         Value &operator[](const Key &) const;
         void insert(Key, Value);
         void remove(Key);
-        typedef MapIterator<Key, Value> iterator;
+        typedef HTIterator<Key, Value> iterator;
         iterator begin() const;
         iterator end() const;
         void clear();
@@ -45,7 +45,7 @@ class HashMap {
         void init();
         size_t getIndex(Key) const;
         std::string toString(Key) const;
-        void deepCopy(const HashMap &);
+        void deepCopy(const HashTable &);
 
 };
 
@@ -55,34 +55,34 @@ class HashMap {
 
 
 template<typename Key, typename Value>
-HashMap<Key, Value>::HashMap()
+HashTable<Key, Value>::HashTable()
 {
     num_buckets = 100;
     init();
 }
 template<typename Key, typename Value>
-HashMap<Key, Value>::HashMap(size_t size)
+HashTable<Key, Value>::HashTable(size_t size)
 {
     num_buckets = size;
     init();
 
 }
 template<typename Key, typename Value>
-HashMap<Key, Value>::~HashMap()
+HashTable<Key, Value>::~HashTable()
 {
     for (size_t i = 0; i < num_buckets; i++) {
         delete buckets[i];
     }
 }
 template<typename Key, typename Value>
-HashMap<Key, Value>::HashMap(const HashMap &source)
+HashTable<Key, Value>::HashTable(const HashTable &source)
 {
     this->num_buckets = source.num_buckets;
     init();
     deepCopy(source);
 }
 template<typename Key, typename Value>
-HashMap<Key, Value> &HashMap<Key, Value>::operator=(const HashMap &source)
+HashTable<Key, Value> &HashTable<Key, Value>::operator=(const HashTable &source)
 {
     this->num_buckets = source.num_buckets;
     clear();
@@ -91,10 +91,10 @@ HashMap<Key, Value> &HashMap<Key, Value>::operator=(const HashMap &source)
 }
 
 template<typename Key, typename Value>
-void HashMap<Key, Value>::clear()
+void HashTable<Key, Value>::clear()
 {
     std::stack<Key> *keys = new std::stack<Key>;
-    for (HashMap<Key, Value>::iterator it = this->begin(); 
+    for (HashTable<Key, Value>::iterator it = this->begin(); 
          it != this->end(); ++it) { 
         keys->push(it.key());
     }
@@ -107,29 +107,29 @@ void HashMap<Key, Value>::clear()
 }
 
 template<typename Key, typename Value>
-void HashMap<Key, Value>::deepCopy(const HashMap &source)
+void HashTable<Key, Value>::deepCopy(const HashTable &source)
 {
-    for (HashMap<Key, Value>::iterator it = source.begin(); 
+    for (HashTable<Key, Value>::iterator it = source.begin(); 
          it != source.end(); ++it) {
         insert(it.key(), it.value());
     }
 
 }
 template<typename Key, typename Value>
-MapIterator<Key, Value> HashMap<Key, Value>::begin() const
+HTIterator<Key, Value> HashTable<Key, Value>::begin() const
 {
-    return MapIterator<Key, Value>(buckets, num_buckets);
+    return HTIterator<Key, Value>(buckets, num_buckets);
 }
 template<typename Key, typename Value>
-MapIterator<Key, Value> HashMap<Key, Value>::end() const
+HTIterator<Key, Value> HashTable<Key, Value>::end() const
 {
-    return MapIterator<Key, Value>(nullptr, num_buckets);
+    return HTIterator<Key, Value>(nullptr, num_buckets);
     
 }
 
 
 template<typename Key, typename Value>
-void HashMap<Key, Value>::init()
+void HashTable<Key, Value>::init()
 {
     buckets = new LinkedList<Key, Value> *[num_buckets];
     for (size_t i = 0; i < num_buckets; i++) {
@@ -139,7 +139,7 @@ void HashMap<Key, Value>::init()
 }
 
 template<typename Key, typename Value>
-void HashMap<Key, Value>::insert(Key k, Value val)
+void HashTable<Key, Value>::insert(Key k, Value val)
 {
     if (buckets[getIndex(k)]->insert(k, val)) {
         num_elements++;
@@ -149,13 +149,13 @@ void HashMap<Key, Value>::insert(Key k, Value val)
 }
 
 template<typename Key, typename Value>
-Value &HashMap<Key, Value>::operator[](const Key &k) const
+Value &HashTable<Key, Value>::operator[](const Key &k) const
 {
     return (*buckets[getIndex(k)])[k];
 }
 
 template<typename Key, typename Value>
-void HashMap<Key, Value>::remove(Key k)
+void HashTable<Key, Value>::remove(Key k)
 {
     if (buckets[getIndex(k)]->remove(k)) {
         num_elements--;
@@ -163,13 +163,13 @@ void HashMap<Key, Value>::remove(Key k)
 }
 
 template<typename Key, typename Value>
-size_t HashMap<Key, Value>::getIndex(Key k) const
+size_t HashTable<Key, Value>::getIndex(Key k) const
 {
     return hashFunction(toString(k)) % num_buckets;
 }
 
 template<typename Key, typename Value>
-std::string HashMap<Key, Value>::toString(Key k) const
+std::string HashTable<Key, Value>::toString(Key k) const
 {
     std::ostringstream oss;
     oss << k;

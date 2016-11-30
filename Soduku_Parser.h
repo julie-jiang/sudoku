@@ -55,6 +55,8 @@ class Soduku_Parser {
 		bool solve_all;
 		bool check_one;
 		bool check_all;
+		bool generate_one;
+		bool generate_many;
 
 		/* write defaults to false and print defaults to true */
 		bool write;
@@ -63,6 +65,7 @@ class Soduku_Parser {
 
 		void parse_first_argument(std::string);
 		void parse_optional_arguments(int , char **);
+
 
 };
 #endif
