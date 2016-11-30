@@ -23,11 +23,12 @@
 
 #include <iostream>
 #include <fstream>
+#include <queue>
 #include "Soduku.h"
 #include "Soduku_Util.h"
-#include "Set/Set.h"
-#include "Coord/Coord.h"
-#include "HashTable/HashTable.h"
+#include "../Set/Set.h"
+#include "../Coord/Coord.h"
+#include "../HashTable/HashTable.h"
 
 
 /*****************************************************************************/
@@ -40,17 +41,16 @@
  */
 void Soduku::read_puzzle()
 {
-    size_t num_elements = 0;
     // Open file 
     std::ifstream inFile;
     inFile.open(puzzle_name);
     if (inFile.fail()) {
         throw std::logic_error("ERROR: File " + puzzle_name + " does not exist");
     }
-
     // Read input
     std::queue<int> *elements = new std::queue<int>;
     std::string s;
+    size_t num_elements = 0;
     while (inFile >> s) {
         elements->push(string2int(s));
         num_elements++;
@@ -60,10 +60,8 @@ void Soduku::read_puzzle()
     container_size = num_elements;
     gridSize = square_root(num_elements);
     n = square_root(gridSize);
-
-
     // Initialize Soduku puzzle grid
-    init_grid(*elements);
+    init_grid(elements);
     delete elements;
 }
 /*
@@ -73,17 +71,16 @@ void Soduku::read_puzzle()
  * "domains" maps a set of coordinates to their remaining legal domain values.
  * Here, this is initialized to be all the numbers from 1 to gridSize.
  */
-void Soduku::init_grid(std::queue<int> &elements)
+void Soduku::init_grid(std::queue<int> *elements)
 {
     // initialize grid
     puzzle = new HashTable<Coord, int>(container_size);
     for (size_t j = 0; j < gridSize; j++) {
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
-            int num = elements.front();
-            elements.pop();
+            int num = elements->front();
+            elements->pop();
             puzzle->insert(c, num);
-            ;
         }
     }
 }

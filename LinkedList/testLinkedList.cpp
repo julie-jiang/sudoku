@@ -2,8 +2,8 @@
 #include <vector>
 #include <cassert>
 #include "LinkedList.h"
-#include "../../Coord/Coord.h"
-#include "../../Set/Set.h"
+#include "../Coord/Coord.h"
+#include "../Set/Set.h"
 
 void testIterator()
 {

@@ -31,14 +31,13 @@
  * --hide  or -h   Disable the default setting that print solutions to console.
  */
 #include <iostream>
-#include "Soduku_Parser.h"
-#include "Soduku_Driver.h"
+#include "Soduku/Soduku_Parser.h"
+#include "Soduku/Soduku_Driver.h"
 int main(int argc, char *argv[])
 {
     try {
         // Parse input
         Soduku_Parser parser(argc, argv);
-
         // Take one action 
         if (parser.solve_one) {
             solve_one(parser);

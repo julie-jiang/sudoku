@@ -9,14 +9,15 @@
 #include <functional>
 #include <sstream>
 #include <stack>
-#include "LinkedList/LinkedList.h"
+#include <math.h>
+#include "../LinkedList/LinkedList.h"
 #include "HTIterator.h"
 template<typename Key, typename Value>
 
 class HashTable {
 
     public:
-        HashTable(size_t = 100);
+        HashTable(size_t = 75);
         HashTable(const HashTable &);
         ~HashTable();
         HashTable &operator=(const HashTable &);
@@ -32,8 +33,8 @@ class HashTable {
     private:
         LinkedList<Key, Value> **buckets;
         std::hash<std::string> hashFunction;
-        size_t num_buckets;
-        size_t num_elements;
+        size_t numBuckets;
+        size_t numElements;
         const float kLoadFactor = 0.75;
 
 
@@ -41,6 +42,8 @@ class HashTable {
         size_t getIndex(Key) const;
         std::string toString(Key) const;
         void deepCopy(const HashTable &);
+        size_t getBucketSize(size_t);
+        bool isPrime(size_t);
 
 };
 /*****************************************************************************/
@@ -50,14 +53,14 @@ class HashTable {
 template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable(size_t size)
 {
-    num_buckets = size;
+    numBuckets = getBucketSize(size);
     init();
 }
 
 template<typename Key, typename Value>
 HashTable<Key, Value>::~HashTable()
 {
-    for (size_t i = 0; i < num_buckets; i++) {
+    for (size_t i = 0; i < numBuckets; i++) {
         delete buckets[i];
     }
     delete buckets;
@@ -65,7 +68,7 @@ HashTable<Key, Value>::~HashTable()
 template<typename Key, typename Value>
 HashTable<Key, Value>::HashTable(const HashTable &source)
 {
-    this->num_buckets = source.num_buckets;
+    this->numBuckets  = source.numBuckets;
     init();
     deepCopy(source);
 }
@@ -73,7 +76,7 @@ template<typename Key, typename Value>
 HashTable<Key, Value> &HashTable<Key, Value>::operator=(const HashTable &source)
 {
     clear();
-    this->num_buckets = source.num_buckets;
+    this->numBuckets = source.numBuckets;
     init();
     deepCopy(source);
     return *this;
@@ -100,16 +103,17 @@ void HashTable<Key, Value>::deepCopy(const HashTable &source)
 {
     for (HashTable<Key, Value>::iterator it = source.begin(); 
          it != source.end(); ++it) {
-        insert(it.key(), it.value());
+        buckets[getIndex(it.key())]->insert(it.key(), it.value());
     }
+    numElements = source.numElements;
 
 }
 template<typename Key, typename Value>
-void HashTable<Key, Value>::resize(size_t new_size)
+void HashTable<Key, Value>::resize(size_t size)
 {
     HashTable<Key, Value> ht_original = *this;
     clear();
-    this->num_buckets = new_size;
+    this->numBuckets = getBucketSize(size);
     init();
     deepCopy(ht_original);
 
@@ -117,8 +121,9 @@ void HashTable<Key, Value>::resize(size_t new_size)
 template<typename Key, typename Value>
 void HashTable<Key, Value>::init()
 {
-    buckets = new LinkedList<Key, Value> *[num_buckets];
-    for (size_t i = 0; i < num_buckets; i++) {
+    numElements = 0;
+    buckets = new LinkedList<Key, Value> *[numBuckets];
+    for (size_t i = 0; i < numBuckets; i++) {
         buckets[i] = new LinkedList<Key, Value>();
     }
     hashFunction = std::hash<std::string>{};
@@ -130,27 +135,47 @@ void HashTable<Key, Value>::init()
 template<typename Key, typename Value>
 HTIterator<Key, Value> HashTable<Key, Value>::begin() const
 {
-    return HTIterator<Key, Value>(buckets, num_buckets);
+    return HTIterator<Key, Value>(buckets, numBuckets);
 }
 template<typename Key, typename Value>
 HTIterator<Key, Value> HashTable<Key, Value>::end() const
 {
-    return HTIterator<Key, Value>(nullptr, num_buckets);
+    return HTIterator<Key, Value>(nullptr, numBuckets);
     
 }
-
-
 
 template<typename Key, typename Value>
 void HashTable<Key, Value>::insert(Key k, Value val)
 {
     if (buckets[getIndex(k)]->insert(k, val)) {
-        num_elements++;
+        numElements++;
     }
-    if ((float) num_elements / num_buckets > kLoadFactor) {
-        resize((size_t) num_elements / kLoadFactor);
+    // Get the smallest prime number larger than numBuckets * 2
+    if ((float) numElements / numBuckets > kLoadFactor) {
+        resize(getBucketSize(numBuckets * 2));
     }
 }
+template<typename Key, typename Value>
+size_t HashTable<Key, Value>::getBucketSize(size_t lower_bound)
+{
+    size_t num = lower_bound;
+    while (not isPrime(num)) {
+        num++;
+    }
+    return num;
+}
+template<typename Key, typename Value>
+bool HashTable<Key, Value>::isPrime(size_t num)
+{
+    for (size_t i = 2; i < (size_t) sqrt(num) + 1; i++) {
+        if (num % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 
 template<typename Key, typename Value>
 Value &HashTable<Key, Value>::operator[](const Key &k) const
@@ -162,14 +187,14 @@ template<typename Key, typename Value>
 void HashTable<Key, Value>::remove(Key k)
 {
     if (buckets[getIndex(k)]->remove(k)) {
-        num_elements--;
+        numElements--;
     }
 }
 
 template<typename Key, typename Value>
 size_t HashTable<Key, Value>::getIndex(Key k) const
 {
-    return hashFunction(toString(k)) % num_buckets;
+    return hashFunction(toString(k)) % numBuckets;
 }
 
 template<typename Key, typename Value>

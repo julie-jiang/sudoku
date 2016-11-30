@@ -101,8 +101,10 @@ void solve_all_and_write(Soduku_Parser &parser)
                                  get_raw_name(puzzle_name) + 
                                  "_solution.txt");
         outFile << file_name << std::endl;
-        std::cout << "Solved puzzle can be found at: " << file_name << "\n";
+        
     }
+    std::cout << "List of paths to solved puzzle can be found at: ";
+    std::cout << output_filelist<< "\n";
     outFile.close();
 
 }

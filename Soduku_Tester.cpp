@@ -21,13 +21,13 @@
 #include <sstream>
 #include <time.h>
 #include <vector>
-#include "Soduku_Checker.h"
-#include "Soduku_Driver.h"
+#include "Soduku/Soduku_Checker.h"
+#include "Soduku/Soduku_Driver.h"
 
 /* Test one easy puzzle just to see that this works! */
 void test0()
 {
-    system("./soduku --solve data/puzzles/set1/puzzle1.txt \
+    system("./run_soduku --solve data/puzzles/set1/puzzle1.txt \
             --write data/solutions/set1 --hide");
     std::string puzzle_name = "data/solutions/set1/puzzle1_solution.txt";
     Soduku_Checker soduku;
@@ -45,7 +45,7 @@ void test1()
     std::cout << "data/puzzles/set1 ...\n";
     clock_t t;
     t = clock();
-    system("./soduku --solve-all data/puzzles/set1/puzzle_list.txt \
+    system("./run_soduku --solve-all data/puzzles/set1/puzzle_list.txt \
             --write data/solutions/set1 --hide");
     t = clock() - t;
     float solve_time = ((float)t)/ CLOCKS_PER_SEC;
@@ -72,7 +72,7 @@ void test2()
     std::cout << "data/puzzles/set2 ...\n";
     clock_t t;
     t = clock();
-    system("./soduku --solve-all data/puzzles/set2/puzzle_list.txt \
+    system("./run_soduku --solve-all data/puzzles/set2/puzzle_list.txt \
             --write data/solutions/set2 --hide");
     t = clock() - t;
     float solve_time = ((float)t)/ CLOCKS_PER_SEC;
@@ -85,9 +85,12 @@ void test2()
 
     std::cout << "Total checking time = " << check_time << "s. \n";
     std::cout << "Finished executing test set data/puzzles/set2.\n\n";
-    
-    
 }
+void test3()
+{
+
+}
+
 int main()
 {
     std::cout << "Running system tests for Soduku\n";

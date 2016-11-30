@@ -19,8 +19,8 @@
  * Result is true if the solution is valid.
  */
 #include "Soduku_Checker.h"
-#include "Coord/Coord.h"
-#include "Set/Set.h"
+#include "../Coord/Coord.h"
+#include "../Set/Set.h"
 /*****************************************************************************/
 /*                           Implementations                                 */
 /*****************************************************************************/

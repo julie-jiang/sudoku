@@ -25,9 +25,9 @@
 #ifndef SODUKU_SOLVER_H
 #define SODUKU_SOLVER_H
 #include "Soduku.h"
-#include "Coord/Coord.h"
-#include "HashTable/HashTable.h"
-#include "Set/Set.h"
+#include "../Coord/Coord.h"
+#include "../HashTable/HashTable.h"
+#include "../Set/Set.h"
 class Soduku_Solver: public Soduku
 {
 	public:

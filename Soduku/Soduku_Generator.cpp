@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "Soduku_Generator.h"
-#include "Coord/Coord.h"
+#include "../Coord/Coord.h"
 #include "Soduku_Util.h"
 
 Soduku_Generator::Soduku_Generator(std::string difficulty, int size)

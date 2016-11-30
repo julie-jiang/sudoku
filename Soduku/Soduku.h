@@ -26,9 +26,9 @@
 #include <cstdlib>
 #include <vector>
 #include <queue>
-#include "Set/Set.h"
-#include "Coord/Coord.h"
-#include "HashTable/HashTable.h"
+#include "../Set/Set.h"
+#include "../Coord/Coord.h"
+#include "../HashTable/HashTable.h"
 
 // Everything is protected
 class Soduku { 
@@ -43,7 +43,7 @@ class Soduku {
 
         // Initialiation functions 
         void read_puzzle();
-        void init_grid(std::queue<int> &);
+        void init_grid(std::queue<int> *);
         
         
         // Utility functions 

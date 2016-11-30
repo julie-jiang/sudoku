@@ -225,13 +225,10 @@ void testAssignmentOperator2()
 void testResize()
 {
     std::cout << "Testing resize function...";
-    HashTable<std::string, int> ht1;
-    ht1.insert("key1", 10);
-    ht1.insert("key2", 20);
-    HashTable<std::string, int> ht2(ht1);
-    ht2.resize(50);
-    assert(ht2["key1"] == ht1["key1"]);
-    assert(ht2["key2"] == ht1["key2"]);
+    HashTable<int, std::string> ht1(40);
+    for (int i = 0; i < 70; i++) {
+        ht1.insert(i, "value");
+    }
     std::cout << "...test passed\n";
 }
 int main()

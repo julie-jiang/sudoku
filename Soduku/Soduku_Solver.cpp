@@ -50,9 +50,9 @@
 #include <iostream>
 #include <fstream>
 #include "Soduku_Solver.h"
-#include "Coord/Coord.h"
-#include "HashTable/HashTable.h"
-#include "Set/Set.h"
+#include "../Coord/Coord.h"
+#include "../HashTable/HashTable.h"
+#include "../Set/Set.h"
 #include "Soduku_Util.h" // get_raw_name 
 /*****************************************************************************/
 /*                             Public Functions                              */
