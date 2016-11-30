@@ -408,46 +408,7 @@ void Soduku_Solver::init_data_structures()
 /*                           Utility Functions                               */
 /*****************************************************************************/
 
-/*
- * Based on the maximum number of digits (max_char_length) of the values 
- * in this puzzle, compute the number whitespaces needed for every value
- * so that a each value plus their associate whitespaces span the same
- * number of characters. 
- *
- * For example, if the largest possible value is 121, then max_char_length = 3.
- * Therefore numbers with one digits will be paired with 3 spaces, 
- * numbers with two digits will be paired with 2 spaces, and 
- * numbers with three digits will be paired with 1 space. 
- *      whitespace[0] = "   ";
- *      whitespace[1] = "  ";
- *      whitespace[2] = " ";
- * 
- * Return a pointer to a array of strings of length max_char_length.
- */
-std::string *Soduku_Solver::get_whitespaces(int max_char_length)
-{
-    std::string *whitespace = new std::string [max_char_length];
-    for (int i = 0; i < max_char_length; i++) {
-        whitespace[i] = "";
-        for (int j = i; j < max_char_length; j++) {
-            whitespace[i] += " ";
-        }
-    }
-    return whitespace;
-}
-/*
- * Get the number of digits in the given int 
- */
-int Soduku_Solver::get_num_digits(int num)
-{
-    int i = 1;
-    int digits = 1;
-    while (num / i > 9) {
-        i *= 10;
-        digits++;
-    }
-    return digits;
-}
+
 
 /*
  * Print the remaining legal values of each Coord. For debugging purposes.

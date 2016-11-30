@@ -20,6 +20,7 @@
 #include "Soduku_Driver.h"
 #include "Soduku_Solver.h"
 #include "Soduku_Checker.h"
+#include "Soduku_Generator.h"
 #include "Soduku_Parser.h"
 #include "Soduku_Util.h"
 
@@ -153,7 +154,16 @@ bool check_all(std::string input_file)
 }
 
 
-
+void generate(Soduku_Parser &parser)
+{
+    for (int i = 0; i < parser.num_generate; i++) {
+        Soduku_Generator soduku;
+        if (parser.print)
+            soduku.print_puzzle();
+        if (parser.write)
+            soduku.write_puzzle(parser.output_path, i + 1);
+    }
+}
 
 
 

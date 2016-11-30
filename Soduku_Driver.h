@@ -49,4 +49,6 @@ bool check_one(std::string);
  */
 bool check_all(std::string);
 
+void generate(Soduku_Parser &);
+
 #endif

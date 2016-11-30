@@ -46,7 +46,8 @@ class Soduku {
         /* Utility functions */
         size_t square_root(size_t);
         Set<int> *new_unit();
-        int string2int(std::string);
+        int get_num_digits(int);
+        std::string *get_whitespaces(int);
 
 };
 #endif

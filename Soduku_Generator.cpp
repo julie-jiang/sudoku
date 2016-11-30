@@ -1,9 +1,11 @@
 #include <iostream>
+#include <fstream>
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
 #include "Soduku_Generator.h"
 #include "Coord/Coord.h"
+#include "Soduku_Util.h"
 
 Soduku_Generator::Soduku_Generator()
 {
@@ -17,9 +19,33 @@ Soduku_Generator::Soduku_Generator()
 	} else {
 		std::cout << "puzzle not found\n";
 	}
-	print_puzzle();
 	make_puzzle();
-	print_puzzle();
+	//print_puzzle();
+}
+void Soduku_Generator::write_puzzle(std::string directory, int index)
+{
+    // Open file
+    std::string filename = directory + "/puzzle" + int2string(index) + ".txt";
+    std::ofstream outFile(filename);
+    if (not outFile.is_open()) {
+        throw std::logic_error("ERROR: " + directory + 
+                               " is not a valid directory");
+    }
+    // Write to file
+    int max_char_length = get_num_digits(gridSize);
+    std::string *whitespace = get_whitespaces(max_char_length);
+    for (size_t j = 0; j < gridSize; j++) {
+        for (size_t i = 0; i < gridSize; i++) {
+            Coord c(i, j);
+            int number = puzzle[c];
+            if (number == 0) {
+				std::cout << "\033[1m\033[31m0\033[0m" << whitespace[get_num_digits(number) - 1];
+			} else {
+				std::cout << number << whitespace[get_num_digits(number) - 1];
+			}
+        } outFile << std::endl;
+    }
+    outFile.close();
 }
 void Soduku_Generator::make_puzzle()
 {

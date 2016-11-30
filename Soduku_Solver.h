@@ -60,8 +60,7 @@ class Soduku_Solver: public Soduku
         void init_data_structures();
         void printDomains(HashTable<Coord, Set<int>> &);
         void print_horizontal_line(int);
-        int get_num_digits(int);
-        std::string *get_whitespaces(int);
+        
 
         /* Private Variables */
         HashTable<Coord, std::vector<std::vector<Coord>>> units;

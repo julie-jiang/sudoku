@@ -21,11 +21,11 @@
  */
 
 #include <iostream>
-#include <sstream>
 #include <fstream>
 #include <stack>
 #include <cassert>
 #include "Soduku.h"
+#include "Soduku_Util.h"
 #include "Set/Set.h"
 #include "Coord/Coord.h"
 #include "HashTable/HashTable.h"
@@ -110,21 +110,6 @@ size_t Soduku::square_root(size_t num)
     throw std::logic_error("Error: File " + puzzle_name + 
                            " does not contain valid Soduku puzzle");
 }
-/*
- * Convert a string to an int. 
- * Throw runtime error if the string is not numerical.
- */
-int Soduku::string2int(std::string s)
-{
-    std::stringstream ss(s);
-    int result;
-    ss >> result;
-    if (ss.fail())
-        throw std::logic_error("ERROR: File " + puzzle_name + 
-                                 " contains nonnumerical value");
-
-    return result;
-}
 
 
 /*
@@ -138,6 +123,47 @@ Set<int> *Soduku::new_unit()
         one_unit->add(i);
     }
     return one_unit;
+}
+
+/*
+ * Based on the maximum number of digits (max_char_length) of the values 
+ * in this puzzle, compute the number whitespaces needed for every value
+ * so that a each value plus their associate whitespaces span the same
+ * number of characters. 
+ *
+ * For example, if the largest possible value is 121, then max_char_length = 3.
+ * Therefore numbers with one digits will be paired with 3 spaces, 
+ * numbers with two digits will be paired with 2 spaces, and 
+ * numbers with three digits will be paired with 1 space. 
+ *      whitespace[0] = "   ";
+ *      whitespace[1] = "  ";
+ *      whitespace[2] = " ";
+ * 
+ * Return a pointer to a array of strings of length max_char_length.
+ */
+std::string *Soduku::get_whitespaces(int max_char_length)
+{
+    std::string *whitespace = new std::string [max_char_length];
+    for (int i = 0; i < max_char_length; i++) {
+        whitespace[i] = "";
+        for (int j = i; j < max_char_length; j++) {
+            whitespace[i] += " ";
+        }
+    }
+    return whitespace;
+}
+/*
+ * Get the number of digits in the given int 
+ */
+int Soduku::get_num_digits(int num)
+{
+    int i = 1;
+    int digits = 1;
+    while (num / i > 9) {
+        i *= 10;
+        digits++;
+    }
+    return digits;
 }
 
 

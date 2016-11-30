@@ -6,9 +6,10 @@ class Soduku_Generator : public Soduku
 {
 	public:
 		Soduku_Generator();
+		void print_puzzle();
+		void write_puzzle(std::string, int);
 	private:
 		std::vector<int> *get_shuffled_numbers();
-		void print_puzzle();
 		void init_blank_puzzle();
 		bool search(Coord);
 		bool satisfies_constraints(int, Coord);

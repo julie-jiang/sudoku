@@ -37,46 +37,47 @@
  */
 #include <iostream>
 #include <fstream>
-#include <regex>
 #include "Soduku_Parser.h"
+#include "Soduku_Util.h"
 Soduku_Parser::Soduku_Parser(int argc, char *argv [])
 {
     // Initialize booleans
     solve_one = solve_all = check_one = check_all = write = false;
     print = true;
     // Must have at least 3 arguments
-    if (argc < 3) {
+    if (argc < 2) {
         throw std::logic_error("ERROR: missing mandatory argument");
     }
     parse_first_argument(std::string(argv[1]));
-    input_path = std::string(argv[2]);
-    parse_optional_arguments(argc, argv);
+    if (not generate) {
+        input_path = std::string(argv[2]);
+        parse_optional_arguments(3, argc, argv);
+        return;
+    } 
+
+    if (std::string(argv[2]).substr(0, 1) == "-"){
+        num_generate = string2int(std::string(argv[2]));
+    } else {
+        num_generate = 1;
+    }
+    parse_optional_arguments(2, argc, argv);
+    
 }
 /*
  * Parse the first argument and stores the input_path.
  */
 void Soduku_Parser::parse_first_argument(std::string arg)
 {
-    std::regex solve_one_regex("--solve|-s");
-    std::regex solve_all_regex("--solve-all|-sa");
-    std::regex check_one_regex("--check|-c");
-    std::regex check_all_regex("--check-all|-ca");
-    std::regex generate_one_regex("--generate|-g");
-    std::regex generate_all_regex("(--generate-|-ga-)[[:digit:]]+");
-    if (std::regex_match(arg, solve_one_regex)) {
+     if (arg == "--solve" or arg == "-s") {
         solve_one = true;
-    } else if (std::regex_match(arg, solve_all_regex)) {
+    } else if (arg == "--solve-all" or arg == "-sa") {
         solve_all = true;
-    } else if (std::regex_match(arg, check_one_regex)) {
+    } else if (arg == "--check" or arg == "-c") {
         check_one = true;
-    } else if (std::regex_match(arg, check_all_regex)) {
+    } else if (arg == "--check-all" or arg == "-ca") {
         check_all = true;
-    } else if (std::regex_match(arg, generate_one_regex)) {
-        std::cout << "matched generate_one\n";
-        generate_one = true;
-    } else if (std::regex_match(arg, generate_all_regex)) {
-        std::cout << "matched generate_many\n";
-        generate_many = true;
+    } else if (arg == "--generate" or arg == "-g") {
+        generate = true;
     } else {
         throw std::logic_error("ERROR: Invalid mandatory argument");
     }
@@ -84,9 +85,8 @@ void Soduku_Parser::parse_first_argument(std::string arg)
 /*
  * Parses any additional optional arguments
  */
-void Soduku_Parser::parse_optional_arguments(int argc, char *argv[])
+void Soduku_Parser::parse_optional_arguments(int i, int argc, char *argv[])
 {
-    int i = 3;
     while (i < argc) {
         std::string arg = argv[i];
         if ((arg == "--write" or arg == "-w") and i + 1 < argc) {
