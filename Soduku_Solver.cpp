@@ -1,52 +1,51 @@
 /* 
- * Soduku_Solver.cpp
- * Implementations for the Soduku_Solver class, a class derived from Soduku.
- * This class can solve a soduku puzzle of any size.
- *
- * By:   Julie Jiang
- * UTLN: yjiang06
- * Comp 15 Fall 2016 Independent Project
+   Soduku_Solver.cpp
+   Implementations for the Soduku_Solver class, a class derived from Soduku.
+   This class can solve a soduku puzzle of any size.
+ 
+   By:   Julie Jiang
+   UTLN: yjiang06
+   Comp 15 Fall 2016 Independent Project
  */
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
 /* To solve a puzzle, create an instance of Soduku with the parametrized 
- * constructor, and provide a path to a file that contains an unsolved soduku 
- * puzzle:
- *      Soduku soduku(puzzle.txt);
- * To print the (complete or incomplete) solutions to terminal:
- *      soduku.print();
- * To output the solutions to a file:
- *      soduku.write(filename.txt);
- * For both of these options, if the puzzle is only partially solved, then
- * grid cells with indeterminate values will be printed as bold red '0'.
+   constructor, and provide a path to a file that contains an unsolved soduku 
+   puzzle:
+        Soduku soduku(puzzle.txt);
+   To print the (complete or incomplete) solutions to terminal:
+        soduku.print();
+   To output the solutions to a file:
+        soduku.write(filename.txt);
+   For both of these options, if the puzzle is only partially solved, then
+   grid cells with indeterminate values will be printed as bold red '0'.
  */
 /*****************************************************************************/
 /*                         Containers Explained                              */
 /*****************************************************************************/
-/* 
- * A Coord is an object that holds two integers that indicates the coordinates
- * of a variable in a Soduku puzzle grid.
- *
- * A unit is defined to be a set of Coords a row, column, or subgrid. In a 
- * typical 9 by 9 Soduku puzzle, there are 9 rows + 9 columns + 9 subgrids = 
- * 27 units. 
- *
- * The following containers will be used throughout Soduku_Solver:
- *
- * 1. "allunits" is a vector of vector of Coords. It contains a list of all the
- *     units in the puzzle in terms of Coords.
- * 2. "units" is a map that maps a Coord to the three units that contains that
- *     Coord.
- * 3. "peers" is a map that maps a Coord to all the other Coords that share
- *    a common unit.
- * 4. "puzzle" is a map that maps a Coord to its initial value in the provided
- *    file. 
- * 5. "domains" is a map that maps a Coord to its remaining legal values. 
- *    Throughout the search algorithms, many different copies of "domains" will 
- *    be passed around so as to not get all the search states mixed up. There 
- *    is also a member variable called domains, which I will refer to as 
- *    this->domains.
+/* A Coord is an object that holds two integers that indicates the coordinates
+   of a variable in a Soduku puzzle grid.
+  
+   A unit is defined to be a set of Coords a row, column, or subgrid. In a 
+   typical 9 by 9 Soduku puzzle, there are 9 rows + 9 columns + 9 subgrids = 
+   27 units. 
+  
+   The following containers will be used throughout Soduku_Solver:
+  
+   1. "allunits" is a vector of vector of Coords. It contains a list of all the
+       units in the puzzle in terms of Coords.
+   2. "units" is a map that maps a Coord to the three units that contains that
+       Coord.
+   3. "peers" is a map that maps a Coord to all the other Coords that share
+      a common unit.
+   4. "puzzle" is a map that maps a Coord to its initial value in the provided
+      file. 
+   5. "domains" is a map that maps a Coord to its remaining legal values. 
+      Throughout the search algorithms, many different copies of "domains" will 
+      be passed around so as to not get all the search states mixed up. There 
+      is also a member variable called domains, which I will refer to as 
+      this->domains.
  */
 #include <iostream>
 #include <fstream>
@@ -58,24 +57,21 @@
 /*****************************************************************************/
 /*                             Public Functions                              */
 /*****************************************************************************/
-/* 
- * Initializes a Soduku object and attempts to solve it.
- */
+/* Parameterized constructor. 
+   Initializes a Soduku object and attempts to solve it.*/
 Soduku_Solver::Soduku_Solver(std::string filename)
 {
     puzzle_name = filename;
     read_puzzle();
-    init_data_structures();
+    init_containers();
     solve();
 }
 
-/*
- * Print the solved or incomplete soduku puzzle as a 2D grid. The assigned 
- * value of each Coord is printed via standard cout. If the solution 
- * is incomplete, then the Coords that don't have assigned values will be have
- * '0' printed instead in bold red.
- * This is printed with gridlines!
- */
+/* Print the solved or incomplete soduku puzzle as a 2D grid. The assigned 
+   value of each grid cell is printed via standard cout. If the solution 
+   is incomplete, then the grid cells that don't have assigned values will be 
+   have '0' printed instead in bold red.
+   This is printed with gridlines!  */
 void Soduku_Solver::print_solution()
 {
     int max_char_length = get_num_digits(gridSize);
@@ -92,7 +88,7 @@ void Soduku_Solver::print_solution()
                 int number= this->domains[c].top();
                 std::cout << number << whitespace[get_num_digits(number) - 1];
             } else {
-                std::cout << "\033[1m\033[31m0\033[0m ";
+                std::cout << "\033[1m\033[31m0\033[0m" << whitespace[0];
             }
             if ((i + 1) % n == 0) {
                 std::cout << "| ";
@@ -102,10 +98,15 @@ void Soduku_Solver::print_solution()
     print_horizontal_line(max_char_length);
     delete [] whitespace;
 }
-/*
- * Write the solutions to the specified directory. 
- */
+/* Write the solutions to the specified directory as a .txt file. 
+   Files will be named the same as their original filename + "_solutions". 
+   For example, if the original puzzle name was called "some_puzzle.txt" then
+   the output file will be called "some_puzzle_solutions.txt". 
 
+   The puzzle will be written without gridlines and with 0 in place of any 
+   grid cells with indeterminate values.
+    
+   Throws logic error if the directory does not exist. */
 void Soduku_Solver::write_solution(std::string directory)
 {
     // Open file
@@ -126,7 +127,7 @@ void Soduku_Solver::write_solution(std::string directory)
                 int number= this->domains[c].top();
                 outFile << number << whitespace[get_num_digits(number) - 1];
             } else {
-                outFile << "\033[1m\033[31m0\033[0m ";
+                outFile << "0 " << whitespace[0];
             }
         } outFile << std::endl;
     }
@@ -137,11 +138,10 @@ void Soduku_Solver::write_solution(std::string directory)
 /*****************************************************************************/
 /*                              Solve Puzzle                                 */
 /*****************************************************************************/
-/*
- * Solve a soduku puzzle by first pruning the grid, then using a depth-first, 
- * backtracking search algorithm to find a solution.
- * Returns true is a solution is found.
- */
+
+/* Solve a soduku puzzle by first pruning the grid, then using a depth-first, 
+   backtracking search algorithm to find a solution.
+   Returns true is a solution is found. */
 bool Soduku_Solver::solve()
 {
     // Return false if any contradiction is found while pruning the grid
@@ -153,11 +153,10 @@ bool Soduku_Solver::solve()
     this->domains = copy_domains;
     return result;
 }
-/*
- * Prune the grid by assigning values as indicated by the initial puzzle. 
- * Enforce constraint consistency for each value assigned.
- * Returns false if any contradictions arises.
- */
+
+/* Prune the grid by assigning values as indicated by the initial puzzle. 
+   Enforce constraint consistency for each value assigned. 
+   Returns false if any contradictions arises. */
 bool Soduku_Solver::prune_grid()
 {
     for (HashTable<Coord, int>::iterator it = puzzle.begin();
@@ -171,8 +170,6 @@ bool Soduku_Solver::prune_grid()
     }
     return true;
 }
-
-
 /*****************************************************************************/
 /*                           Backtracking search                             */
 /*****************************************************************************/
@@ -185,12 +182,13 @@ bool Soduku_Solver::search(HashTable<Coord, Set<int>> &domains)
     if (solved(domains)) {
         return true;
     } 
-
+    
     Coord c = select_unassigned_variable(domains);
-
+    
     // Try all the domains. For each domain, enforce constraint consistency. 
     // Use a new copy of domains for every recursion. 
     Set<int> domains_of_c(domains[c]);
+    
     while (not domains_of_c.empty()) {
         int d = domains_of_c.pop();
         HashTable<Coord, Set<int>> copy_domains(domains);
@@ -198,9 +196,11 @@ bool Soduku_Solver::search(HashTable<Coord, Set<int>> &domains)
             domains = copy_domains;
             return true;
         } // If assignment or recursive search didn't work, keep trying until 
-          // domains_of_c is not empty        
+          // domains_of_c is not empty    
+        //delete copy_domains;    
     }
     // If none of the values in the domain works, then return false.
+    
     return false;
 }
 
@@ -210,13 +210,14 @@ bool Soduku_Solver::search(HashTable<Coord, Set<int>> &domains)
  */
 bool Soduku_Solver::solved(HashTable<Coord, Set<int>> &domains) 
 {
+    int i = 1; 
     for (HashTable<Coord, Set<int>>::iterator it = domains.begin(); 
          it != domains.end(); ++it) {
         size_t size = it.value().size();
+        i++;
         if (size != 1) {
             return false;
         }
-
         assert(size > 0); // Sanity check
     }
     return true;
@@ -316,8 +317,8 @@ bool Soduku_Solver::eliminate_from_peers(HashTable<Coord, Set<int>> &domains,
 
     if (domains[c].size() == 1) {
         int d = domains[c].top();
-        for (Set<Coord>::iterator it = peers[c].begin(); 
-             it != peers[c].end(); ++it) {
+        for (Set<Coord>::iterator it = (*peers)[c].begin(); 
+             it != (*peers)[c].end(); ++it) {
             Coord c2 = *it;
             // Return false if eliminating d from c2 is unsuccessful
             if (not eliminate(domains, c2, d)) {
@@ -338,11 +339,11 @@ bool Soduku_Solver::check_unique_remaining_values(
                            HashTable<Coord, Set<int>> &domains, Coord c, int d)
 {
     // For each unit that contains c
-    for (size_t i = 0; i < units[c].size(); i++) {
+    for (size_t i = 0; i < (*units)[c].size(); i++) {
         // Obtain a list of possible places that int d can be
         std::vector<Coord> possible_places; 
-        for (size_t j = 0; j < units[c][i].size(); j++) {
-            Coord c2 = units[c][i][j];
+        for (size_t j = 0; j < (*units)[c][i].size(); j++) {
+            Coord c2 = (*units)[c][i][j];
             if (domains[c2].contains(d)) {
                 possible_places.push_back(c2);
             } 
@@ -371,10 +372,12 @@ bool Soduku_Solver::check_unique_remaining_values(
  * that Coord.
  * "peers" maps a Coord to all the other Coords that share a common unit.
  */
-void Soduku_Solver::init_data_structures()
+void Soduku_Solver::init_containers()
 {
-    std::vector<std::vector<Coord>> allunits;
+    units = new HashTable<Coord, std::vector<std::vector<Coord>>>(container_size);
+    peers = new HashTable<Coord, Set<Coord>>(container_size);
 
+    std::vector<std::vector<Coord>> allunits;
     for (size_t j = 0; j < gridSize; j++) {
         allunits.push_back(std::vector<Coord>());
         allunits.push_back(std::vector<Coord>());
@@ -382,9 +385,9 @@ void Soduku_Solver::init_data_structures()
             Coord c1(i, j); Coord c2(j, i);
             allunits[2 * j].push_back(c1);
             allunits[2 * j + 1].push_back(c2);
-            units.insert(c1, std::vector<std::vector<Coord>>());
-            peers.insert(c1, Set<Coord>()); 
-            domains.insert(c1, Set<int>(*new_unit())); }} // TODO: memory link?
+            units->insert(c1, std::vector<std::vector<Coord>>());
+            peers->insert(c1, Set<Coord>()); 
+            this->domains.insert(c1, Set<int>(*new_unit())); }} // TODO: memory link?
 
     for (size_t i = 0; i < gridSize; i += n) {
         for (size_t j = 0; j < gridSize; j += n) {
@@ -398,17 +401,21 @@ void Soduku_Solver::init_data_structures()
     for (size_t i = 0; i < allunits.size(); i++) {
         for (size_t j = 0; j < allunits[i].size(); j++) {
             Coord c = allunits[i][j];
-            units[c].push_back(std::vector<Coord>(allunits[i]));
+            (*units)[c].push_back(std::vector<Coord>(allunits[i]));
             for (size_t k = 0; k < allunits[i].size(); k++) {
                 if (k != j) {
                     Coord c2 = allunits[i][k];
-                    peers[c].add(c2); }}}}
+                    (*peers)[c].add(c2); }}}}
     
 }
 /*****************************************************************************/
 /*                           Utility Functions                               */
 /*****************************************************************************/
-
+Soduku_Solver::~Soduku_Solver()
+{
+    delete units;
+    delete peers;
+}
 
 
 /*

@@ -84,8 +84,9 @@ HashTable<Key, Value>::HashTable(const HashTable &source)
 template<typename Key, typename Value>
 HashTable<Key, Value> &HashTable<Key, Value>::operator=(const HashTable &source)
 {
-    this->num_buckets = source.num_buckets;
     clear();
+    this->num_buckets = source.num_buckets;
+    init();
     deepCopy(source);
     return *this;
 }

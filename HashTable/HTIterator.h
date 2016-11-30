@@ -51,8 +51,8 @@ HTIterator<Key, Value> &HTIterator<Key, Value>::operator++()
         while(bucketIndex < num_buckets and buckets[bucketIndex]->empty()) {
             bucketIndex++;
         } 
-        (bucketIndex == num_buckets) ? 
-        it = nullptr: it = buckets[bucketIndex]->begin();
+        it = (bucketIndex == num_buckets) ? 
+              nullptr : buckets[bucketIndex]->begin();
     } 
     return *this;
 

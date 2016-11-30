@@ -56,9 +56,11 @@ void Soduku::read_puzzle()
         num_elements++;
     }
     inFile.close();
-    // Get grid size
+    // Get sizes
+    container_size = num_elements;
     gridSize = square_root(num_elements);
     n = square_root(gridSize);
+
 
     // Initialize Soduku puzzle grid
     init_grid(*elements);

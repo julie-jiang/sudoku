@@ -239,6 +239,23 @@ int main()
     testClear2();
     testAssignmentOperator1();
     testAssignmentOperator2();
+
+    HashTable<Coord, Set<int>> *units = 
+    new HashTable<Coord, Set<int>>(81);
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            Coord c(i, j);
+            units->insert(c, Set<int>());
+            (*units)[c].add(5);
+        }
+    }
+    HashTable<Coord, Set<int>> *newunits = new HashTable<Coord, Set<int>>(*units);
+    newunits = units;
+    for (HashTable<Coord, Set<int>>::iterator it = newunits->begin(); 
+         it != newunits->end(); ++it) {
+        std::cout << it.key () << it.value() << std::endl;
+        size_t size = it.value().size();
+    }
     std::cout << "============== Tests for HashTable completed! ==============\n";
 }
 

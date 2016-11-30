@@ -39,6 +39,7 @@ class Soduku {
         std::string puzzle_name;
         size_t gridSize;
         size_t n;
+        size_t container_size;
 
         // Initialiation functions 
         void read_puzzle();

@@ -33,6 +33,7 @@ class Soduku_Solver: public Soduku
 	public:
         /* Solve a puzzle given in the provided file */
 		Soduku_Solver(std::string);
+        ~Soduku_Solver();
 
         /* Print the solutions (complete or imcomplete) of the given puzzle. */
         void print_solution();
@@ -41,6 +42,10 @@ class Soduku_Solver: public Soduku
         void write_solution(std::string);
         
 	private:
+        /* Private Variables */
+        HashTable<Coord, std::vector<std::vector<Coord>>> *units;
+        HashTable<Coord, Set<Coord>> *peers;
+        HashTable<Coord, Set<int>> domains;
         /* Default constructor made private so it can't be called */
 		Soduku_Solver() {} 
 
@@ -51,21 +56,18 @@ class Soduku_Solver: public Soduku
         bool solved(HashTable<Coord, Set<int>> &);
         Coord select_unassigned_variable(HashTable<Coord, Set<int>> &);
         bool assign(HashTable<Coord, Set<int>> &, Coord, int);
-        bool eliminate(HashTable<Coord, Set<int>>&, Coord, int);
+        bool eliminate(HashTable<Coord, Set<int>> &, Coord, int);
         bool eliminate_from_peers(HashTable<Coord, Set<int>> &, Coord);
         bool check_unique_remaining_values(HashTable<Coord, Set<int>> &, 
                                            Coord, int);
 
         /* Other init/helper functions */
-        void init_data_structures();
+        void init_containers();
         void printDomains(HashTable<Coord, Set<int>> &);
         
         
 
-        /* Private Variables */
-        HashTable<Coord, std::vector<std::vector<Coord>>> units;
-        HashTable<Coord, Set<Coord>> peers;
-        HashTable<Coord, Set<int>> domains;
+        
 
 };
 #endif
