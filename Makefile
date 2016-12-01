@@ -43,4 +43,4 @@ Set/Set.o: Set/Set.h Set/SetNode.h Set/SetIterator.h
 LinkedList/LinkedList.o: LinkedList/LinkedList.h LinkedList/ListIterator.h \
                          LinkedList/ListNode.h
 
-.PHONY: run_soduku, test
+make provide: 

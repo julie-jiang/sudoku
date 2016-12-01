@@ -64,7 +64,6 @@ Usage: ./run_soduku [--solve     | -s  <filename>] \
                     [--check-all | -ca <filelist>] \
                     [--generate  | -g  <some number>]
 ```
-*Woah, that's a lot of options. No worries, let's go through them.*
 ### Solve
 You can either solve one puzzle or solve a bunch of puzzle. 
 To solve one puzzle, you must provide the name of the file that contains a 
@@ -107,17 +106,17 @@ example, if `puzzle_list.txt` contains names to a bunch of soduku puzzles:
 ```
 ./run_soduku --solve-all puzzle_list.txt --write allsolutions --hide
 ```
-This will write the solutions to all the puzzles listed in puzzle_list.txt
+This will write the solutions to all the puzzles listed in `puzzle_list.txt`
 to the directory `allsolutions`, provided that the directory exists. There will
 also be an additional file called `puzzle_list_solutions_list.txt` in `
-allsolutions` that lists the name of all the file generated.
+allsolutions` that contains the name of all the file generated.
 ### Check
 You can also check the validity of solved puzzles.  
 ```
 ./run_soduku --check my_puzzle_solution.txt
 ```
 ### Check a bunch
-Or check a bunch of puzzles given the file that contains the filenames of these
+Check a bunch of puzzles given the file that contains the filenames of these
 puzzles:
 ```
 ./run_soduku --check allsolutions/puzzle_list_solutions_list.txt
@@ -125,7 +124,7 @@ puzzles:
 The output to terminal will indicate the validity of the puzzles checked.
 
 ### Generate
-To generate Soduku puzzle, use `--generate` or `-g`:
+To generate a Soduku puzzle, use `--generate` or `-g`:
 ```
 ./run_soduku --generate
 ```
@@ -142,7 +141,7 @@ you want to generate 10 puzzles, write the solved puzzles to a directory called
 ./run_soduku --generate 10 -w allpuzzles -h
 ```
 The list to the filenames of the generated puzzles will be called 
-`puzzle_list.txt` and will be located in `allpuzzles`.
+`puzzle_list.txt` and will be located in the directory `allpuzzles`.
 
 You can also generate Soduku puzzles of arbitrary size -- well, not really. 
 This size has to be a perfect square of another integer, due to the way Soduku 
@@ -151,7 +150,7 @@ up with an integer. You can specify the difficulty of the Soduku puzzle as
 well. Difficulty is determined by the number of indeterminate values in the 
 puzzle. A `hard` puzzle will have approximately 80% of the values removed, a 
 `medium` puzzle will have 50% removed, and an `easy` puzzle will only have 30% 
-removed. The default size is 9 and difficulty is "medium". 
+removed. The default size is 9 and difficulty is `medium`. 
 
 Put together, if we want to generate 15 puzzles 16 by 16 in size that are 
 `hard`, hide the output and write to the directory `reallyhardpuzzles`:
@@ -209,7 +208,7 @@ any existing values. For example, if puzzle says that `(0, 0) = 5`, then
 `(0, 1)` can't be 5, so we eliminate 5 from  `(0, 1)`. This is called 
 constraint propagation.
 
-Sometimes, for simpler puzzles, a solution can be found by after pruning the 
+Sometimes, for simpler puzzles, a solution can be found after pruning the 
 grid. Other times, we need to go through a trial-and-error process by picking a
 grid cell, assigning it a value from its pool of legal values, and then 
 recursively repeat until either the puzzle is solved or if a contradiction is 
@@ -224,28 +223,28 @@ the most constrained variable.
 To expedite the process, at each level of search recursion, constraint 
 propagation is again enforced. There are two simple rules of thumbs: 
 
-1. if a grid cell has only one value `d` left in its pool of legal domains, 
-then that by the process of elimination the grid cell must be assigned to `d`. 
-2. For every unit, if a value `d` can be found in only one place grid cell, 
+1. if a grid cell has only one value `d` left in its pool of legal values, 
+then that grid cell should be assigned to `d`. 
+2. For every unit, if a value `d` can be found in only one grid cell, 
 then that grid cell must be assigned to `d`. 
 
-In either case, we remove `d` from the domains of all other grid cells in the
+Either case, we remove `d` from the domains of all other grid cells in the
 concerning gird cell's row, column, or subgrid.
 
 ### In checking a puzzle
 First, initialize a container than holds all the possible values for each unit. 
-For a 9 by 9 puzzle, that would be a container of size 27, each holding 9 
-numbers from 1 to 9. Then iterate through all the grid cells in the puzzle. For 
+For a 9 by 9 puzzle, that would be a container of 27 units, each holding 9 
+numbers from 1 to 9. Then, iterate through all the grid cells in the puzzle. For 
 each seen value, eliminate that value from the three units that contains that 
-grid cells. Check that removal is always successfula and at the end of the 
+grid cells. Check that removal is always successful and that at the end of the 
 iteration all the units are empty.
 
 ### In generating a puzzle
-This is done via a depth first backtracking search with randomness. A puzzle is 
-generated by iterating through all the grid cells in the puzzle and assigning 
-each a random but legal value based on existing assignments. If no values at 
-this level of recursion works, backtrack to a previous level and try with a 
-different value. 
+Puzzle generation is done via a depth first backtracking search with randomness.
+A puzzle is generated by iterating through all the grid cells in the puzzle and 
+assigning each a random but legal value based on existing assignments. If no 
+values at this level of recursion works, backtrack to a previous level and try 
+with a different value. 
 
 ## Data Structures 
 
@@ -254,19 +253,18 @@ The data structures I implemented for this program are
 1. [Set](Set/)
 	
 	This is an ordered collection of unique elements, implemented as an 
-    [AVL tree][4], a type of self-balancing binary. The benefits of using this
-    container is the fast O(n) look up time, which comes at the cost of slower 
-    insertion and removal.
+    [AVL tree][4], a type of self-balancing binary search tree. The benefits of 
+    using this container is the fast O(n) look up time, which comes at the cost
+    of slower insertion and removal.
 
 
 2. [Hash Table](HashTable/)
 	
 	This is an unordered collection of elememts (or values) indexed by keys. 
-    Values can be anything, and keys can be any immutable types that can be 
-    converted to strings. Because values are indexed by keys, keys must be 
-    immutable, meaning they cannot be changed. Values, however, can be changed
-    or overwritten. Which means that keys should be unique to ensure that no 
-    data is lost. Hash collision is resolved by chaining.
+    Because values are indexed by keys, keys must be immutable, meaning they 
+    cannot be changed. Values, however, can be changed or overwritten. Keys 
+    should therefore be unique to ensure that no data is lost. Hash collision 
+    is resolved by chaining.
 
 3. [Linked List](LinkedList/)
 
@@ -305,19 +303,19 @@ runs of the test
 All of the solutions can be found in `data/solutions`. 
 
 ## Project Deviation
-Originaly, I planned to implement a priority queue to hold my grid cells. I 
-thought this would be useful when I want to select a the most constrained 
+Originally, I planned to implement a priority queue to hold my grid cells. I 
+thought this would be useful when I want to select the most constrained 
 variable, as the grid cells will be ordered according to their number of legal 
 remaining values. However, in order to allow for backtracking, each search state 
 has to hold a separate copy of all the values in the grid cells. Additionally, 
-since constraint consistency is enforced after every successful new assignment, 
+constraint consistency is enforced after every successful new assignment, 
 which will result in elimination of a lot of domains from a lot of grid cells. 
 
 This means that if I were to use a priority queue to hold my grid cells, I 
 would need to regenerate a new priority queue at each search state. However, 
 this is huge waste of memory and time, since I only care about the element at 
 the top of the priority queue. All of the remaining elements are discarded 
-since their priorities no longer apply at a new search state. For these 
+as their priorities no longer apply at a new search state. For these 
 reasons, I decided to forgo priority queue and use a simple min-finding 
 function to select the most constrained variable. 
 
@@ -325,7 +323,7 @@ function to select the most constrained variable.
 I would like to thank all the help I received directly and indirectly on Stack 
 Overflow, cplusplus.com, geeksforgeeks.org, etc. I would also like to thank the
 instructors of UC Berkeley CS188 Intro to AI, Dan Klein and Pieter Abbeel,
-for sharing their the [lecture slides][7] on CSP (constraint satisfaction 
+for sharing their [lecture slides][7] on CSP (constraint satisfaction 
 problems),as well as Peter Norvig for his [insightful article][8] on solving 
 Soduku puzzles in Python. Last but not least, I'd like to thank my TAs Erica, 
 Max and Justin for all the love and support.
@@ -333,12 +331,12 @@ Max and Justin for all the love and support.
 ## Time spent doing this project
 Too long. But in retrospect, I totally would do it again. 
 
-One of the most challenging parts of this project was figuring how to add 
-iterating functionality to my data structures, which I wish we learned more 
-about in class, as I think this is a very useful feature for data structures. 
-But by forcing myself to figure out how to implement iterators, I earned more 
-about classes in c++ these past few days than I ever did before, which was a 
-very rewarding process. 
+One of the most challenging parts of this project was trying to figure out how
+to add iterating functionality to my data structures, which I wish we learned 
+more about in class, as I think this is a very useful feature for data 
+structures. But by forcing myself to figure out how to implement iterators, I 
+learned more about classes in c++ these past few days than I ever did before, 
+which was a very rewarding process. 
 
 
 [1]: https://en.wikipedia.org/wiki/Constraint_satisfaction
