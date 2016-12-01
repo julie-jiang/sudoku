@@ -325,10 +325,10 @@ function to select the most constrained variable.
 I would like to thank all the help I received directly and indirectly on Stack 
 Overflow, cplusplus.com, geeksforgeeks.org, etc. I would also like to thank the
 instructors of UC Berkeley CS188 Intro to AI, Dan Klein and Pieter Abbeel,
-for sharing their the [lecture slides][7] on CSP (constraint satisfaction problems),
-as well as Peter Norvig for his [insightful article][8] on solving Soduku 
-puzzles in Python. Last but not least, I'd like to thank my TAs Erica, Max and
-Justin for all the love and support.
+for sharing their the [lecture slides][7] on CSP (constraint satisfaction 
+problems),as well as Peter Norvig for his [insightful article][8] on solving 
+Soduku puzzles in Python. Last but not least, I'd like to thank my TAs Erica, 
+Max and Justin for all the love and support.
 
 ## Time spent doing this project
 Too long. But in retrospect, I totally would do it again. 
