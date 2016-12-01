@@ -12,16 +12,14 @@
 /* Returns the given filename stripped of its path and extension.
    For example, the input "some_directory/my_file.txt" will have "my_file"
    returned. */
-std::string get_raw_name(std::string filename)
-{
+std::string get_raw_name(std::string filename) {
 	std::string raw_name = filename.substr(0, filename.find_last_of("."));
     raw_name = raw_name.substr(raw_name.find_last_of("/\\") + 1);
     return raw_name;
 }
 /* Convert a string to an int. Returns the int form of the given string.
    Throw logic error if the string is not numerical. */
-int string2int(std::string s)
-{
+int string2int(std::string s) {
     std::stringstream ss(s);
     int result;
     ss >> result;
@@ -32,8 +30,7 @@ int string2int(std::string s)
 
 /* Converts an int to string.
    Returns the string form of the given int */
-std::string int2string(int num)
-{
+std::string int2string(int num) {
     std::string result;
     std::ostringstream oss;
     oss << num;

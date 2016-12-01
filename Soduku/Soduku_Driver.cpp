@@ -1,8 +1,8 @@
 /* 
    Soduku_Driver.cpp
-   Implementations for Soduku_Driver
-   Driver class for the soduku class. Contains the solve_one, solve_all, 
-   check_one, check_all and generate functions, amongst other helper functions.
+   Implementations of the Soduku_Driver class. Contains the solve_one, 
+   solve_all, check_one, check_all and generate functions, amongst other helper 
+   functions.
  
    By:   Julie Jiang
    UTLN: yjiang06
@@ -13,8 +13,7 @@
 /* This class must be used in conjunction with a Soduku_Parser object. 
    An instance of this class will be created in the main function 
    (in Soduku_Main.cpp) of the run_soduku program. 
-   It contains all the driver functions for the run_soduku program.
- */
+   It contains all the driver functions for the run_soduku program. */
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -29,8 +28,7 @@
    Assumes that only one of the five booleans parser.solve_one, 
    parser.solve_all, parser.check_one, parser.check_all and parser.generate
    is true. */
-Soduku_Driver::Soduku_Driver(const Soduku_Parser &parser) 
-{
+Soduku_Driver::Soduku_Driver(const Soduku_Parser &parser)  {
          if (parser.solve_one) { solve_one(parser); }        
     else if (parser.solve_all) { solve_all(parser); }     
     else if (parser.check_one) { check_one(parser); }
@@ -43,8 +41,7 @@ Soduku_Driver::Soduku_Driver(const Soduku_Parser &parser)
 
 /* Solves one puzzle contained in Soduku_Parser.input_path.
    May print to terminal and may write to file.*/
-void Soduku_Driver::solve_one(const Soduku_Parser &parser)
-{
+void Soduku_Driver::solve_one(const Soduku_Parser &parser) {
     Soduku_Solver solver(parser.input_path);
     if (parser.print) {
         solver.print_solution();
@@ -57,8 +54,7 @@ void Soduku_Driver::solve_one(const Soduku_Parser &parser)
    May print to terminal and may write to file. Also generates
    a file that contains a list of paths to solution files, if it will write 
    solutions to files. (done in helper function solve_all_and_write).*/
-void Soduku_Driver::solve_all(const Soduku_Parser &parser)
-{
+void Soduku_Driver::solve_all(const Soduku_Parser &parser) {
     // If requires writing to file
     if (parser.write) {
         solve_all_and_write(parser);
@@ -82,14 +78,12 @@ void Soduku_Driver::solve_all(const Soduku_Parser &parser)
 /* Solves all soduku puzzles contained in Soduku_Parser.input_path and writes
    all solutions to the directory parser.output_path. Also generates
   a file that contains a list of paths to solution files. */
-void Soduku_Driver::solve_all_and_write(const Soduku_Parser &parser)
-{
+void Soduku_Driver::solve_all_and_write(const Soduku_Parser &parser) {
     // Open input file
     std::ifstream inFile;
     inFile.open(parser.input_path);
-    if (inFile.fail()) {
+    if (inFile.fail()) 
         throw std::logic_error("File "+ parser.input_path + " does not exist");
-    }
     // Open the output file that contains list of paths to solution files
     std::string output_filelist = (parser.output_path + "/" + 
                                    get_raw_name(parser.input_path) +
@@ -99,13 +93,11 @@ void Soduku_Driver::solve_all_and_write(const Soduku_Parser &parser)
         throw std::logic_error("ERROR: " + parser.output_path + 
                                " is not a valid directory");
     }
-    // Solve each puzzle 
-    std::string puzzle_name;
+    std::string puzzle_name;  // Solve each puzzle 
     while (inFile >> puzzle_name) {
         Soduku_Solver solver(puzzle_name);
-        if (parser.print) {
+        if (parser.print) 
             solver.print_solution();
-        }
         solver.write_solution(parser.output_path);
         // Output the file name to outFile
         std::string filename = (parser.output_path + "/" + 
@@ -116,15 +108,13 @@ void Soduku_Driver::solve_all_and_write(const Soduku_Parser &parser)
     std::cout << "List of paths to solved puzzle can be found at: ";
     std::cout << output_filelist<< "\n";
     outFile.close();
-
 }
 /*****************************************************************************/
 /*                             Check functions                               */
 /*****************************************************************************/
 /* Checks the validity of one soduku solution contained in the file
    parser.input_path. Results will be printed via standard cout. */
-void Soduku_Driver::check_one(const Soduku_Parser &parser)
-{
+void Soduku_Driver::check_one(const Soduku_Parser &parser) {
     Soduku_Checker checker;
     if (checker.check_solution(parser.input_path)) {
         std::cout << parser.input_path << " is a solved Soduku puzzle!\n";
@@ -135,8 +125,7 @@ void Soduku_Driver::check_one(const Soduku_Parser &parser)
 /* Checks the validity of all soduku solutions contained in the files
    indicated in file parser.input_path.
    Results will be printed via standard cout. */
-void Soduku_Driver::check_all(const Soduku_Parser &parser)
-{
+void Soduku_Driver::check_all(const Soduku_Parser &parser) {
     // Open input file
     std::ifstream inFile;
     inFile.open(parser.input_path);
@@ -164,8 +153,7 @@ void Soduku_Driver::check_all(const Soduku_Parser &parser)
 
 /* Generate one or many Soduku puzzle of size parser.generate_size. 
    May print to terminal and may write to file. */
-void Soduku_Driver::generate(const Soduku_Parser &parser)
-{
+void Soduku_Driver::generate(const Soduku_Parser &parser) {
     // seed time
     srand(time(NULL)); 
     // Either generate one or generate a bunch
@@ -175,8 +163,7 @@ void Soduku_Driver::generate(const Soduku_Parser &parser)
 /* Generate one Soduku puzzle of size parser.generate_size.
    May print to terminal and may write to file.
    If writing to file, the file will be named puzzle.txt*/
-void Soduku_Driver::generate_one(const Soduku_Parser &parser)
-{
+void Soduku_Driver::generate_one(const Soduku_Parser &parser) {
     Soduku_Generator generator(parser.generate_difficulty, 
                                parser.generate_size);
     if (parser.print) {
@@ -192,8 +179,7 @@ void Soduku_Driver::generate_one(const Soduku_Parser &parser)
 /* Generate parser.num_generate puzzles of size parser.generate_size.
    May print to terminal and may write to file. 
    If writing to file, call helper function generate_all_and_write */
-void Soduku_Driver::generate_all(const Soduku_Parser &parser)
-{
+void Soduku_Driver::generate_all(const Soduku_Parser &parser) {
     if (parser.write) {
         generate_all_and_write(parser);
         return;
@@ -211,8 +197,7 @@ void Soduku_Driver::generate_all(const Soduku_Parser &parser)
    May print to terminal and may write to file. 
    If writing to file, then a file consisting of all the paths to the generated
    puzzles will be made. This file is named puzzle_list.txt */
-void Soduku_Driver::generate_all_and_write(const Soduku_Parser &parser)
-{
+void Soduku_Driver::generate_all_and_write(const Soduku_Parser &parser) {
     // Open the output file that contains list of paths to solution files
     std::string output_filelist = (parser.output_path + "/puzzle_list.txt");
     std::ofstream outFile(output_filelist);

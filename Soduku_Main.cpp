@@ -55,8 +55,7 @@ More optional flags for --generate:
 #include <iostream>
 #include "Soduku/Soduku_Parser.h"
 #include "Soduku/Soduku_Driver.h"
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     try {
         Soduku_Parser parser(argc, argv);   // Parse input. See Soduku_Parser
         Soduku_Driver driver(parser);       // Take action. See Soduku_Driver

@@ -29,8 +29,7 @@
 #include "../Set/Set.h"
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
-Soduku::~Soduku()
-{
+Soduku::~Soduku() {
     delete puzzle;
 }
 
@@ -42,8 +41,7 @@ Soduku::~Soduku()
  * Throw logic error if the file cannot be opened, or if the file does not 
  * contain a valid Soduku puzzle.
  */
-void Soduku::read_puzzle()
-{
+void Soduku::read_puzzle() {
     // Open file 
     std::ifstream inFile;
     inFile.open(puzzle_name);
@@ -74,8 +72,7 @@ void Soduku::read_puzzle()
  * "domains" maps a set of coordinates to their remaining legal domain values.
  * Here, this is initialized to be all the numbers from 1 to gridSize.
  */
-void Soduku::init_grid(std::queue<int> *elements)
-{
+void Soduku::init_grid(std::queue<int> *elements) {
     // initialize grid
     puzzle = new HashTable<Coord, int>(container_size);
     for (size_t j = 0; j < gridSize; j++) {
@@ -95,8 +92,7 @@ void Soduku::init_grid(std::queue<int> *elements)
  * Find the square root of the given number. 
  * Throw logic error if no perfect square root can be found.
  */
-size_t Soduku::square_root(size_t num)
-{
+size_t Soduku::square_root(size_t num) {
     size_t i = 1;
     while (i <= num / 2 + 1) {
         if (i * i == num) {
@@ -115,8 +111,7 @@ size_t Soduku::square_root(size_t num)
  * Make a new set of units that contains one of every possible value.
  * Return a pointer to this new set.
  */
-Set<int> *Soduku::new_unit()
-{
+Set<int> *Soduku::new_unit() {
     Set<int> *one_unit = new Set<int>;
     for (int i = 1; i <= (int) gridSize; i++) {
         one_unit->add(i);
@@ -140,8 +135,7 @@ Set<int> *Soduku::new_unit()
  * 
  * Returns a pointer to a array of strings of length max_char_length.
  */
-std::string *Soduku::get_whitespaces(int max_char_length)
-{
+std::string *Soduku::get_whitespaces(int max_char_length) {
     std::string *whitespace = new std::string [max_char_length];
     for (int i = 0; i < max_char_length; i++) {
         whitespace[i] = "";
@@ -152,8 +146,7 @@ std::string *Soduku::get_whitespaces(int max_char_length)
     return whitespace;
 }
 /* Returns the number of digits in the given int */
-int Soduku::get_num_digits(int num)
-{
+int Soduku::get_num_digits(int num) {
     int i = 1;
     int digits = 1;
     while (num / i > 9) {
@@ -163,8 +156,7 @@ int Soduku::get_num_digits(int num)
     return digits;
 }
 /* Print helper function. Prints a horizontal line. */
-void Soduku::print_horizontal_line(int max_char_length)
-{
+void Soduku::print_horizontal_line(int max_char_length) {
     std::cout << "|";
     size_t length = gridSize * (max_char_length + 1) + n * 2 - 1;
     for (size_t i = 0; i < length; i++) {

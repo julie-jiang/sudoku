@@ -1,6 +1,6 @@
 /* 
    SetIterator.h
-   Header and implementations for the iterator of the container Set, an ordered
+   Header and implementations of the iterator of the container Set, an ordered
    collection of unique elements. 
 
    By:   Julie Jiang
@@ -12,23 +12,21 @@
 /* This is designed to be used in conjunction with the Set. Therefore, the 
    constructor is made private. To iterate through a Set, it first pushes all
    the elements in the Set to a stack via in-order traversal. Then it pops
-   the elements in the stack one-by-one. */
-#ifndef SETITERATOR_H
-#define SETITERATOR_H
-#include <stack>
+   the elements in the stack one-by-one. */   
 /*****************************************************************************/
 /*                                  Header                                   */
 /*****************************************************************************/
-
+#ifndef SETITERATOR_H
+#define SETITERATOR_H
+#include <stack>
 template<typename T>
-class SetIterator 
-{
+class SetIterator {
     public:
         friend class Set<T>;
-        SetNode<T> *operator++();
-        bool operator!=(const SetIterator &);
+        SetNode<T> *operator++();             // Increment operator
+        bool operator!=(const SetIterator &); // Comparison operators
         bool operator==(const SetIterator &);
-        T &operator*();
+        T &operator*();                       // Dereference operatator
 
     private:
         SetNode<T> *iter_node;
@@ -44,8 +42,7 @@ class SetIterator
    to the first node in the stack. Else, iter_node is nullptr, which acts as a 
    sentinel. */
 template<typename T>
-SetIterator<T>::SetIterator(SetNode<T> *node): iter_node(node)
-{
+SetIterator<T>::SetIterator(SetNode<T> *node): iter_node(node) {
     if (node != nullptr) {
         traverse(node);
         iter_node = elements.top();
@@ -57,8 +54,7 @@ SetIterator<T>::SetIterator(SetNode<T> *node): iter_node(node)
 /* Recursively traverses the tree starting from the given node via in-order
    traversal. Pushes everything to elements (a stack) */ 
 template<typename T>
-void SetIterator<T>::traverse(SetNode<T> *node)
-{
+void SetIterator<T>::traverse(SetNode<T> *node) {
     if (node->left != nullptr) {
         traverse(node->left);
     }
@@ -71,8 +67,7 @@ void SetIterator<T>::traverse(SetNode<T> *node)
 /* Overload the "++" operator. Returns next node in elements if elements
    is not empty. Else returns nullptr */
 template<typename T>
-SetNode<T> *SetIterator<T>::operator++()
-{
+SetNode<T> *SetIterator<T>::operator++() {
     if (elements.empty()) {
         iter_node = nullptr;
     } else {
@@ -83,21 +78,18 @@ SetNode<T> *SetIterator<T>::operator++()
 }
 /* Overload the "!=" operator. Returns true if they don't equal*/
 template<typename T>
-bool SetIterator<T>::operator!=(const SetIterator &source) 
-{
+bool SetIterator<T>::operator!=(const SetIterator &source) {
     return (iter_node != source.iter_node);
 }
 /* Overload the "==" operator. Returns true if they do equal */
 template<typename T>
-bool SetIterator<T>::operator==(const SetIterator &source) 
-{
+bool SetIterator<T>::operator==(const SetIterator &source) {
     return (iter_node == source.iter_node);
 }
 /* Overload the dereferencing operator "*". Returns the value stored
    in this node */
 template<typename T>
-T &SetIterator<T>::operator*() 
-{
+T &SetIterator<T>::operator*() {
     return iter_node->value;
 }
 

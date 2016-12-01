@@ -1,6 +1,6 @@
 /* 
  * Soduku.h
- * Header file for the Soduku class.
+ * Header file of the Soduku class.
  *
  * By:   Julie Jiang
  * UTLN: yjiang06

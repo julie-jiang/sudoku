@@ -1,7 +1,7 @@
 # Set
 This is an ordered collection of unique elements, implemented as an [AVL tree]
-(https://en.wikipedia.org/wiki/avl_tree), a type of self-balancing binary search 
-tree. 
+(https://en.wikipedia.org/wiki/avl_tree), a type of self-balancing binary 
+search tree. 
 
 As a set, it will not hold duplicate copies of the same item. If you attempt to
 add an element that is already in the set, then nothing will change. 
@@ -18,8 +18,6 @@ at the cost of slower insertion and removal.
 To initialize a `Set` object:
 
 ```c++
-#include "Set.h"
-// ...
 Set<T> set;            // Constructor 
 Set<T> copy_set(set);  // Copy constructor
 ```

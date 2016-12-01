@@ -1,6 +1,6 @@
 /* 
    Soduku_Parser.h
-   Header file for the class Soduku_Parser.cpp.
+   Header file of the class Soduku_Parser.cpp.
    Parses command line arguments for the soduku program.
   
    By:   Julie Jiang

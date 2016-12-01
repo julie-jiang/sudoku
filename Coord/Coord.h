@@ -28,8 +28,7 @@
    Same logic applies to other equality operators.
 
    A Coord object is immutable, meaning its values cannot be changed once it's
-   created.
- */
+   created.  */
 #ifndef COORD_H
 #define COORD_H
 #include <iostream>
@@ -44,9 +43,9 @@ class Coord {
         friend bool operator==(const Coord &, const Coord &);
         friend bool operator!=(const Coord &, const Coord &);
         friend bool operator<=(const Coord &, const Coord &);
-        friend bool operator<(const Coord &, const Coord &);
+        friend bool operator< (const Coord &, const Coord &);
         friend bool operator>=(const Coord &, const Coord &);
-        friend bool operator>(const Coord &, const Coord &);
+        friend bool operator> (const Coord &, const Coord &);
 
         // Ostream operator
         friend std::ostream &operator<<(std::ostream &, const Coord &);

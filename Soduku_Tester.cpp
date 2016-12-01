@@ -25,8 +25,7 @@
 
 /* Helper function. Execute the given command (should be a soduku generating 
    command) and display total run time. */
-void test_generate(const char *command)
-{
+void test_generate(const char *command) {
     std::cout << "Generating soduku puzzles...\n";
     clock_t t;
     t = clock();
@@ -38,8 +37,7 @@ void test_generate(const char *command)
 
 /* Helper function. Execute the given command (should be a soduku puzzle solving 
    command) and display total run time. */
-void test_solve(const char *command)
-{
+void test_solve(const char *command) {
     std::cout << "Solving puzzles...\n";
     clock_t t;
     t = clock();
@@ -51,8 +49,7 @@ void test_solve(const char *command)
 
 /* Helper function. Execute the given command (should be a soduku puzzle 
    checking command) and display total run time. */
-void test_check(const char *command)
-{
+void test_check(const char *command) {
     std::cout << "Checking puzzles...\n";
     clock_t t;
     t = clock();
@@ -62,8 +59,7 @@ void test_check(const char *command)
     std::cout << "Total checking time = " << check_time << "s. \n";
 }
 /* Test one easy puzzle just to see that this works! */
-void test0()
-{
+void test0() {
   std::cout << "Beginning test 0\n";
     test_solve("./run_soduku --solve data/puzzles/set1/puzzle1.txt \
                 --write data/solutions/set1 --hide");
@@ -81,8 +77,7 @@ void test0()
    Solutions are located in data/solutions/set1.
    All of test set 1 puzzles are taken from Project Euler 
    (https://projecteuler.net/problem=96)  */
-void test1()
-{
+void test1() {
     std::cout << "Beginning test 1\n";
     system("mkdir data/solutions/set1");
     test_solve("./run_soduku --solve-all data/puzzles/set1/puzzle_list.txt \
@@ -104,8 +99,7 @@ void test1()
    There are supposedly really hard 9 by 9 soduku puzzles.
    Running this test could take a while because of the sheer amount of puzzles
    in this set (almost 400) */
-void test2()
-{
+void test2() {
     std::cout << "Beginning test 2\n";
     std::cout << "Running tests on all Soduku puzzles in ";
     std::cout << "data/puzzles/set2 ...\n";
@@ -122,8 +116,7 @@ void test2()
    their solutions.
    Generated puzzles will be located in data/puzzles/set3.
    Solutions will be located in data/solutions/set3. */
-void test3()
-{
+void test3() {
     std::cout << "Beginning test 3\n";
     system("mkdir data/puzzles/set3");
     system("mkdir data/solutions/set3");
@@ -141,8 +134,7 @@ void test3()
    their solutions.
    Generated puzzles will be located in data/puzzles/set4.
    Solutions will be located in data/solutions/set4. */
-void test4()
-{
+void test4() {
     std::cout << "Beginning test 4\n";
     system("mkdir data/puzzles/set4");
     system("mkdir data/solutions/set4");
@@ -160,8 +152,7 @@ void test4()
    check their solutions.
    Generated puzzles will be located in data/puzzles/set4.
    Solutions will be located in data/solutions/set4. */
-void test5()
-{
+void test5() {
     std::cout << "Beginning test 5\n";
     system("mkdir data/puzzles/set5");
     system("mkdir data/solutions/set5");
@@ -180,8 +171,7 @@ void test5()
    Generated puzzles will be located in data/puzzles/set6.
    Solutions will be located in data/solutions/set6. 
    This test could take a while. */
-void test6()
-{
+void test6() {
     std::cout << "Beginning test 6\n";
     system("mkdir data/puzzles/set6");
     system("mkdir data/solutions/set6");
@@ -199,8 +189,7 @@ void test6()
    Generated puzzles will be located in data/puzzles/set7.
    Solutions will be located in data/solutions/set7. 
    This test could take a while. */
-void test7()
-{
+void test7() {
     std::cout << "Beginning test 7\n";
     system("mkdir data/puzzles/set7");
     system("mkdir data/solutions/set7");
@@ -212,8 +201,7 @@ void test7()
                  data/solutions/set7/puzzle_solution.txt");
     std::cout << "Finished executing test set data/puzzles/set7.\n\n";
 }
-int main()
-{
+int main() {
     std::cout << "Running system tests for Soduku\n";
     /*test0();
     test1();

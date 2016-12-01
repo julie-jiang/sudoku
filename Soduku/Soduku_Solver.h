@@ -1,6 +1,6 @@
 /* 
  * Soduku_Solver.h
- * Header file for the Soduku_Solver class, a class derived from Soduku.
+ * Header file of the Soduku_Solver class, a class derived from Soduku.
  * This class can solve a soduku puzzle of any size.
  *
  * By:   Julie Jiang
@@ -53,8 +53,7 @@
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
 #include "../Set/Set.h"
-class Soduku_Solver: public Soduku
-{
+class Soduku_Solver: public Soduku {
 	public:
         /* Solve a puzzle given in the provided file */
 		Soduku_Solver(std::string);
@@ -93,10 +92,5 @@ class Soduku_Solver: public Soduku
         void init_containers2(std::vector<std::vector<Coord>> &);
         void init_containers3(std::vector<std::vector<Coord>> &);
         void printDomains(HashTable<Coord, Set<int>> &);
-        
-        
-
-        
-
 };
 #endif

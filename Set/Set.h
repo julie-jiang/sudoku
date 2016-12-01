@@ -1,11 +1,11 @@
 /* 
    Set.h
-   Header and implementations for the container Set, an ordered collection of
+   Header and implementations of the container Set, an ordered collection of
    unique elements. 
   
    By:   Julie Jiang
    UTLN: yjiang06
-   Comp 15 Fall 2016 Independent Project */
+   Comp 15 Fall 2016 Independent Project                                     */
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
@@ -36,23 +36,23 @@
    To print the elements in the set via standard cout:
         std::cout << set;
    For more usage information and examples, please see the README.md in this 
-   directory.  */
+   directory.                                                                */
 /*****************************************************************************/
 /*                         Implementation details                            */
 /*****************************************************************************/
 /* This is implemented as an AVL Tree, a self-balancing binary search tree.
-   In addtion to the value and pointers to children nodes, each node also 
-   has a balance. At each insertion or removal, balance is maintained by 
-   rotating some of the unbalanced subtrees. */
+   In addtion to the value and pointers to children nodes, each node 
+   (see SetNode) also has a balance. At each insertion or removal, balance is
+   maintained by rotating some of the unbalanced subtrees.                   */
+/*****************************************************************************/
+/*                                  Header                                   */
+/*****************************************************************************/
 #ifndef SET_H
 #define SET_H
 #include <iostream>
 #include <sstream>
 #include "SetNode.h"
 #include "SetIterator.h"
-/*****************************************************************************/
-/*                                  Header                                   */
-/*****************************************************************************/
 template<typename T>
 class Set;
 template<typename T>
@@ -74,8 +74,8 @@ class Set {
         std::string tree(); // Get the string form of the tree of the set
 
         typedef SetIterator<T> iterator; // Iterator functions 
-        iterator begin() const;
-        iterator end()   const;
+        iterator    begin() const;
+        iterator    end()   const;
         // Overload ostream operator
         friend std::ostream &operator << <>(std::ostream &, const Set &);
     private:
@@ -98,11 +98,7 @@ class Set {
 
         void        tree(SetNode<T> *, int, std::string &);
         void        toString(SetNode<T> *, std::string &) const;
-        std::string value2string(T &) const;
-        
-        
-        
-        
+        std::string value2string(T &) const;      
 };
 
 /*****************************************************************************/
@@ -110,15 +106,13 @@ class Set {
 /*****************************************************************************/
 /* Constructor */
 template<typename T>
-Set<T>::Set()
-{
+Set<T>::Set() {
     root = nullptr;
 }
 
 /* Destructor */
 template<typename T>
-Set<T>::~Set()
-{
+Set<T>::~Set() {
     if (not empty()) {
         clear(root);
     }
@@ -126,8 +120,7 @@ Set<T>::~Set()
 /* Destructor helper function. Recursively delete every node in the set via 
    post-order traversal */
 template<typename T>
-void Set<T>::clear(SetNode<T> *node)
-{
+void Set<T>::clear(SetNode<T> *node) {
     if (node->left != nullptr) {
         clear(node->left);
     }
@@ -138,8 +131,7 @@ void Set<T>::clear(SetNode<T> *node)
 }
 /* Copy constructor */
 template<typename T>
-Set<T>::Set(const Set &source)
-{
+Set<T>::Set(const Set &source) {
     root = nullptr;
     for (Set<T>::iterator i = source.begin(); i != source.end(); ++i) {
         add(*i);
@@ -152,8 +144,7 @@ Set<T>::Set(const Set &source)
 
 /* Adds val to the tree. No changes if the val already exists */
 template<typename T>
-void Set<T>::add(T val)
-{
+void Set<T>::add(T val) {
     root = add(root, val);
         
 }
@@ -162,8 +153,7 @@ void Set<T>::add(T val)
    traversal. First perform a standard BST insertion. Then restores balance if 
    need be. Returns the updated version of the input node. */
 template<typename T>
-SetNode<T> *Set<T>::add(SetNode<T> *node, T val)
-{
+SetNode<T> *Set<T>::add(SetNode<T> *node, T val) {
     if (node == nullptr) {// Make new SetNode
         node = new SetNode<T>(val);
 
@@ -181,8 +171,7 @@ SetNode<T> *Set<T>::add(SetNode<T> *node, T val)
 /* Removes the value from the tree if it exists. If it doesn't exist, nothing
    will change. */
 template<typename T>
-void Set<T>::remove(T val)
-{
+void Set<T>::remove(T val) {
     root = remove(root, val);
 }
 
@@ -190,8 +179,7 @@ void Set<T>::remove(T val)
    traversal. First perform a standard BST removal. Then restores balance
    if need be. */
 template<typename T>
-SetNode<T> *Set<T>::remove(SetNode<T> *node, T val)
-{   
+SetNode<T> *Set<T>::remove(SetNode<T> *node, T val) {   
     // Standard BST removal 
     if (node == nullptr) {
         return node;
@@ -216,8 +204,7 @@ SetNode<T> *Set<T>::remove(SetNode<T> *node, T val)
    may have two children, one child, or no child. Returns the memory address
    of the original node. */
 template<typename T>
-SetNode<T> *Set<T>::removeSetNode(SetNode<T> *node)
-{
+SetNode<T> *Set<T>::removeSetNode(SetNode<T> *node) {
     // If node has two children, replace the contents of this node with 
     // those of its in-order successor.
     // Then delete its original in-order successor through recursion.
@@ -241,8 +228,7 @@ SetNode<T> *Set<T>::removeSetNode(SetNode<T> *node)
 }
 /* Find the minimum node starting from the given node. */
 template<typename T>
-SetNode<T> *Set<T>::getMinSetNode(SetNode<T> *node)
-{
+SetNode<T> *Set<T>::getMinSetNode(SetNode<T> *node) {
     // Keep traversing left until end of AVL tree is reached
     return (node->left == nullptr) ? node : getMinSetNode(node->left);
 }
@@ -258,8 +244,7 @@ SetNode<T> *Set<T>::getMinSetNode(SetNode<T> *node)
    right left unbalance, left left unbalance, and left right unbalance.
    Returns the memory address of the balanced node. */
 template<typename T>
-SetNode<T> *Set<T>::restoreBalance(SetNode<T> *node)
-{
+SetNode<T> *Set<T>::restoreBalance(SetNode<T> *node) {
     // Update height and get balance
     node->height = max(height(node->left), height(node->right)) + 1;
     int balance = getBalance(node);
@@ -287,8 +272,7 @@ SetNode<T> *Set<T>::restoreBalance(SetNode<T> *node)
 /* Rotates the subtree with this node at root left. Returns the new root
    of this rotated subtree. */ 
 template<typename T>
-SetNode<T> *Set<T>::rotateLeft(SetNode<T> *node)
-{
+SetNode<T> *Set<T>::rotateLeft(SetNode<T> *node) {
     SetNode<T> *rightChild     = node->right;
     SetNode<T> *rightLeftChild = rightChild->left;
     // Rotation 
@@ -303,8 +287,7 @@ SetNode<T> *Set<T>::rotateLeft(SetNode<T> *node)
 /* Rotates the subtree with this node at root right. Returns the new root
    of this rotated subtree. */ 
 template<typename T>
-SetNode<T> *Set<T>::rotateRight(SetNode<T> *node)
-{
+SetNode<T> *Set<T>::rotateRight(SetNode<T> *node) {
     SetNode<T> *leftChild      = node->left;
     SetNode<T> *leftRightChild = leftChild->right;
     // Rotation
@@ -318,22 +301,19 @@ SetNode<T> *Set<T>::rotateRight(SetNode<T> *node)
 }
 /* Returns the balance at this node */
 template<typename T>
-int Set<T>::getBalance(SetNode<T> *node)
-{
+int Set<T>::getBalance(SetNode<T> *node) {
     return (height(node->right) - height(node->left));
 }
 /* Returns the height of this node. If the node does not exist (i.e. node is 
    nullptr), then the height is 0 */
 template<typename T>
-int Set<T>::height(SetNode<T> *node)
-{
+int Set<T>::height(SetNode<T> *node) {
     return (node == nullptr) ? 0 : node->height;
 }
 
 /* Return the maximum of the two integer */
 template<typename T>
-int Set<T>::max(int a, int b)
-{
+int Set<T>::max(int a, int b) {
     return (a > b) ? a : b;
 }
 /*****************************************************************************/
@@ -342,15 +322,13 @@ int Set<T>::max(int a, int b)
 
 /* Returns true if the set contains val. */
 template<typename T>
-bool Set<T>::contains(T val)
-{
+bool Set<T>::contains(T val) {
     return (empty()) ? false : contains(root, val);
 }
 /* contains helper function. Recursively check if the set contains val.
    Returns true if this node or any of its children contains val. */
 template<typename T>
-bool Set<T>::contains(SetNode<T> *node, T val)
-{
+bool Set<T>::contains(SetNode<T> *node, T val) {
     // Found s! 
     if (node->value == val) { 
         return true;
@@ -371,8 +349,7 @@ bool Set<T>::contains(SetNode<T> *node, T val)
 /*****************************************************************************/
 /* Returns true if set is empty. */
 template<typename T>
-bool Set<T>::empty()
-{
+bool Set<T>::empty() {
     return (root == nullptr);
 }
 
@@ -381,15 +358,13 @@ bool Set<T>::empty()
 /*****************************************************************************/
 /* Returns the value of the root of the tree. */
 template<typename T>
-T Set<T>::top()
-{
+T Set<T>::top() {
     return root->value;
 }
 
 /* Returns the value of the root of the tree AND removes it from the tree */
 template<typename T>
-T Set<T>::pop()
-{
+T Set<T>::pop() {
     T value = root->value;
     remove(value);
     return value;
@@ -401,15 +376,13 @@ T Set<T>::pop()
 /*****************************************************************************/
 /* Returns the number of elements stored in the tree */
 template<typename T>
-size_t Set<T>::size()
-{
+size_t Set<T>::size() {
     return size(root, 0);
 }
 /* size helper function. Recursively sum up the number of elements in the tree
    via pre-order traversal. Returns the number of elements in the tree. */
 template<typename T>
-size_t Set<T>::size(SetNode<T> *node, int sum)
-{
+size_t Set<T>::size(SetNode<T> *node, int sum) {
     if (node != nullptr) {
         sum++;
         sum = size(node->left, sum);   // Traverse left subtree 
@@ -426,8 +399,7 @@ size_t Set<T>::size(SetNode<T> *node, int sum)
    then this will return "[2, 3, 5, 6, 7]". If the set is empty, then 
    it will return "[]". */ 
 template<typename T>
-std::ostream &operator<<(std::ostream &output, const Set<T> &source)
-{
+std::ostream &operator<<(std::ostream &output, const Set<T> &source) {
     std::string str = "[";
     if (source.root != nullptr) {
         source.toString(source.root, str);
@@ -440,8 +412,7 @@ std::ostream &operator<<(std::ostream &output, const Set<T> &source)
 /* Ostream operator "<<" overload helper function. Recursively build
    a string version of all the elements in the tree via in-order traversal.*/
 template<typename T>
-void Set<T>::toString(SetNode<T> *node, std::string &str) const
-{
+void Set<T>::toString(SetNode<T> *node, std::string &str) const {
     if (node->left != nullptr) 
         toString(node->left, str);
     
@@ -467,8 +438,7 @@ void Set<T>::toString(SetNode<T> *node, std::string &str) const
    This is particularly useful for debugging.
 */
 template<typename T>
-std::string Set<T>::tree()
-{
+std::string Set<T>::tree() {
     std::string str_tree = "";
     if (not empty()) {
         tree(root, 0, str_tree);
@@ -478,8 +448,7 @@ std::string Set<T>::tree()
 /* tree helper function. Recursively build the string version of the tree
    via pre-order traversal */
 template<typename T>
-void Set<T>::tree(SetNode<T> *node, int depth, std::string &str_tree)
-{
+void Set<T>::tree(SetNode<T> *node, int depth, std::string &str_tree) {
     std::string indent = "";
     for (int i = 0; i < depth; i++) {
         indent += "    "; 
@@ -495,8 +464,7 @@ void Set<T>::tree(SetNode<T> *node, int depth, std::string &str_tree)
 }
 /* Output helper function. Converts the given value of type T to a string */
 template<typename T>
-std::string Set<T>::value2string(T &v) const
-{
+std::string Set<T>::value2string(T &v) const {
     std::string result;
     std::ostringstream oss;
     oss << v;
@@ -509,15 +477,13 @@ std::string Set<T>::value2string(T &v) const
 
 /* Return a SetIterator object of the root */
 template<typename T>
-SetIterator<T> Set<T>::begin() const
-{
+SetIterator<T> Set<T>::begin() const {
     return SetIterator<T>(root);
 }
 
 /* Return a SetIterator object of nullptr */
 template<typename T>
-SetIterator<T> Set<T>::end() const
-{
+SetIterator<T> Set<T>::end() const {
     return SetIterator<T>(nullptr);
 }
 

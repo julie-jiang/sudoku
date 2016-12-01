@@ -1,12 +1,31 @@
+/* 
+   testLinkedList.cpp
+   Unit tests for the container HashMap
+
+   By:   Julie Jiang
+   UTLN: yjiang06
+   Comp 15 Fall 2016 Independent Project */
+/*****************************************************************************/
+/*                                 Blurb                                     */
+/*****************************************************************************/
+/* To compile the test program, use the Makefile in this directory and run: 
+        ./testHashMap
+   This tests all the functionality of the class LinkedList, including all the 
+   corner cases I could think of. Testing is done using assertion, so all tests
+   are passed if the program correctly terminates (they all passed).         
+   Due to the fact that I wanted to make the function clear() private, the 
+   tests for clear() are commented out so the test would compile. But they all
+   passed during testing stage.                                              */
 #include <iostream>
 #include <sstream>
-#include <vector>
 #include <cassert>
 #include "HashTable.h"
 #include "../Coord/Coord.h"
 #include "../Set/Set.h"
-void testGetterSetter()
-{
+
+/* Tests inserting elements and using subscript operator. Also checks that
+   exceptions are correctly thrown when querying for keys that don't exist */
+void testGetterSetter() {
     std::cout << "Testing getter and setter...";
     HashTable<std::string, int> ht;
     ht.insert("key1", 1);
@@ -25,9 +44,8 @@ void testGetterSetter()
     assert(caughtException);
     std::cout << "test passed.\n";
 }
-
-void testRemove()
-{
+/* Tests that key after removal doesn't exist anymore */
+void testRemove() {
     std::cout << "Testing remove...";
     HashTable<std::string, int> ht;
     ht.insert("key", 1);
@@ -44,8 +62,7 @@ void testRemove()
 
 }
 
-void testIterator1()
-{
+void testIterator1() {
     std::cout << "Testing iterator...";
     HashTable<std::string, int> ht;
     ht.insert("key1", 1);
@@ -57,8 +74,7 @@ void testIterator1()
     } 
     
 }
-void testIterator2()
-{
+void testIterator2() {
     HashTable<Coord, int> ht;
     Coord c1(1, 2);
     Coord c2(2, 3);
@@ -73,8 +89,7 @@ void testIterator2()
     
 }
 
-void testIterator3()
-{
+void testIterator3() {
     
     HashTable<Coord, Set<int>> ht;
     Coord c(1, 2);
@@ -92,10 +107,9 @@ void testIterator3()
     }  
     std::cout << "test passed.\n";
 }
-
-void testType1()
-{
-    std::cout << "Testing using custum defined object...";
+/* Tests using a custom defined object as keys */
+void testType1() {
+    std::cout << "Testing using custom defined object...";
     HashTable<Coord, int> ht;
     Coord c1(1, 2);
     Coord c2(2, 3);
@@ -108,8 +122,8 @@ void testType1()
     assert(val2 == 20);
 
 }
-void testType2()
-{
+/* Tests using a custom defined object as value */
+void testType2() {
     HashTable<int, Coord> ht;
     Coord c1(1, 2);
     Coord c2(2, 3);
@@ -121,18 +135,14 @@ void testType2()
     assert(val2 == c2);
     std::cout << "test passed.\n";
 }
-
-void testConstructor()
-{
-    std::cout << "Testing constructor...";
+/* Tests constructor and copy constructor */
+void testConstructor1() {
+    std::cout << "Testing constructor and copy constructor...";
     HashTable<Coord, int> ht1;
     size_t size = 200;
     HashTable<std::string, int> ht2(size);
-    std::cout << "test passed.\n";
 }
-void testCopyConstructor()
-{
-    std::cout << "Testing copy constructor...";
+void testConstructor2() {
     HashTable<std::string, int> ht1;
     ht1.insert("key1", 10);
     ht1.insert("key2", 20);
@@ -144,8 +154,8 @@ void testCopyConstructor()
     std::cout << "test passed.\n";
 }
 
-void testClear1()
-{
+/*
+void testClear1() {
     std::cout << "Testing function clear...";
     HashTable<std::string, int> ht;
     ht.insert("key1", 10);
@@ -171,8 +181,7 @@ void testClear1()
     assert(it == ht.end());
    
 }
-void testClear2()
-{
+void testClear2() {
     HashTable<Coord, Set<int>> ht;
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
@@ -186,8 +195,9 @@ void testClear2()
     ht.clear();
     std::cout << "test passed.\n";
 }
-void testAssignmentOperator1()
-{
+*/
+/* Tests using assignment operator on primitive types */
+void testAssignmentOperator1() {
     std::cout << "Testing assignment operator...";
     HashTable<std::string, int> ht1;
     ht1.insert("key1", 10);
@@ -200,8 +210,8 @@ void testAssignmentOperator1()
     assert(ht2["key2"] == 20);
     
 }
-void testAssignmentOperator2()
-{
+/* Tests using assignment operator on custom defined objects */
+void testAssignmentOperator2() {
     HashTable<Coord, Set<int>> ht1;
     HashTable<Coord, Set<int>> ht2;
     Coord c1(1, 2);
@@ -222,8 +232,7 @@ void testAssignmentOperator2()
     assert(buffer.str() == "[100, 101, 102, 103, 104, 105]");
     std::cout << "...test passed\n";
 }
-void testResize()
-{
+void testResize() {
     std::cout << "Testing resize function...";
     HashTable<int, std::string> ht1(40);
     for (int i = 0; i < 70; i++) {
@@ -231,11 +240,10 @@ void testResize()
     }
     std::cout << "...test passed\n";
 }
-int main()
-{
+int main() {
     std::cout << "============ Running tests for Hash Table ============\n";
-    testConstructor();
-    testCopyConstructor();
+    testConstructor1();
+    testConstructor2();
     testGetterSetter();
     testRemove();
     testType1();
@@ -243,8 +251,8 @@ int main()
     testIterator1();
     testIterator2();
     testIterator3();
-    testClear1();
-    testClear2();
+    //testClear1();
+    //testClear2();
     testAssignmentOperator1();
     testAssignmentOperator2();
     testResize();

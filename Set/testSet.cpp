@@ -12,7 +12,7 @@
         ./testSet 
    This tests all the functionality of the class Set, including all the 
    corner cases I could think of. Testing is done using assertion, so all tests
-   are passed if the program correctly terminates. */
+   are passed if the program correctly terminates (they all passed).         */
 #include <iostream>
 #include <cassert>
 #include <sstream>
@@ -26,8 +26,7 @@
    that inserting duplicated elements will not change the tree. */
 
 /* Left left unbalance */
-void testAdd1()
-{
+void testAdd1() {
     Set<int> *set = new Set<int>;
     set->add(60); set->add(50); set->add(30);
     set->add(20); set->add(40); set->add(10);
@@ -43,8 +42,7 @@ void testAdd1()
 
 }
 /* Left right unbalance */
-void testAdd2()
-{
+void testAdd2() {
 
     Set<int> *set = new Set<int>;
     set->add(60); set->add(20); set->add(50);
@@ -60,8 +58,7 @@ void testAdd2()
 
 }
 /* Right right unbalance */
-void testAdd3()
-{
+void testAdd3() {
     Set<int> *set = new Set<int>;
     set->add(10); set->add(20); set->add(40);
     set->add(30); set->add(50); set->add(60);
@@ -75,8 +72,7 @@ void testAdd3()
     delete set;
 }
 /* Right left unbalance */
-void testAdd4()
-{
+void testAdd4() {
     Set<int> *set = new Set<int>;
     set->add(10); set->add(50); set->add(20);
     set->add(30); set->add(60); set->add(40);
@@ -90,8 +86,7 @@ void testAdd4()
     delete set;
 }
 /* testing adding duplicates */
-void testAdd5()
-{
+void testAdd5() {
     Set<int> *set = new Set<int>;
     set->add(10); set->add(50); set->add(20);
     set->add(30); set->add(60); set->add(40);
@@ -106,8 +101,7 @@ void testAdd5()
     delete set;
 
 }
-void testAdd()
-{
+void testAdd() {
     std::cout << "Testing function add...";
     testAdd1(); // Left left unbalance 
     testAdd2(); // Left right unbalance
@@ -125,8 +119,7 @@ void testAdd()
    last function tests removing an element that doesn't exist in the tree. */
 
 /* Left left unbalance*/
-void testRemove1()
-{
+void testRemove1() {
     Set<int> *set = new Set<int>;
     set->add(70); set->add(50); set->add(80);
     set->add(20); set->add(60); set->add(90);
@@ -145,8 +138,7 @@ void testRemove1()
 }
 
 /* Left right unbalance */
-void testRemove2()
-{
+void testRemove2() {
     Set<int> *set = new Set<int>;
     set->add(70); set->add(50); set->add(80);
     set->add(20); set->add(60); set->add(90);
@@ -165,8 +157,7 @@ void testRemove2()
 }
 
 /* Right right unbalance */
-void testRemove3()
-{
+void testRemove3() {
     Set<int> *set = new Set<int>;
     set->add(30); set->add(10); set->add(40);
     set->add(20); set->add(60); set->add(90);
@@ -184,8 +175,7 @@ void testRemove3()
     delete set;
 }
 /* Right left unbalance */
-void testRemove4()
-{
+void testRemove4() {
     Set<int> *set = new Set<int>;
     set->add(30); set->add(10); set->add(40);
     set->add(20); set->add(80); set->add(90);
@@ -202,8 +192,7 @@ void testRemove4()
     delete set;
 }
 /* Test removing something that doesn't exist */
-void testRemove5()
-{
+void testRemove5() {
     Set<int> *set = new Set<int>;
     set->add(30); set->add(10); set->add(40);
     set->add(20); set->add(80); set->add(90);
@@ -222,8 +211,7 @@ void testRemove5()
 }
 
 
-void testRemove()
-{
+void testRemove() {
     std::cout << "Testing function remove...  ";
     testRemove1(); // Left left unbalance 
     testRemove2(); // Left right unbalance 
@@ -242,8 +230,7 @@ void testRemove()
         (3) has one child
         (4) has no children
         (5) does not exist  */
-void testContains() 
-{
+void testContains() {
     std::cout << "Testing function contains...";
     Set<int> *set = new Set<int>;
     set->add(10); set->add(50); set->add(20);
@@ -263,8 +250,7 @@ void testContains()
         (1) is empty
         (2) contains only one element
         (3) contains many elements  */
-void testSize()
-{
+void testSize() {
     std::cout << "Testing function size...";
     Set<int> *set1 = new Set<int>;
     Set<int> *set2 = new Set<int>;
@@ -288,8 +274,7 @@ void testSize()
 /* Tests the iterator when the set is empty and when the set is not empty
    In the process, tests all the functionalities of an iterator: constructor, 
    comparison operators, and dereference operator. */
-void testIterator()
-{
+void testIterator() {
     std::cout << "Testing iterator...";
 
     Set<int> *set = new Set<int>; 
@@ -310,8 +295,7 @@ void testIterator()
 /*****************************************************************************/
 /*                      Test Copy Constructor                                */
 /*****************************************************************************/
-void testCopyConstructor()
-{
+void testCopyConstructor() {
     std::cout << "Testing copy constructor ";
     Set<int> *set = new Set<int>;
     set->add(9);  set->add(5); set->add(10);
@@ -331,8 +315,7 @@ void testCopyConstructor()
 /*****************************************************************************/
 /* Tests using Set to hold non-primitive types. Also tests that 
    the copy constructor works. */
-void testType()
-{
+void testType() {
     std::cout << "Testing using Set with custom defined object...";
     Set<Coord> *set = new Set<Coord>;
     for (int i = 0; i < 9; i++) {
@@ -351,8 +334,7 @@ void testType()
 /*****************************************************************************/
 /* Tests using the ostream operator "<<" when the set is empty and when the
    set it not empty */
-void testOStream()
-{
+void testOStream() {
     Set<int> set;
     std::stringstream buffer;
     buffer << set;
@@ -365,8 +347,7 @@ void testOStream()
     
 }
 
-int main() 
-{
+int main() {
     std::cout << "============== Running tests for Set ==============\n";
     testAdd();
     testRemove();

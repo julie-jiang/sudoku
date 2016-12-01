@@ -1,6 +1,6 @@
 /* 
  * Soduku_Checker.cpp
- * Implementations for the Soduku_Checker class, a class derived from Soduku.
+ * Implementations of the Soduku_Checker class, a class derived from Soduku.
  * Checks whether a solution to a Soduku puzzle is valid. It can check Soduku
  * puzzles of arbitrary size.
  *
@@ -34,8 +34,7 @@
  *
  * Returns true if puzzle is valid. 
  */
-bool Soduku_Checker::check_solution(std::string filename)
-{
+bool Soduku_Checker::check_solution(std::string filename) {
     puzzle_name = filename;
     read_puzzle();
     return(check_rows_columns() and check_subgrid());
@@ -44,8 +43,7 @@ bool Soduku_Checker::check_solution(std::string filename)
  * Returns true if all row and column units contain one and only one of the 
  * values from 1 to gridSize. 
  */
-bool Soduku_Checker::check_rows_columns()
-{
+bool Soduku_Checker::check_rows_columns() {
     // Check that each row and column contains one and only one of the 
     // values from 1 to gridSize
     for (size_t j = 0; j < gridSize; j++) {
@@ -71,8 +69,7 @@ bool Soduku_Checker::check_rows_columns()
  * Returns true if all subgrid units contain one and only one of the 
  * values from 1 to gridSize. 
  */
-bool Soduku_Checker::check_subgrid()
-{
+bool Soduku_Checker::check_subgrid() {
     // Check that each subgrid contains one and only one of the values
     // from 1 to gridSize
     for (size_t i = 0; i < gridSize; i += n) {

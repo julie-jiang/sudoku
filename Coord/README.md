@@ -13,8 +13,6 @@ created.
 ## Initilization
 
 ```c++
-#include "Coord.h"
-// ...
 Coord c1(1, 2);  // constructor
 Coord c2(c);     // copy constructor
 ```

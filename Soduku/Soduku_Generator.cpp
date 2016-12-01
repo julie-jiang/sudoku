@@ -1,6 +1,6 @@
 /* 
    Soduku_Generator.cpp
-   Implementations for the Soduku_Generator class, a class derived from Soduku.
+   Implementations of the Soduku_Generator class, a class derived from Soduku.
    Generates a random Soduku puzzle on the fly.
   
    By:   Julie Jiang
@@ -42,8 +42,7 @@
    default to "medium" and size will default to 9.
    A playable soduku puzzle will be constructed at the end of this constructor.
    It rests in "puzzle". */
-Soduku_Generator::Soduku_Generator(std::string difficulty, int size)
-{
+Soduku_Generator::Soduku_Generator(std::string difficulty, int size) {
     gridSize = size;
     n = square_root(gridSize);
     container_size = gridSize * gridSize;
@@ -56,8 +55,7 @@ Soduku_Generator::Soduku_Generator(std::string difficulty, int size)
 /* Print the generated soduku puzzle as a 2D grid via standard cout. 
    The Coords that don't have assigned values will be printed as '0' in
    bold red. This is printed with gridlines!  */
-void Soduku_Generator::print_puzzle()
-{
+void Soduku_Generator::print_puzzle() {
     int max_char_length = get_num_digits(gridSize);
     std::string *whitespace = get_whitespaces(max_char_length);
     for (size_t i = 0; i < gridSize; i++) {
@@ -86,8 +84,7 @@ void Soduku_Generator::print_puzzle()
    value.  
    The parameter index is optional. If it is omitted, then index will be an 
    empty string. */
-void Soduku_Generator::write_puzzle(std::string directory, std::string index)
-{
+void Soduku_Generator::write_puzzle(std::string directory, std::string index) {
     // Open file
     std::string filename = directory + "/puzzle" + index + ".txt";
     std::ofstream outFile(filename);
@@ -115,8 +112,7 @@ void Soduku_Generator::write_puzzle(std::string directory, std::string index)
 /*****************************************************************************/
 /* Loops until a valid soduku puzzle is found.
    Starts off by clearing the grid. */
-void Soduku_Generator::search_puzzle()
-{
+void Soduku_Generator::search_puzzle() {
     Coord c(0, 0); // initial coordinates
     do {
         init_blank_puzzle();
@@ -126,8 +122,7 @@ void Soduku_Generator::search_puzzle()
    search algorithm. In each recursion, find a viable value for this Coord 
    given the existing constraints. 
    Returns false if no legal value can be found */
-bool Soduku_Generator::search_puzzle(Coord c)
-{
+bool Soduku_Generator::search_puzzle(Coord c) {
     // Base case if c is the dummy coord. This signals that all the Coords
     // in the puzzle has been filled with a legal value. We can return true.
     if (c[1] == (int) gridSize) { 
@@ -155,8 +150,7 @@ bool Soduku_Generator::search_puzzle(Coord c)
    any existing constraints.
    Checks all the other Coords in c's row, column and subgrid to see that
    that are not assigned to this value. */
-bool Soduku_Generator::satisfies_constraints(int value, Coord c)
-{
+bool Soduku_Generator::satisfies_constraints(int value, Coord c) {
     int x = c[0]; int y = c[1];
     for (int i = 0; i < (int) gridSize; i++) {
         Coord c1(i, y); Coord c2(x, i);
@@ -188,8 +182,7 @@ bool Soduku_Generator::satisfies_constraints(int value, Coord c)
    This Coord does not actually exist in the puzzle. Therefore it serves as
    a sentinel. 
  */
-Coord Soduku_Generator::next_coord(Coord c)
-{
+Coord Soduku_Generator::next_coord(Coord c) {
     int x = c[0]; int y = c[1];
     if (x < (int) gridSize - 1) {
         Coord next_c(x + 1, y);
@@ -202,8 +195,7 @@ Coord Soduku_Generator::next_coord(Coord c)
 /* Construct a vector consisting of the values from 1 to gridSize, and then
    randomly shuffle them. 
    This utilizes the Fisher-Yates shuffle algorithm */
-std::vector<int> *Soduku_Generator::get_shuffled_numbers()
-{
+std::vector<int> *Soduku_Generator::get_shuffled_numbers() {
     // Make new vector {1, 2, 3, ..., gridSize} 
     std::vector<int> *numbers = new std::vector<int>;
     for (int i = 1 ; i <= (int) gridSize; i++) {
@@ -227,8 +219,7 @@ std::vector<int> *Soduku_Generator::get_shuffled_numbers()
    an assigned value).
    Eliminates roughly 80% of all the variables if difficulty is hard, 50% if 
    difficulty is medium, and 30% is the difficulty is easy. */
-void Soduku_Generator::make_puzzle(std::string difficulty)
-{
+void Soduku_Generator::make_puzzle(std::string difficulty) {
     // Get the number of values to eliminate based on difficulty. 
     int num_eliminate;
     if (difficulty == "hard") {         
@@ -249,8 +240,7 @@ void Soduku_Generator::make_puzzle(std::string difficulty)
    a Coord and then set it to zero. Make sure that the new Coord is not 
    already set to zero. 
  */
-void Soduku_Generator::eliminate_one_value()
-{
+void Soduku_Generator::eliminate_one_value() {
     // Loop until a new value has been set to zero
     while (true) {
         int x = rand() % gridSize; int y = rand() % gridSize;
@@ -266,8 +256,7 @@ void Soduku_Generator::eliminate_one_value()
 /*                               Initialization                              */
 /*****************************************************************************/
 /* Initialize a blank soduku puzzle by setting all the Coords to zero. */
-void Soduku_Generator::init_blank_puzzle()
-{
+void Soduku_Generator::init_blank_puzzle() {
     puzzle = new HashTable<Coord, int>(container_size);
     for (size_t i = 0; i < gridSize; i++) {
         for (size_t j = 0; j < gridSize; j++) {

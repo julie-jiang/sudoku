@@ -1,6 +1,6 @@
 /* 
    Soduku_Generator.cpp
-   Implementations for the Soduku_Generator class, a class derived from Soduku.
+   Implementations of the Soduku_Generator class, a class derived from Soduku.
    Generates a random Soduku puzzle on the fly.
   
    By:   Julie Jiang
@@ -29,8 +29,7 @@
 #define SODUKU_GENERATOR_H
 #include <vector>
 #include "Soduku.h"
-class Soduku_Generator : public Soduku
-{
+class Soduku_Generator : public Soduku {
 	public:
 		/* Parameterized constructor. The first parameter is the difficulty
 		   of the puzzle, which defaults to "medium". The second parameter

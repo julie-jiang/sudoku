@@ -1,6 +1,6 @@
 /* 
  * Soduku_Checker.h
- * Header file for the Soduku_Checker class, a class derived from Soduku.
+ * Header file of the Soduku_Checker class, a class derived from Soduku.
  * Checks whether a solution to a Soduku puzzle is valid. It can check Soduku
  * puzzles of arbitrary size.
  *
@@ -21,8 +21,7 @@
 #ifndef SODUKU_CHECKER_H
 #define SODUKU_CHECKER_H
 #include "Soduku.h"
-class Soduku_Checker: public Soduku
-{
+class Soduku_Checker: public Soduku {
 	public:
 		bool check_solution(std::string);
 	private:

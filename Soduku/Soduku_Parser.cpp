@@ -59,8 +59,7 @@ More optional flags for --generate:
 #include <fstream>
 #include "Soduku_Parser.h"
 #include "Soduku_Util.h"
-Soduku_Parser::Soduku_Parser(int argc, char *argv [])
-{
+Soduku_Parser::Soduku_Parser(int argc, char *argv []) {
     init_default_settings();
 
     if (argc < 2) {  // Must have at least 2 arguments
@@ -87,8 +86,7 @@ Soduku_Parser::Soduku_Parser(int argc, char *argv [])
     }
 }
 /* Initialize default settings */
-void Soduku_Parser::init_default_settings()
-{
+void Soduku_Parser::init_default_settings() {
     solve_one = solve_all = check_one = check_all = write = generate = false;
     print = true;  
     generate_difficulty = "medium";
@@ -96,8 +94,7 @@ void Soduku_Parser::init_default_settings()
     generate_size = 9;
 }
 /* Parse the first argument and stores the input_path. */
-void Soduku_Parser::parse_first_flag(std::string arg)
-{
+void Soduku_Parser::parse_first_flag(std::string arg) {
     if (arg == "--solve" or arg == "-s") {
         solve_one = true;
     } else if (arg == "--solve-all" or arg == "-sa") {
@@ -116,8 +113,7 @@ void Soduku_Parser::parse_first_flag(std::string arg)
     }
 }
 /* Parses any additional optional arguments */
-void Soduku_Parser::parse_optional_flags(int i, int argc, char *argv[])
-{
+void Soduku_Parser::parse_optional_flags(int i, int argc, char *argv[]) {
     while (i < argc) {
         std::string arg = argv[i];
         if ((arg == "--write" or arg == "-w") and i + 1 < argc) {
@@ -142,8 +138,7 @@ void Soduku_Parser::parse_optional_flags(int i, int argc, char *argv[])
     }
 }
 /* Prints the full doc on usage of the program. */
-void Soduku_Parser::print_usage()
-{
+void Soduku_Parser::print_usage() {
     std::ifstream inFile("soduku_driver_usage.txt");
     std::string line;
     while (not inFile.eof()) {
@@ -153,8 +148,7 @@ void Soduku_Parser::print_usage()
 }
 /* Prints a quick blurb of usage with cerr.
    This is a static method. */
-void Soduku_Parser::help_message()
-{
+void Soduku_Parser::help_message() {
     std::cerr << "Usage: ./soduku [--solve     or -s  <filename>] or \n";
     std::cerr << "                [--solve-all or -sa <filelist>] or \n";
     std::cerr << "                [--check     or -c  <filename>] or \n";

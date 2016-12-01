@@ -1,7 +1,6 @@
 /* 
    Soduku_Driver.h
-   Header file for Soduku_Driver 
-   Driver class for the soduku class. Contains the solve_one, solve_all, 
+   Header file of the Soduku_Driver class. Contains the solve_one, solve_all, 
    check_one, and check_all functions, amongst other helper functions.
   
    By:   Julie Jiang
@@ -19,8 +18,7 @@
 #define SODUKU_DRIVER_H
 #include "Soduku_Parser.h"
 
-class Soduku_Driver
-{
+class Soduku_Driver {
 	public:
 		/* Take one action. Calls one of solve_one, solve_all, check_one, 
 		   check_all, and generate.  */

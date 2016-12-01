@@ -28,53 +28,44 @@
 #include "Coord.h"
 
 /* Constructor */
-Coord::Coord(int i, int j) 
-{
+Coord::Coord(int i, int j) {
     x = i;
     y = j;
 }
 /* Copy constructor */
-Coord::Coord(const Coord &source)
-{
+Coord::Coord(const Coord &source) {
     x = source.x;
     y = source.y;
 }
 /* Equality operator "==". */
-bool operator==(const Coord &source1, const Coord &source2) 
-{
+bool operator==(const Coord &source1, const Coord &source2) {
     return (source1.x == source2.x and source1.y == source2.y);
 }
 /* Equality operator "!=" */
-bool operator!=(const Coord &source1, const Coord &source2) 
-{
+bool operator!=(const Coord &source1, const Coord &source2) {
     return not (source1 == source2);
 }
 /* Equality operator "<=" */
-bool operator<=(const Coord &source1, const Coord &source2)
-{
+bool operator<=(const Coord &source1, const Coord &source2) {
     return (source1 < source2 or source1 == source2);
 
 }
 /* Equality operator "<" */
-bool operator<(const Coord &source1, const Coord &source2)
-{
+bool operator<(const Coord &source1, const Coord &source2) {
     return (source1.x < source2.x or 
            (source1.x == source2.x and source1.y < source2.y));
 }
 /* Equality operator ">=" */
-bool operator>=(const Coord &source1, const Coord &source2)
-{
+bool operator>=(const Coord &source1, const Coord &source2) {
     return (source1 > source2 or source1 == source2);
 }
 /* Equality operator ">" */
-bool operator>(const Coord &source1, const Coord &source2)
-{
+bool operator>(const Coord &source1, const Coord &source2) {
     return not (source1 <= source2);
 }
 /* Subscript operator 
    Index must be either 0 or 1. Else logic error would be thrown. */
-int &Coord::operator[](const int index)
-{
+int &Coord::operator[](const int index) {
     if (index == 0) {
         return x;
     } else if (index == 1) {
@@ -83,8 +74,7 @@ int &Coord::operator[](const int index)
     throw std::logic_error("Coord: index error");
 }
 /* Ostream operator "<<". If x = 1 and y = 2, then output would be "(1, 2)" */
-std::ostream &operator<<(std::ostream &output, const Coord &source)
-{
+std::ostream &operator<<(std::ostream &output, const Coord &source) {
     output << "(" << source.x << ", " << source.y << ")";
     return output;
 }
