@@ -9,25 +9,15 @@
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
-/* To create an instance of the Hashtable with default size 100:
-        HashTable<Key, Value> ht;
-   To create an instance of the Hashtable with with at least n buckets:
-        HashTable<Key, Value> ht(n);
-   Copy constructor and assignment overload operator is also available. 
-   To add an element:
-        ht.insert(k1, v1);
-   To get the value of Key k1 by as a reference:
-        Value v1 = ht[k1]; 
-   To remove the key k1 (and accordingly its value) from the hash table:
-        ht.remove(k1);
-   To resize the hash table to size m:
-        ht.resize(m);
-   To iterate through the hash table:
-        for (HashTable<Key, Value>::iterator it = ht.begin(); 
-             it != ht.end(); ++it) {
-            Key k = it.key();
-            Value v = it.value();
-        } 
+/* A HashTable instance can be created with the default constructor, 
+   a parameterized constructor that sets the size of the hash table to the 
+   input number, or a copy constructor. Once created, you can
+      (1) insert a key, value pair into the hash table
+      (2) query for the value with a key using subscript operator
+      (3) remove a key (and accordingly its value) from the hash table
+      (4) resize the hash table
+      (5) iterate through the hash table 
+      
    Because values are indexed by keys, keys must be immutable, meaning they 
    cannot be changed. Values, however, can be changed or overwritten. Which 
    means that keys should be unique to ensure that no data is lost. Due to the

@@ -19,7 +19,8 @@
    Will throw logic error if the string cannot be converted to an integer.
 
    To convert any int n to a string:
-   		std::string s = int2string(n); */
+   		std::string s = int2string(n);
+ */
 #ifndef SODUKU_UTIL_H
 #define SODUKU_UTIL_H
 

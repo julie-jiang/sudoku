@@ -1,26 +1,12 @@
 /* 
- * Soduku.cpp
- * Implementations of the Soduku class, a base class for Soduku_Solver, 
- * 
- * By:   Julie Jiang
- * UTLN: yjiang06
- * Comp 15 Fall 2016 Independent Project
- */
-/*****************************************************************************/
-/*                                  Blurb                                    */
-/*****************************************************************************/
-/* This is a useless class on its own. The classes Soduku_Solver,
-   Soduku_Checker, and Soduku_Generator are derived classes of this class. 
-   Soduku_Solver solves a given soduku puzzle
-   Soduku_Checker checks the validity of a solved puzzle. 
-   Soduku_Generator generates a valid soduku puzzle. 
-   Please refer to them for more usage information.
-
-   This class holds methods and variables that are shared amongst Soduku_Solver 
-   and Soduku_Checker, and Soduku_Generator. These are mostly utility and 
-   initialization methods.                                                    
+   Soduku.cpp
+   Implementations of the Soduku class, a base class for Soduku_Solver, 
+   Soduku_Checker, and Soduku_Generator.
+   
+   By:   Julie Jiang
+   UTLN: yjiang06
+   Comp 15 Fall 2016 Independent Project 
 */
-
 #include <iostream>
 #include <fstream>
 #include <queue>
@@ -29,11 +15,13 @@
 #include "../Set/Set.h"
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
-/* Initialize puzzle */
+
+/* Constructor. Initialize puzzle */
 Soduku::Soduku()
 {
     puzzle = nullptr;
 }
+/* Destructor */
 Soduku::~Soduku() {
     delete puzzle;
 }

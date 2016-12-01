@@ -15,12 +15,8 @@
    To access the individual elements of a Coord:
         int x = c[0];
         int y = c[1];
-   To print a Coord via standard cout:
-        std::cout << c; // print as "(1, 2)" 
-   To compare the two Coords:
-        if (c1 > c2) {
-            // ... do something
-        } 
+   You can also compare any two Coord objects, and output a Coord via standard
+   cout. 
    A Coord object is immutable, meaning its values can't be changed once it's
    been constructed.
  */

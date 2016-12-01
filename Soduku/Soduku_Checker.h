@@ -15,7 +15,7 @@
  * To check the validity of a Soduku puzzle that rests in the file 
  * solutions.txt:
  *      Soduku_Checker soduku;
- *      bool result = soduku.check(solutions.txt);
+ *      bool result = soduku.check_solution(solutions.txt);
  * Result is true if the solution is valid.
  */
 #ifndef SODUKU_CHECKER_H
@@ -24,7 +24,9 @@
 class Soduku_Checker: public Soduku {
 	public:
         Soduku_Checker() : Soduku() {}
-		bool check_solution(std::string);
+        
+        // Checks the validity of the puzzle in the given file
+		bool check_solution(std::string); 
 	private:
 		bool check_rows_columns();
 		bool check_subgrid();

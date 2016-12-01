@@ -1,10 +1,11 @@
 /* 
- * Soduku.h
- * Header file of the Soduku class.
- *
- * By:   Julie Jiang
- * UTLN: yjiang06
- * Comp 15 Fall 2016 Independent Project
+   Soduku.h
+   Header file of the Soduku class, a base class for Soduku_Solver, 
+   Soduku_Checker, and Soduku_Generator.
+  
+   By:   Julie Jiang
+   UTLN: yjiang06
+   Comp 15 Fall 2016 Independent Project
  */
 /*****************************************************************************/
 /*                                  Blurb                                    */
@@ -43,6 +44,7 @@ class Soduku {
         size_t gridSize;
         size_t n;
         size_t container_size;
+        bool show_process;
 
         // Initialiation functions 
         void read_puzzle();

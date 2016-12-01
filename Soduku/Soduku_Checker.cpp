@@ -8,22 +8,10 @@
  * UTLN: yjiang06
  * Comp 15 Fall 2016 Independent Project
  */
-/*****************************************************************************/
-/*                                 Usage                                     */
-/*****************************************************************************/
-/*
- * To check the validity of a Soduku puzzle that rests in the file 
- * solutions.txt:
- *      Soduku_Checker soduku;
- *      bool result = soduku.check(solutions.txt);
- * Result is true if the solution is valid.
- */
+
 #include "Soduku_Checker.h"
 #include "../Coord/Coord.h"
 #include "../Set/Set.h"
-/*****************************************************************************/
-/*                           Implementations                                 */
-/*****************************************************************************/
 /*
  * Validate the puzzle stored in 'puzzle'. This is done checking to see that 
  * each unit in the puzzle contains one and only one of the values from 1 to

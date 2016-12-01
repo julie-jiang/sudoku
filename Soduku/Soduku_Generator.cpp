@@ -6,27 +6,10 @@
    By:   Julie Jiang
    UTLN: yjiang06
    Comp 15 Fall 2016 Independent Project */
-/*****************************************************************************/
-/*                                 Usage                                     */
-/*****************************************************************************/
-/* To generate a Soduku puzzle of size puzzle_size and difficulty 
-   puzzle_difficulty:
-        Soduku_Generator soduku(puzzle_difficulty, puzzle_size);
-   
-   Difficulty is a string that is "hard", "medium", or "easy".
-   Size is a integer specifying the size of the soduku puzzle. It must
-   be a perfect square of some other integer, due to the way soduku 
-   puzzles are defined.
-
-   These parameters can be omitted, in which case difficulty will default to 
-   "medium" and size will default to 9.
-
-   To view the puzzle in terminal:
-        soduku.print_puzzle();
-   To write the puzzle to the directory mypuzzles and title it puzzle1.txt:
-        soduku.write_puzzle(mypuzzles, 1); */
 #include <iostream>
 #include <fstream>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 #include <vector>
 #include "Soduku_Generator.h"
 #include "../Coord/Coord.h"
@@ -37,15 +20,18 @@
    Parameters: 
         1) difficulty is a string that is "hard", "medium", or "easy".
         2) size is a perfect square of some other integer.
+        3) show the process of generation if "show" is true.
    If the parameters are do not satisfy these requirements, logic error will be
    thrown. These arguments can be omitted, in which case difficulty will 
    default to "medium" and size will default to 9.
    A playable soduku puzzle will be constructed at the end of this constructor.
    It rests in "puzzle". */
-Soduku_Generator::Soduku_Generator(std::string difficulty, int size):Soduku() {
+Soduku_Generator::Soduku_Generator(std::string difficulty, int size, bool show)
+                                   :Soduku() {
     gridSize = size;
     n = square_root(gridSize);
     container_size = gridSize * gridSize;
+    show_process = show;
 
     // Search for a valid soduku puzzle
     search_puzzle(); 
@@ -123,11 +109,18 @@ void Soduku_Generator::search_puzzle() {
    given the existing constraints. 
    Returns false if no legal value can be found */
 bool Soduku_Generator::search_puzzle(Coord c) {
+    if (show_process) {
+        std::cout << "\033[H\033[2J";
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        print_puzzle();
+    }
     // Base case if c is the dummy coord. This signals that all the Coords
     // in the puzzle has been filled with a legal value. We can return true.
+    
     if (c[1] == (int) gridSize) { 
         return true;
     }
+
     // Get the numbers from 1 to gridSize in random order. 
     std::vector<int> *numbers = get_shuffled_numbers();
     Coord next_c = next_coord(c); // The next Coord that needs to be filled.
@@ -137,6 +130,7 @@ bool Soduku_Generator::search_puzzle(Coord c) {
 
             // Depth first search
             if (search_puzzle(next_c)) {
+                
                 delete numbers;
                 return true;
             } // If it didn't work, backtrack by trying the next value.

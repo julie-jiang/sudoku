@@ -7,13 +7,6 @@
    By:   Julie Jiang
    UTLN: yjiang06
    Comp 15 Fall 2016 Independent Project */
-/*****************************************************************************/
-/*                                 Usage                                     */
-/*****************************************************************************/
-/* This class must be used in conjunction with a Soduku_Parser object. 
-   An instance of this class will be created in the main function 
-   (in Soduku_Main.cpp) of the run_soduku program. 
-   It contains all the driver functions for the run_soduku program. */
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -42,7 +35,7 @@ Soduku_Driver::Soduku_Driver(const Soduku_Parser &parser)  {
 /* Solves one puzzle contained in Soduku_Parser.input_path.
    May print to terminal and may write to file.*/
 void Soduku_Driver::solve_one(const Soduku_Parser &parser) {
-    Soduku_Solver solver(parser.input_path);
+    Soduku_Solver solver(parser.input_path, parser.show_process);
     if (parser.print) {
         solver.print_solution();
     }
@@ -69,7 +62,7 @@ void Soduku_Driver::solve_all(const Soduku_Parser &parser) {
     // Solve each puzzle 
     std::string puzzle_name;
     while (inFile >> puzzle_name) {
-        Soduku_Solver solver(puzzle_name);
+        Soduku_Solver solver(puzzle_name, parser.show_process);
         if (parser.print) {
             solver.print_solution();
         }
@@ -95,7 +88,7 @@ void Soduku_Driver::solve_all_and_write(const Soduku_Parser &parser) {
     }
     std::string puzzle_name;  // Solve each puzzle 
     while (inFile >> puzzle_name) {
-        Soduku_Solver solver(puzzle_name);
+        Soduku_Solver solver(puzzle_name, parser.show_process);
         if (parser.print) 
             solver.print_solution();
         solver.write_solution(parser.output_path);
@@ -165,7 +158,8 @@ void Soduku_Driver::generate(const Soduku_Parser &parser) {
    If writing to file, the file will be named puzzle.txt*/
 void Soduku_Driver::generate_one(const Soduku_Parser &parser) {
     Soduku_Generator generator(parser.generate_difficulty, 
-                               parser.generate_size);
+                               parser.generate_size, 
+                               parser.show_process);
     if (parser.print) {
         generator.print_puzzle();
     }
@@ -186,7 +180,8 @@ void Soduku_Driver::generate_all(const Soduku_Parser &parser) {
     }
     for (int i = 0; i < parser.num_generate; i++) {
         Soduku_Generator generator(parser.generate_difficulty, 
-                                   parser.generate_size);
+                                   parser.generate_size, 
+                                   parser.show_process);
         if (parser.print) {
             generator.print_puzzle();
         }
@@ -207,7 +202,8 @@ void Soduku_Driver::generate_all_and_write(const Soduku_Parser &parser) {
     }
     for (int i = 0; i < parser.num_generate; i++) {
         Soduku_Generator generator(parser.generate_difficulty, 
-                                   parser.generate_size);
+                                   parser.generate_size, 
+                                   parser.show_process);
         if (parser.print) {
             generator.print_puzzle();
         }

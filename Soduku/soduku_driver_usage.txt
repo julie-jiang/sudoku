@@ -28,6 +28,8 @@ Optional flags for --solve, --solve-all or --generate:
 --write      or -w   <directory>
                     Write puzzle to the specified directory as a .txt file.
 --hide       or -h  Disable the default setting that print puzzle to console.
+--show       or -sa Show the process of solving or generating a puzzle.
+                    Only one of --show and --hide can be used.
 
 More optional flags for --generate:
 --difficulty or -d  <level>
@@ -38,3 +40,6 @@ More optional flags for --generate:
                     argument is 16, then a 16 by 16 Soduku puzzle will be 
                     generated. This number must be a perfect square.
                     Default setting is 9.
+
+Unless otherwise specified, optional flags can be overloaded and can appear in 
+any order

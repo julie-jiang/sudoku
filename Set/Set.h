@@ -1,7 +1,8 @@
 /* 
    Set.h
    Header and implementations of the container Set, an ordered collection of
-   unique elements. 
+   unique elements. It is implemented as an AVL Tree, a self-balancing binary
+   search tree. 
   
    By:   Julie Jiang
    UTLN: yjiang06
@@ -9,39 +10,25 @@
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
-/* To create an instance of the Set object to hold objects of type T:
-        Set<T> set;
-   To add an element:
-        set.add(some_element);
-   To remove an element from the set:
-        set.remove(some_element);
-   To remove and get the root of the set (does not guarantee to be the min nor 
-   max):
-        T root = set.pop();
-   To get the root of the set without removing (does not guarantee to be the 
-   min nor max):
-        T root = set.top();
-   To see if the set contains an element:
-        bool contains_some_element = set.contains(some_element); 
-   To see if the set is empty:
-        bool is_empty = set.empty();  
-   To get the number of unique elements in the set:
-        size_t num_elements = set.size();
-   To get the tree form of the set as a string:
-        std::string set_tree = set.tree();
-   To iterate through the tree in order:
-        for (Set<T>::iterator it = set.begin(); it != set.end(); ++it) {
-            T elem = *it;
-        } 
-   To print the elements in the set via standard cout:
-        std::cout << set;
+/* Create an instance of Set with either the constructor or the copy 
+   constructor. Once created, you can
+      (1) add an element
+      (2) remove an element without returning
+      (3) get the value at the root of the Set without removing
+      (4) get and remove the value at the root of the Set
+      (5) check if the Set contains a certain element
+      (6) check if the Set is empty
+      (7) get the number of elements stored in the Set
+      (8) iterate through the Set
+      (9) print the elements of the set using ostream operator "<<"
+      (10) get the tree form of the set as a string
+
    For more usage information and examples, please see the README.md in this 
    directory.                                                                */
 /*****************************************************************************/
 /*                         Implementation details                            */
 /*****************************************************************************/
-/* This is implemented as an AVL Tree, a self-balancing binary search tree.
-   In addtion to the value and pointers to children nodes, each node 
+/* In addtion to the value and pointers to children nodes, each node 
    (see SetNode) also has a balance. At each insertion or removal, balance is
    maintained by rotating some of the unbalanced subtrees.                   */
 /*****************************************************************************/

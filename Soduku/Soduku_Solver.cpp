@@ -9,20 +9,6 @@
    Comp 15 Fall 2016 Independent Project
  */
 /*****************************************************************************/
-/*                                 Usage                                     */
-/*****************************************************************************/
-/* To solve a puzzle, create an instance of Soduku with the parametrized 
-   constructor, and provide a path to a file that contains an unsolved soduku 
-   puzzle:
-        Soduku soduku(puzzle.txt);
-   To print the (complete or incomplete) solutions to terminal:
-        soduku.print();
-   To output the solutions to a file:
-        soduku.write(filename.txt);
-   For both of these options, if the puzzle is only partially solved, then
-   grid cells with indeterminate values will be printed as bold red '0'.
- */
-/*****************************************************************************/
 /*                         Containers Explained                              */
 /*****************************************************************************/
 /* A Coord is an object that holds two integers that indicates the coordinates
@@ -51,6 +37,8 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 #include "Soduku_Solver.h"
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
@@ -60,11 +48,13 @@
 /*                             Public Functions                              */
 /*****************************************************************************/
 /* Parameterized constructor. 
-   Initializes a Soduku object and attempts to solve it.*/
-Soduku_Solver::Soduku_Solver(std::string filename) : Soduku() {
+   Initializes a Soduku object that rests in filename and attempts to solve it
+   If show is true, then the process of solving the puzzle will be displayed.*/
+Soduku_Solver::Soduku_Solver(std::string filename, bool show) : Soduku() {
     puzzle_name = filename;
     read_puzzle();
     init_containers();
+    show_process = show;
     solve();
 }
 /* Destructor */
@@ -72,13 +62,15 @@ Soduku_Solver::~Soduku_Solver() {
     delete units;
     delete peers;
 }
-
+void Soduku_Solver::print_solution() {
+    print_solution(this->domains);
+}
 
 /* Print the solved or partially solved soduku puzzle as a 2D grid via standard
    cout. If the solution is only partial, then the grid cells that don't have 
    assigned values will be have '0' printed instead in bold red.
    This is printed with gridlines!  */
-void Soduku_Solver::print_solution() {
+void Soduku_Solver::print_solution(HashTable<Coord, Set<int>> &domains) {
     int max_char_length = get_num_digits(gridSize);
     std::string *whitespace = get_whitespaces(max_char_length);
 
@@ -89,8 +81,8 @@ void Soduku_Solver::print_solution() {
         std::cout << "| ";
         for (size_t i = 0; i < gridSize; i++) {
             Coord c(i, j);
-            if (this->domains[c].size() == 1) {
-                int number= this->domains[c].top();
+            if (domains[c].size() == 1) {
+                int number = domains[c].top();
                 std::cout << number << whitespace[get_num_digits(number) - 1];
             } else {
                 std::cout << "\033[1m\033[31m0\033[0m" << whitespace[0];
@@ -270,6 +262,11 @@ bool Soduku_Solver::assign(HashTable<Coord, Set<int>> &domains,
             delete other_domains;
             return false;
         }
+    }
+    if (show_process) {
+        std::cout << "\033[H\033[2J";
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        print_solution(domains);
     }
     delete other_domains;
     return true;

@@ -10,31 +10,21 @@
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
-/* To create an instance of the LinkedList object to hold keys of type Key and 
-   values of type Value:
-        LinkedList<Key, Value> list;
-   To add an element:
-        list.insert(k1, v1);
-   To get the value of Key k1 by as a reference:
-        Value v1 = list[k1]; 
-   To remove the key k1 (and accordingly its value) from the list:
-        list.remove(k1);
-   To get the size of the LinkedList:
-        size_t size =  list.size();
-   To see if the list is empty:
-        bool is_empty = list.empty();  
+/* A LinkedList object can be created with the default constructor. Once 
+   created, you can
+      (1) insert a key, value pair into the list
+      (2) query for the value with a key using subscript operator
+      (3) remove a key (and accordingly its value) from the list
+      (4) get the size of the linkedlist
+      (5) check if the list is empty
+      (6) iterate through the list in order of insertion
 
-   To iterate through the list in order of insertion:
-        for (LinkedList<Key, Value>::iterator it = list.begin(); 
-             it != list.end(); ++it) {
-            Key k = it.key();
-            Value v = it.value();
-        } 
    Because this is the container used in the HashTable, keys are immutable,
    meaning they cannot be changed. Values, however, can be overwritten.
 
    For more usage information and examples, please see the README.md in this 
-   directory.  */
+   directory. 
+*/
 /*****************************************************************************/
 /*                                  Header                                   */
 /*****************************************************************************/

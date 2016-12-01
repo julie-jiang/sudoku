@@ -9,10 +9,9 @@
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/
-/*  Compile with:
-        make test
-    And run:
-        ./test_soduku
+/*  First compile the main Soduku program: make or make run_soduku
+    Then compile the test program: make test
+    And run: ./test_soduku
  */
 #include <iostream>
 #include <fstream>
