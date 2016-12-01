@@ -10,8 +10,8 @@ keys are hashed, the keys must also be able to be converted to a string.
 
 Hash collision is resolved by chaining. Therefore, the hash table is 
 implemented as a bunch of `buckets`, each `bucket` is a `LinkedList` object (see 
-[LinkedList](../LinkedList)), which in turn holds a bunch of `ListNodes`. In 
-order to reduce hash collisions, the size of the `bucket` is always a prime 
+[LinkedList][1], which in turn holds a bunch of `ListNodes`. In order to reduce 
+hash collisions, the size of the `bucket` is always a prime 
 number. 
 
 When the load factor (defined to be the number of elements stored in the hash 
@@ -94,3 +94,4 @@ And run:
 ```
 ./testHashTable
 ```
+[1]: ../LinkedList/

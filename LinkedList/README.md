@@ -1,5 +1,5 @@
 # Linked List
-This is the linked list used in the [Hash Table](../HashTable). The nodes in 
+This is the linked list used in the [Hash Table][1]. The nodes in 
 the linked list consist of a key and a value.
 
 ## Intialization
@@ -69,3 +69,4 @@ And run:
 ```
 ./testLinkedList
 ```
+[1]: ../HashTable

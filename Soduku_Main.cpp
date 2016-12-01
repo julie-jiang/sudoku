@@ -11,12 +11,12 @@
 /*                                 Usage                                     */
 /*****************************************************************************/
 /*  Compile with: make
-    Usage: ./soduku [--solve     or -s  <filename>] \
-                    [--solve-all or -sa <filelist>] \
-                    [--check     or -c  <filename>] \
-                    [--check-all or -ca <filelist>] \
-                    [--generate  or -g  <some number>]
-    For more usage information and optional arguments: --help or -h or see README
+    Usage: ./soduku [--solve     | -s  <filename>] \
+                    [--solve-all | -sa <filelist>] \
+                    [--check     | -c  <filename>] \
+                    [--check-all | -ca <filelist>] \
+                    [--generate  | -g  <some number>]
+    For more usage information and optional arguments: --help | -h or see README
 */
 #include <iostream>
 #include "Soduku/Soduku_Parser.h"

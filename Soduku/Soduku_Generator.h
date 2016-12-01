@@ -30,37 +30,37 @@
 #include <vector>
 #include "Soduku.h"
 class Soduku_Generator : public Soduku {
-	public:
-		/* Parameterized constructor. The first parameter is the difficulty
-		   of the puzzle, which defaults to "medium". The second parameter
-		   is the size of the puzzle, which defaults to 9. If the third
+    public:
+        /* Parameterized constructor. The first parameter is the difficulty
+           of the puzzle, which defaults to "medium". The second parameter
+           is the size of the puzzle, which defaults to 9. If the third
            parameter is true, then the process of generating the puzzle 
            will be shown.
-   	       A playable soduku puzzle will be constructed at the end of this 
-   	       constructor. */
-		Soduku_Generator(std::string = "medium", int = 9, bool = false);
+           A playable soduku puzzle will be constructed at the end of this 
+           constructor. */
+        Soduku_Generator(std::string = "medium", int = 9, bool = false);
 
-		/* Print the generated soduku puzzle as a 2D grid */
-		void print_puzzle();
+        /* Print the generated soduku puzzle as a 2D grid */
+        void print_puzzle();
 
-		/* Write the generated soduku puzzle as a 2D grid to a file called 
-		   "puzzle" + index + ".txt" in the specified directory. 
-		   The second parameter index is optional. If it is omitted, then 
-		   index will be an empty string. */
-		void write_puzzle(std::string, std::string = "");
-	private:
-		/* Puzzle searching functions */
-		void search_puzzle();
-		bool search_puzzle(Coord);
-		bool satisfies_constraints(int, Coord);
-		Coord next_coord(Coord);
-		std::vector<int> *get_shuffled_numbers();
-		
-		/* Puzzle making functions */
-		void make_puzzle(std::string);
-		void eliminate_one_value();
+        /* Write the generated soduku puzzle as a 2D grid to a file called 
+           "puzzle" + index + ".txt" in the specified directory. 
+           The second parameter index is optional. If it is omitted, then 
+           index will be an empty string. */
+        void write_puzzle(std::string, std::string = "");
+    private:
+        /* Puzzle searching functions */
+        void search_puzzle();
+        bool search_puzzle(Coord);
+        bool satisfies_constraints(int, Coord);
+        Coord next_coord(Coord);
+        std::vector<int> *get_shuffled_numbers();
+        
+        /* Puzzle making functions */
+        void make_puzzle(std::string);
+        void eliminate_one_value();
 
-		/* Initialization */
-		void init_blank_puzzle();
+        /* Initialization */
+        void init_blank_puzzle();
 };
 #endif

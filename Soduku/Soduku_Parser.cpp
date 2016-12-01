@@ -114,11 +114,11 @@ void Soduku_Parser::print_usage() {
 /* Prints a quick blurb of usage with cerr.
    This is a static method. */
 void Soduku_Parser::help_message() {
-    std::cerr << "Usage: ./soduku [--solve     or -s  <filename>] or \n";
-    std::cerr << "                [--solve-all or -sa <filelist>] or \n";
-    std::cerr << "                [--check     or -c  <filename>] or \n";
-    std::cerr << "                [--check-all or -ca <filelist>] or \n";
-    std::cerr << "                [--generate  or -g  <some number>] \n";
+    std::cerr << "Usage: ./soduku [--solve     | s  <filename>] or \n";
+    std::cerr << "                [--solve-all | sa <filelist>] or \n";
+    std::cerr << "                [--check     | c  <filename>] or \n";
+    std::cerr << "                [--check-all | ca <filelist>] or \n";
+    std::cerr << "                [--generate  | g  <some number>] \n";
     std::cerr << "For more usage information and optional arguments: --help or -h\n";
 }
 

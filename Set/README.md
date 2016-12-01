@@ -1,7 +1,6 @@
 # Set
-This is an ordered collection of unique elements, implemented as an [AVL tree]
-(https://en.wikipedia.org/wiki/avl_tree), a type of self-balancing binary 
-search tree. 
+This is an ordered collection of unique elements, implemented as an 
+[AVL tree][1], a type of self-balancing binary search tree. 
 
 As a set, it will not hold duplicate copies of the same item. If you attempt to
 add an element that is already in the set, then nothing will change. 
@@ -130,3 +129,4 @@ And run:
 ./testSet
 ```
 
+[1]: https://en.wikipedia.org/wiki/avl_tree

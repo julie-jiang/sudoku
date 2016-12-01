@@ -11,8 +11,9 @@
 /*****************************************************************************/
 /*  First compile the main Soduku program: make or make run_soduku
     Then compile the test program: make test
-    And run: ./test_soduku
- */
+    And run: ./test_soduku [--generate | -g]
+    If the second argument is provided, then new puzzles will be generated.
+*/ 
 #include <iostream>
 #include <fstream>
 #include <cassert>
@@ -94,7 +95,8 @@ void test1() {
    called puzzle_list.txt in that directory that contains the paths to all
    puzzles.
    Solutions are located in data/solutions/set2.
-   All of test set 2 puzzles are taken from online, but I forgot where...
+   All of test set 2 puzzles are taken from 
+   http://forum.enjoysudoku.com/the-hardest-sudokus-new-thread-t6539.html
    There are supposedly really hard 9 by 9 soduku puzzles.
    Running this test could take a while because of the sheer amount of puzzles
    in this set (almost 400) */
@@ -115,12 +117,14 @@ void test2() {
    their solutions.
    Generated puzzles will be located in data/puzzles/set3.
    Solutions will be located in data/solutions/set3. */
-void test3() {
+void test3(bool generate) {
     std::cout << "Beginning test 3\n";
     system("mkdir data/puzzles/set3");
     system("mkdir data/solutions/set3");
-    test_generate("./run_soduku --generate 10 --write data/puzzles/set3 \
-                   --difficulty easy --hide");
+    if (generate) {
+        test_generate("./run_soduku --generate 10 --write data/puzzles/set3 \
+                       --difficulty easy --hide");
+    }
     test_solve("./run_soduku --solve-all data/puzzles/set3/puzzle_list.txt \
                 --write data/solutions/set3 --hide");
     test_check("./run_soduku --check-all \
@@ -133,12 +137,14 @@ void test3() {
    their solutions.
    Generated puzzles will be located in data/puzzles/set4.
    Solutions will be located in data/solutions/set4. */
-void test4() {
+void test4(bool generate) {
     std::cout << "Beginning test 4\n";
     system("mkdir data/puzzles/set4");
     system("mkdir data/solutions/set4");
-    test_generate("./run_soduku --generate 100 --write data/puzzles/set4 \
-                   --difficulty hard --hide");
+    if (generate) {
+        test_generate("./run_soduku --generate 100 --write data/puzzles/set4 \
+                       --difficulty hard --hide");
+    }
     test_solve("./run_soduku --solve-all data/puzzles/set4/puzzle_list.txt \
                 --write data/solutions/set4 --hide");
     test_check("./run_soduku --check-all \
@@ -151,12 +157,14 @@ void test4() {
    check their solutions.
    Generated puzzles will be located in data/puzzles/set4.
    Solutions will be located in data/solutions/set4. */
-void test5() {
+void test5(bool generate) {
     std::cout << "Beginning test 5\n";
     system("mkdir data/puzzles/set5");
     system("mkdir data/solutions/set5");
-    test_generate("./run_soduku --generate 50 --write data/puzzles/set5 \
-                   --size 16 --hide");
+    if (generate) {
+        test_generate("./run_soduku --generate 50 --write data/puzzles/set5 \
+                       --size 16 --hide");
+    }
     test_solve("./run_soduku --solve-all data/puzzles/set4/puzzle_list.txt \
                 --write data/solutions/set5 --hide");
     test_check("./run_soduku --check-all \
@@ -170,46 +178,33 @@ void test5() {
    Generated puzzles will be located in data/puzzles/set6.
    Solutions will be located in data/solutions/set6. 
    This test could take a while. */
-void test6() {
+void test6(bool generate) {
     std::cout << "Beginning test 6\n";
     system("mkdir data/puzzles/set6");
     system("mkdir data/solutions/set6");
-    test_generate("./run_soduku --generate 5 --write data/puzzles/set6 \
-                   --size 25 --hide");
+    if (generate) {
+        test_generate("./run_soduku --generate 5 --write data/puzzles/set6 \
+                       --size 25 --hide");
+    }
     test_solve("./run_soduku --solve-all data/puzzles/set6/puzzle_list.txt \
                 --write data/solutions/set6 --hide");
     test_check("././run_soduku --check-all \
                 data/solutions/set6/puzzle_list_solutions_list.txt");
     std::cout << "Finished executing test set data/puzzles/set6.\n\n";
 }
-/* Test 7
-   Generate 10 easy 36 by 36 Soduku puzzles, solve these puzzles, and then 
-   check their solutions.
-   Generated puzzles will be located in data/puzzles/set7.
-   Solutions will be located in data/solutions/set7. 
-   This test could take a while. */
-void test7() {
-    std::cout << "Beginning test 7\n";
-    system("mkdir data/puzzles/set7");
-    system("mkdir data/solutions/set7");
-    test_generate("./run_soduku --generate --write data/puzzles/set7 \
-                   --size 36 --difficulty easy --hide");
-    test_solve("./run_soduku --solve data/puzzles/set7/puzzle.txt \
-                --write data/solutions/set7 --hide");
-    test_check("./run_soduku --check \
-                 data/solutions/set7/puzzle_solution.txt");
-    std::cout << "Finished executing test set data/puzzles/set7.\n\n";
-}
-int main() {
+/* Generate new puzzles if the second argument is "--generate" or "-g" */
+int main(int argc, char *argv []) {
     std::cout << "Running system tests for Soduku\n";
+    bool generate = (argc == 2 and (
+                     std::string(argv[1]) == "--generate" or 
+                     std::string(argv[1]) == "-g")) ? true : false; 
     test0();
     test1();
-    //test2();
-    test3();
-    test4();
-    test5();
-    //test6();
-    //test7();
+    test2();
+    test3(generate);
+    test4(generate);
+    test5(generate);
+    test6(generate);
     std::cout << "All tests completed! \n";
     
 }
