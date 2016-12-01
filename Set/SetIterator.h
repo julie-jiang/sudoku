@@ -15,7 +15,6 @@
    the elements in the stack one-by-one. */
 #ifndef SETITERATOR_H
 #define SETITERATOR_H
-#include <cstdlib>
 #include <stack>
 /*****************************************************************************/
 /*                                  Header                                   */

@@ -47,7 +47,6 @@
 #ifndef SET_H
 #define SET_H
 #include <iostream>
-#include <cassert>
 #include <sstream>
 #include "SetNode.h"
 #include "SetIterator.h"
