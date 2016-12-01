@@ -32,8 +32,8 @@ Then we would get the following result printed with pretty gridlines:
 ```
 
 
-1. [Usage](##Usage) 
-2. [Design](##Design)
+1. [Usage](#Usage) 
+2. [Design](#Design)
 
 ## Usage
 First, compile with `make` or `make soduku`.
