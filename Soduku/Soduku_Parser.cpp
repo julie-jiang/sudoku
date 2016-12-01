@@ -35,6 +35,10 @@ Soduku_Parser::Soduku_Parser(int argc, char *argv []) {
         // Else next argument specifies the number of puzzles to generate
         } else {
             num_generate = string2int(std::string(argv[2]));
+            if (num_generate <= 0) {
+                throw std::logic_error(
+                    "ERROR: please provide positive integer");
+            }
             parse_optional_flags(3, argc, argv);
         }
     }
@@ -115,7 +119,7 @@ void Soduku_Parser::help_message() {
     std::cerr << "                [--check     or -c  <filename>] or \n";
     std::cerr << "                [--check-all or -ca <filelist>] or \n";
     std::cerr << "                [--generate  or -g  <some number>] \n";
-    std::cerr << "For more usage information: --help or -h\n";
+    std::cerr << "For more usage information and optional arguments: --help or -h\n";
 }
 
 

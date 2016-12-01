@@ -96,8 +96,7 @@ size_t Soduku::square_root(size_t num) {
         }
         i++;
     }
-    throw std::logic_error("Error: File " + puzzle_name + 
-                           " does not contain valid Soduku puzzle");
+    throw std::logic_error("ERROR: not a valid Soduku puzzle size");
 }
 
 /*

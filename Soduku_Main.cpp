@@ -16,7 +16,7 @@
                     [--check     or -c  <filename>] \
                     [--check-all or -ca <filelist>] \
                     [--generate  or -g  <some number>]
-    For more usage information: --help or -h or see README
+    For more usage information and optional arguments: --help or -h or see README
 */
 #include <iostream>
 #include "Soduku/Soduku_Parser.h"

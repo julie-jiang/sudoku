@@ -12,10 +12,10 @@
 CXX = clang++
 CXXFLAGS = -std=c++11 -Wall -Wextra 
 
-run_soduku: Soduku/Soduku_Driver.o Soduku/Soduku.o Soduku/Soduku_Parser.o \
-            Soduku/Soduku_Solver.o Soduku/Soduku_Checker.o Soduku_Main.o \
-            Soduku/Soduku_Generator.o Soduku/Soduku_Util.o Set/Set.o \
-            HashTable/HashTable.o Coord/Coord.o LinkedList/LinkedList.o
+soduku: Soduku/Soduku_Driver.o Soduku/Soduku.o Soduku/Soduku_Parser.o \
+        Soduku/Soduku_Solver.o Soduku/Soduku_Checker.o Soduku_Main.o \
+        Soduku/Soduku_Generator.o Soduku/Soduku_Util.o Set/Set.o \
+        HashTable/HashTable.o Coord/Coord.o LinkedList/LinkedList.o
 	${CXX} ${CXXFLAGS} Soduku/Soduku_Driver.cpp Soduku/Soduku.cpp \
                        Coord/Coord.cpp Soduku/Soduku_Parser.cpp \
                        Soduku/Soduku_Solver.cpp Soduku/Soduku_Checker.cpp \

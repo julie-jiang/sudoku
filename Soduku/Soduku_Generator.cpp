@@ -136,6 +136,7 @@ bool Soduku_Generator::search_puzzle(Coord c) {
             } // If it didn't work, backtrack by trying the next value.
         }
     }
+    (*puzzle)[c] = 0;
     delete numbers;
     // Nothing worked! Return false.
     return false; 

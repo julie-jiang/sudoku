@@ -2,7 +2,7 @@ Usage: ./soduku [--solve     or -s  <filename>] \
                 [--solve-all or -sa <filelist>] \
                 [--check     or -c  <filename>] \
                 [--check-all or -ca <filelist>] \
-                [--generate  or -g  <some number>]
+                [--generate  or -g  <a number>]
 
 Mandatory flags (must provide one and only one of the following FIRST):
 --solve      or -s  <filename>
@@ -22,7 +22,6 @@ Mandatory flags (must provide one and only one of the following FIRST):
                     integer argument provided. If no subsequent argument is 
                     provided or if the next argument is a flag, then the number 
                     of puzzles to be generated will default to 1.
---help       or -h  See more usage information.
 
 Optional flags for --solve, --solve-all or --generate:
 --write      or -w   <directory>
