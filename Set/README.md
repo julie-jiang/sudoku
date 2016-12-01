@@ -20,11 +20,8 @@ To initialize a `Set` object:
 ```c++
 #include "Set.h"
 // ...
-Set<T> set;
-Set<T> *set_pointer = new Set<T>;
-
-Set<T> copy_set(set);
-Set<T> *copy_set_pointer = new Set<T>(set);
+Set<T> set;            // Constructor 
+Set<T> copy_set(set);  // Copy constructor
 ```
 
 

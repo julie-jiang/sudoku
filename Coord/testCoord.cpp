@@ -1,21 +1,33 @@
+/* 
+   testCoord.cpp
+   Unit tests for the class Coord.
+  
+   By:   Julie Jiang
+   UTLN: yjiang06
+   Comp 15 Fall 2016 Independent Project */
+/*****************************************************************************/
+/*                                 Blurb                                     */
+/*****************************************************************************/
+/* To compile the test program, use the Makefile in this directory and run: 
+        ./testCoord
+   This tests all the functionality of the class Coord, including all the 
+   corner cases I could think of. Testing is done using assertion, so all tests
+   are passed if the program correctly terminates. */
 #include <iostream>
 #include <sstream>
-#include <string.h>
-#include <stdio.h>
+#include <cassert>
 #include "Coord.h"
 #include "../Set/Set.h"
-#include <cstdlib>
-#include <map>
-#include <cassert>
+
 void testConstructor()
 {
     std::cout <<"Testing constructor...";
     Coord c1(1, 2);
     std::cout << "test passed.\n";
 }
-void testGetSet()
+void testSubscript()
 {
-    std::cout << "Testing getter and setter...";
+    std::cout << "Testing Subscript operator...";
     Coord c(2, 3);
     int a = c[0];
     int b = c[1];
@@ -97,7 +109,7 @@ void testLEQ()
 }
 void testCout()
 {
-    std::cout << "Testing standard ostream out ...";
+    std::cout << "Testing ostream operator ...";
     Coord c1(1, 2);
     std::stringstream buffer;
     buffer << c1;
@@ -109,7 +121,7 @@ int main()
 {
     std::cout << "======Running tests for Coord======\n";
     testConstructor();
-    testGetSet();
+    testSubscript();
     testEqual();
     testGreaterThan();
     testGEQ();

@@ -1,12 +1,22 @@
 # Coord
-The variables in `Soduku`, which are the individual grid cells, are implemented as instances of the `Coord` object, short for coordinates. It simply holds two integers x and y that specify where in the grid this object refers to.
+Coord is similar to std::pair, as it holds a pair of integers, but it is 
+optimized specifically to hold the coordinates of a set of coordinates for the
+Soduku program. 
 
+The first integer stored in a Coord is defined to be its x-coordinate, or `x`, 
+and the second integer stored is defined to be its y-coordinate, or `y`. A Coord
+`c1` is greater than another Coord `c2` if either `c1.x > c2.x` or `c1.x == c2.x`
+and `c1.y > c2.y`. Same logic applies to other equality operators.
+
+A Coord object is immutable, meaning its values cannot be changed once it's 
+created.
 ## Initilization
 
 ```c++
 #include "Coord.h"
 // ...
-Coord c(1, 2);
+Coord c1(1, 2);  // constructor
+Coord c2(c);     // copy constructor
 ```
 
 ## The things it can do
@@ -18,6 +28,8 @@ Coord c(1, 2);
     Coord c3(1, 2);
     assert(c1 == c2); 
     assert(c1 != c3);
+    assert(c1 <  c3);
+    assert(c1 <= c2);
     ```
 
 2. Subscript operator

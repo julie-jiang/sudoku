@@ -16,9 +16,6 @@
 #include <iostream>
 #include <cassert>
 #include <sstream>
-#include <cstdlib>
-#include <vector>
-#include <stack>
 #include "Set.h"
 #include "../Coord/Coord.h"
 /*****************************************************************************/
