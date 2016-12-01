@@ -29,6 +29,11 @@
 #include "../Set/Set.h"
 #include "../Coord/Coord.h"
 #include "../HashTable/HashTable.h"
+/* Initialize puzzle */
+Soduku::Soduku()
+{
+    puzzle = nullptr;
+}
 Soduku::~Soduku() {
     delete puzzle;
 }

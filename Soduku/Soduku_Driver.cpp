@@ -105,7 +105,7 @@ void Soduku_Driver::solve_all_and_write(const Soduku_Parser &parser) {
                                  "_solution.txt");
         outFile << filename << std::endl;
     }
-    std::cout << "List of paths to solved puzzle can be found at: ";
+    std::cout << "List of paths to solved puzzles can be found at: ";
     std::cout << output_filelist<< "\n";
     outFile.close();
 }
@@ -172,7 +172,7 @@ void Soduku_Driver::generate_one(const Soduku_Parser &parser) {
     if (parser.write) {
         generator.write_puzzle(parser.output_path);
         std::string filename = parser.output_path + "/puzzle.txt";
-        std::cout << "Generated puzzle can be found at: ";
+        std::cout << "Generated puzzles can be found at: ";
         std::cout << filename << "\n";
     }
 }
@@ -216,7 +216,7 @@ void Soduku_Driver::generate_all_and_write(const Soduku_Parser &parser) {
                                + "/puzzle" + int2string(i + 1) + ".txt";
         outFile << filename << std::endl;
     }
-    std::cout << "List of paths to generated puzzle can be found at: ";
+    std::cout << "List of paths to generated puzzles can be found at: ";
     std::cout << output_filelist << "\n";
 }
 

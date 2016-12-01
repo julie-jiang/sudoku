@@ -6,3 +6,10 @@ data/solutions/set1/puzzle5_solution.txt
 data/solutions/set1/puzzle6_solution.txt
 data/solutions/set1/puzzle7_solution.txt
 data/solutions/set1/puzzle8_solution.txt
+data/solutions/set1/puzzle9_solution.txt
+data/solutions/set1/puzzle10_solution.txt
+data/solutions/set1/puzzle11_solution.txt
+data/solutions/set1/puzzle12_solution.txt
+data/solutions/set1/puzzle13_solution.txt
+data/solutions/set1/puzzle14_solution.txt
+data/solutions/set1/puzzle15_solution.txt

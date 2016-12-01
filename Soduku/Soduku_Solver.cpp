@@ -61,7 +61,7 @@
 /*****************************************************************************/
 /* Parameterized constructor. 
    Initializes a Soduku object and attempts to solve it.*/
-Soduku_Solver::Soduku_Solver(std::string filename) {
+Soduku_Solver::Soduku_Solver(std::string filename) : Soduku() {
     puzzle_name = filename;
     read_puzzle();
     init_containers();
@@ -385,7 +385,9 @@ void Soduku_Solver::init_containers1(std::vector<std::vector<Coord>> &allunits)
             allunits[2 * j + 1].push_back(c2);
             units->insert(c1, std::vector<std::vector<Coord>>());
             peers->insert(c1, Set<Coord>()); 
-            this->domains.insert(c1, Set<int>(*new_unit())); // TODO: memory link?
+            Set<int> *unit = new_unit();
+            this->domains.insert(c1, Set<int>(*unit));
+            delete unit;
         } 
     }
 }

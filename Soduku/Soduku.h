@@ -33,6 +33,7 @@
 // Everything except for the destructor is protected
 class Soduku { 
     public:
+      Soduku();
       ~Soduku();
     
     protected:

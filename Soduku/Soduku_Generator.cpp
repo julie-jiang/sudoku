@@ -42,7 +42,7 @@
    default to "medium" and size will default to 9.
    A playable soduku puzzle will be constructed at the end of this constructor.
    It rests in "puzzle". */
-Soduku_Generator::Soduku_Generator(std::string difficulty, int size) {
+Soduku_Generator::Soduku_Generator(std::string difficulty, int size):Soduku() {
     gridSize = size;
     n = square_root(gridSize);
     container_size = gridSize * gridSize;

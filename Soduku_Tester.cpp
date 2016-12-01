@@ -203,14 +203,14 @@ void test7() {
 }
 int main() {
     std::cout << "Running system tests for Soduku\n";
-    /*test0();
+    test0();
     test1();
     //test2();
     test3();
     test4();
     test5();
-    //test6();*/
-    test7();
+    //test6();
+    //test7();
     std::cout << "All tests completed! \n";
     
 }

@@ -23,6 +23,7 @@
 #include "Soduku.h"
 class Soduku_Checker: public Soduku {
 	public:
+        Soduku_Checker() : Soduku() {}
 		bool check_solution(std::string);
 	private:
 		bool check_rows_columns();
