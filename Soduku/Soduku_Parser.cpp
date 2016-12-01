@@ -119,7 +119,8 @@ void Soduku_Parser::help_message() {
     std::cerr << "                [--check     | c  <filename>] or \n";
     std::cerr << "                [--check-all | ca <filelist>] or \n";
     std::cerr << "                [--generate  | g  <some number>] \n";
-    std::cerr << "For more usage information and optional arguments: --help or -h\n";
+    std::cerr << "For more usage information and optional arguments: ";
+    std::cerr << "--help or -h\n";
 }
 
 
