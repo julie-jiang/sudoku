@@ -1,5 +1,17 @@
 # Set
-This is implemented as an [AVL tree](https://en.wikipedia.org/wiki/avl_tree), a type of self-balancing binary search tree. As a set, it will not hold duplicate copies of the same item. If you attempt to add an element that is already in the set, then nothing will change.
+This is an ordered collection of unique elements, implemented as an [AVL tree]
+(https://en.wikipedia.org/wiki/avl_tree), a type of self-balancing binary search 
+tree. 
+
+As a set, it will not hold duplicate copies of the same item. If you attempt to
+add an element that is already in the set, then nothing will change. 
+
+As an AVL Tree, in addtion to the value and pointers to children nodes, each 
+node in the set also has a balance. At each insertion or removal, balance is 
+maintained by rotating some of the unbalanced subtrees.
+
+The benefits of using this container is the fast O(n) look up time, which comes
+at the cost of slower insertion and removal.
 
 
 ## Initialization 
@@ -44,7 +56,7 @@ Set<T> *copy_set_pointer = new Set<T>(set);
 
     ```c++
     if (set.contains(item)) {
-        // ...
+        // ... do something
     }
     ```
     
@@ -70,17 +82,45 @@ Set<T> *copy_set_pointer = new Set<T>(set);
     }
     ```
     
-7. Use standard output to print all the elements in the set via in order traversal
+7. Use standard output to print all the elements in the set via in order 
+   traversal
 
     ```c++
-    std::cout << set; // e.g. [1, 2, 3, 4, 5]
+    Set<int> numbers;
+    for (int i = 1; i <= 5; i++) {
+        numbers.add(i);
+    }
+    std::cout << set; // [1, 2, 3, 4, 5]
     ```
 
-8. Print the set tree with a bunch of brackets indicating parent-child relationship. This is mostly for debugging at the moment and will probably be removed later.
-
+8. Get the tree form of the set as a string. 
+   For example, consider a set with the elements 10, 20, 30, 40, 50, and 60:
     ```c++
-    set.printTree()
+    Set<int> numbers;
+    for (int i = 1; i <= 60; i += 10) {
+        numbers.add(i);
+    }
+    std::cout << numbers.tree();
     ```
+
+   This will produce the following 
+    ```
+    30                  
+        50               
+            60          
+            40    
+        20         
+            10                      
+    ```
+    Which represents the tree 
+    ```
+         30
+        /  \
+       20  50
+      /   /  \
+     10  40  60
+    ```
+    This is particularly useful for debugging.
 
 ## Testing
 Compile with:

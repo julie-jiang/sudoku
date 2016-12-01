@@ -1,3 +1,14 @@
+# Makefile for the main soduku program and the soduku test program
+
+# By:   Julie Jiang
+# UTLN: yjiang06
+# Comp 15 Fall 2016 Independent Project
+
+# To make the main program: make or make run_soduku
+# To run the main program: ./run_soduku [other arguments]
+# To make the test program: make test
+# To run the test program: ./testSoduku
+
 CXX = clang++
 CXXFLAGS = -std=c++11 -Wall -Wextra 
 

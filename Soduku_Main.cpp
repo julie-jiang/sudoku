@@ -1,13 +1,12 @@
 /* 
- * Soduku_Main.cpp
- * Implementaion of the main function for the soduku program. Functionalities
- * include solving soduku puzzles, checking soduku puzzles and generating
- * soduku puzzles.
- *
- * By:   Julie Jiang
- * UTLN: yjiang06
- * Comp 15 Fall 2016 Independent Project
- */
+   Soduku_Main.cpp
+   Implementaion of the main function for the soduku program. Functionalities
+   include solving soduku puzzles, checking soduku puzzles and generating
+   soduku puzzles.
+  
+   By:   Julie Jiang
+   UTLN: yjiang06
+   Comp 15 Fall 2016 Independent Project */
 /*****************************************************************************/
 /*                                 Usage                                     */
 /*****************************************************************************/

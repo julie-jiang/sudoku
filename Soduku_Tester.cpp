@@ -204,25 +204,25 @@ void test7()
     std::cout << "Beginning test 7\n";
     system("mkdir data/puzzles/set7");
     system("mkdir data/solutions/set7");
-    test_generate("./run_soduku --generate 5 --write data/puzzles/set7 \
-                   --size 36 --hide");
-    test_solve("./run_soduku --solve-all data/puzzles/set7/puzzle_list.txt \
+    test_generate("./run_soduku --generate --write data/puzzles/set7 \
+                   --size 36 --difficulty easy --hide");
+    test_solve("./run_soduku --solve data/puzzles/set7/puzzle.txt \
                 --write data/solutions/set7 --hide");
-    test_check("./run_soduku --check-all \
-                 data/solutions/set7/puzzle_list_solutions_list.txt");
+    test_check("./run_soduku --check \
+                 data/solutions/set7/puzzle_solution.txt");
     std::cout << "Finished executing test set data/puzzles/set7.\n\n";
 }
 int main()
 {
     std::cout << "Running system tests for Soduku\n";
-    test0();
+    /*test0();
     test1();
     //test2();
     test3();
     test4();
     test5();
-    //test6();
-    //test7();
+    //test6();*/
+    test7();
     std::cout << "All tests completed! \n";
     
 }
