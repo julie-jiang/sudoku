@@ -32,8 +32,14 @@ Then we would get the following result printed with pretty gridlines:
 ```
 
 
-1. [Usage](#Usage) 
-2. [Design](#Design)
+1. [Usage](#usage) 
+2. [Design](#design)
+3. [Algorithms](#algorithms)
+4. [Data Structures](#data-structures)
+5. [Testing](#testing)
+6. [Project Deviation](#project-deviation)
+7. [Acknowledgements](#acknowledgements)
+8. [Time spent doing this project](#time-spent-doing-this-project)
 
 ## Usage
 First, compile with `make` or `make soduku`.
@@ -151,11 +157,11 @@ Constraint propagation is used in conjunction with a depth-first backtracking se
 
 ## Testing
 To test my soduku solver, I will write a `SodukuGenerator.cpp` which will be able to generate soduku puzzles of arbitrary size. 
-## Significant changes from specification
+## Project Deviation
 
 ## Acknowledgements
 
-## Time spend doing this project
+## Time spent doing this project
 Too many. But in retrospect, totally would do it again.
 
 
