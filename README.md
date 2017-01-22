@@ -1,5 +1,5 @@
 # Soduku
-A Soduku solver, checker and generator for Soduku puzzles an any size. Written 
+A Soduku solver, checker and generator for Soduku puzzles of any size. Written 
 entirely in c++. 
 
 The rules of Soduku puzzle are well defined: find numbers from 1 to 9 to fill in
