@@ -2,7 +2,7 @@
 A Soduku solver, checker and generator for Soduku puzzles an any size. Written 
 entirely in c++. 
 
-The rules of Soduku puzzle is well defined: find numbers from 1 to 9 to fill in
+The rules of Soduku puzzle are well defined: find numbers from 1 to 9 to fill in
 the grid so that each number appears once and only once in every row, column, 
 and 3 by 3 subgrid. This has always been an appealing number game. But as easy 
 as the rules may seem, a Soduku puzzle can be mind boggling at times. I wrote 
